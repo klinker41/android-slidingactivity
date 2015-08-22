@@ -1,0 +1,79 @@
+<!--
+  ~ Copyright (C) 2015 Jacob Klinker
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <string name="app_name">Sliding Activity</string>
+    <string name="show_normal_sliding_activity">Show Normal Sliding Activity</string>
+
+    <string name="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negare non possum. Quae qui non vident, nihil
+        umquam magnum ac cognitione dignum amaverunt. Ergo hoc quidem apparet, nos ad agendum esse natos.
+        <i>Aliter autem vobis placet.</i>
+        Duo Reges: constructio interrete. Ne amores quidem sanctos a sapiente
+        alienos esse arbitrantur.\n\nRatio quidem vestra sic cogit. Idem iste, inquam, de voluptate quid sentit? Innumerabilia dici possunt in
+        hanc sententiam, sed non necesse est. Nondum autem explanatum satis, erat, quid maxime natura vellet. Sin
+        te auctoritas commovebat, nobisne omnibus et Platoni ipsi nescio quem illum anteponebas? Quid autem habent
+        admirationis, cum prope accesseris?\n\nSed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sed ego in hoc resisto;
+        Atque hoc loco similitudines eas, quibus illi uti solent, dissimillimas proferebas. Tum, Quintus et
+        Pomponius cum idem se velle dixissent, Piso exorsus est.
+        <mark>Quid vero?</mark>
+        Atqui eorum nihil est
+        eius generis, ut sit in fine atque extrerno bonorum.\n\nQuamquam te quidem video minime esse deterritum. Quia nec honesto quic quam honestius nec turpi turpius. Ac
+        tamen hic mallet non dolere.
+        <b>An tu me de L.</b>
+        An hoc usque quaque, aliter in vita? Ita relinquet duas,
+        de quibus etiam atque etiam consideret.
+        <mark>At certe gravius.</mark>
+        Cur igitur easdem res, inquam,
+        Peripateticis dicentibus verbum nullum est, quod non intellegatur? Sed erat aequius Triarium aliquid de
+        dissensione nostra iudicare.\n\nTum Torquatus: Prorsus, inquit, assentior; Quo plebiscito decreta a senatu est consuli quaestio Cn.
+        Quae similitudo in genere etiam humano apparet. Quid, si non sensus modo ei sit datus, verum etiam animus
+        hominis?
+        <i>Tubulo putas dicere?</i>
+        Nunc ita separantur, ut disiuncta sint, quo nihil potest esse
+        perversius. In his igitur partibus duabus nihil erat, quod Zeno commutare gestiret. Est enim effectrix
+        multarum et magnarum voluptatum. Bonum negas esse divitias, praeposìtum esse dicis?\n\n
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negare non possum. Quae qui non vident, nihil
+        umquam magnum ac cognitione dignum amaverunt. Ergo hoc quidem apparet, nos ad agendum esse natos.
+        <i>Aliter autem vobis placet.</i>
+        Duo Reges: constructio interrete. Ne amores quidem sanctos a sapiente
+        alienos esse arbitrantur.\n\nRatio quidem vestra sic cogit. Idem iste, inquam, de voluptate quid sentit? Innumerabilia dici possunt in
+        hanc sententiam, sed non necesse est. Nondum autem explanatum satis, erat, quid maxime natura vellet. Sin
+        te auctoritas commovebat, nobisne omnibus et Platoni ipsi nescio quem illum anteponebas? Quid autem habent
+        admirationis, cum prope accesseris?\n\nSed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sed ego in hoc resisto;
+        Atque hoc loco similitudines eas, quibus illi uti solent, dissimillimas proferebas. Tum, Quintus et
+        Pomponius cum idem se velle dixissent, Piso exorsus est.
+        <mark>Quid vero?</mark>
+        Atqui eorum nihil est
+        eius generis, ut sit in fine atque extrerno bonorum.\n\nQuamquam te quidem video minime esse deterritum. Quia nec honesto quic quam honestius nec turpi turpius. Ac
+        tamen hic mallet non dolere.
+        <b>An tu me de L.</b>
+        An hoc usque quaque, aliter in vita? Ita relinquet duas,
+        de quibus etiam atque etiam consideret.
+        <mark>At certe gravius.</mark>
+        Cur igitur easdem res, inquam,
+        Peripateticis dicentibus verbum nullum est, quod non intellegatur? Sed erat aequius Triarium aliquid de
+        dissensione nostra iudicare.\n\nTum Torquatus: Prorsus, inquit, assentior; Quo plebiscito decreta a senatu est consuli quaestio Cn.
+        Quae similitudo in genere etiam humano apparet. Quid, si non sensus modo ei sit datus, verum etiam animus
+        hominis?
+        <i>Tubulo putas dicere?</i>
+        Nunc ita separantur, ut disiuncta sint, quo nihil potest esse
+        perversius. In his igitur partibus duabus nihil erat, quod Zeno commutare gestiret. Est enim effectrix
+        multarum et magnarum voluptatum. Bonum negas esse divitias, praeposìtum esse dicis?
+
+    </string>
+
+</resources>
