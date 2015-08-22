@@ -20,12 +20,20 @@ import android.os.Bundle;
 
 import com.klinker.android.sliding.SlidingActivity;
 
+/**
+ * Activity demonstrating a very simple implementation of a sliding activity.
+ */
 public class NormalActivity extends SlidingActivity {
 
+    /**
+     * Initialize our values, this is overridden instead of onCreate as it should be in all
+     * sliding activities.
+     * @param savedInstanceState the saved state.
+     */
     @Override
     public void init(Bundle savedInstanceState) {
         setTitle(R.string.normal_sliding_activity);
-        setPrimaryColor(
+        setPrimaryColors(
                 getResources().getColor(R.color.normal_sliding_activity_primary),
                 getResources().getColor(R.color.normal_sliding_activity_primary_dark)
         );

@@ -27,6 +27,7 @@ import android.view.ViewOutlineProvider;
  */
 public class ViewUtil {
 
+    // don't allow for instantiation
     private ViewUtil() {
 
     }

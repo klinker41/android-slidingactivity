@@ -25,23 +25,42 @@ import android.widget.ScrollView;
 /**
  * A {@link ScrollView} that doesn't respond or intercept touch events.
  *
- * This is used in combination with {@link com.android.contacts.widget.MultiShrinkScroller} so
+ * This is used in combination with {@link com.klinker.android.sliding.MultiShrinkScroller} so
  * that MultiShrinkScroller can handle all scrolling & saving.
  */
 public class TouchlessScrollView extends ScrollView {
 
+    /**
+     * Creates a new instance of TouchlessScrollview.
+     * @param context
+     */
     public TouchlessScrollView(Context context) {
         this(context, null);
     }
 
+    /**
+     * Creates a new instance of TouchlessScrollview.
+     * @param context
+     * @param attrs
+     */
     public TouchlessScrollView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+    /**
+     * Creates a new instance of TouchlessScrollview.
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     */
     public TouchlessScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
+    /**
+     * Save the current y scroll position for later.
+     * @return
+     */
     @Override
     protected Parcelable onSaveInstanceState() {
         // Do not save the current scroll position. Always store scrollY=0 and delegate

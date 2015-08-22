@@ -17,16 +17,16 @@
 
 <resources>
 
-    <dimen name="quickcontact_starting_empty_height">150dp</dimen>
-    <dimen name="quickcontact_maximum_title_size">26sp</dimen>
-    <dimen name="quickcontact_title_initial_margin">16dp</dimen>
-    <item name="quickcontact_landscape_photo_ratio" type="dimen" format="float">0.7</item>
-    <dimen name="quickcontact_dismiss_distance_on_release">40dp</dimen>
-    <dimen name="quickcontact_dismiss_distance_on_scroll">100dp</dimen>
-    <dimen name="quickcontact_snap_to_top_slop_height">33dp</dimen>
-    <dimen name="quick_contact_photo_container_height">180dp</dimen>
-    <dimen name="quick_contact_toolbar_elevation">4.5dp</dimen>
-    <dimen name="quick_contact_header_max_height">300dp</dimen>
+    <dimen name="sliding_starting_empty_height">150dp</dimen>
+    <dimen name="sliding_maximum_title_size">26sp</dimen>
+    <dimen name="sliding_title_initial_margin">16dp</dimen>
+    <item name="sliding_landscape_photo_ratio" type="dimen" format="float">0.7</item>
+    <dimen name="sliding_dismiss_distance_on_release">40dp</dimen>
+    <dimen name="sliding_dismiss_distance_on_scroll">100dp</dimen>
+    <dimen name="sliding_snap_to_top_slop_height">33dp</dimen>
+    <dimen name="sliding_photo_container_height">180dp</dimen>
+    <dimen name="sliding_toolbar_elevation">4.5dp</dimen>
+    <dimen name="sliding_header_max_height">300dp</dimen>
     <dimen name="first_card_marginTop">12dp</dimen>
 
 </resources>

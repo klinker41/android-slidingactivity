@@ -35,7 +35,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.QuickContact"
+            android:theme="@style/Theme.Sliding"
             android:windowSoftInputMode="stateUnchanged"/>
 
         <activity
@@ -43,7 +43,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.QuickContact"
+            android:theme="@style/Theme.Sliding"
             android:windowSoftInputMode="stateUnchanged"/>
 
         <activity
@@ -51,7 +51,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.QuickContact"
+            android:theme="@style/Theme.Sliding"
             android:windowSoftInputMode="stateUnchanged"/>
 
     </application>

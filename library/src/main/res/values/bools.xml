@@ -17,6 +17,6 @@
 
 <resources>
 
-    <bool name="quickcontact_two_panel">false</bool>
+    <bool name="sliding_two_panel">false</bool>
 
 </resources>

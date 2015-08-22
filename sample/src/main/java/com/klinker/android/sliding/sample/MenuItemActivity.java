@@ -23,24 +23,43 @@ import android.widget.Toast;
 
 import com.klinker.android.sliding.SlidingActivity;
 
+/**
+ * Activity demonstrating showing menu items on the sliding content, this is achieved in the same
+ * manor as you would handle it for any type of activity.
+ */
 public class MenuItemActivity extends SlidingActivity {
 
+    /**
+     * Initialize our values, this is overridden instead of onCreate as it should be in all
+     * sliding activities.
+     * @param savedInstanceState the saved state.
+     */
     @Override
     public void init(Bundle savedInstanceState) {
         setTitle(R.string.submit_feedback);
-        setPrimaryColor(
+        setPrimaryColors(
                 getResources().getColor(R.color.menu_item_activity_primary),
                 getResources().getColor(R.color.menu_item_activity_primary_dark)
         );
         setContent(R.layout.activity_content);
     }
 
+    /**
+     * Creates the options menu.
+     * @param menu the menu.
+     * @return true.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_menu_item, menu);
         return true;
     }
 
+    /**
+     * Handles the options item selected event.
+     * @param item the item selected.
+     * @return true.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

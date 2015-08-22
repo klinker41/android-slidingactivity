@@ -34,29 +34,29 @@
             android:id="@+id/empty_start_column"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="@integer/contact_list_space_layout_weight"
-            android:contentDescription="@string/quickcontact_transparent_view_description" />
+            android:layout_weight="@integer/sliding_space_layout_weight"
+            android:contentDescription="@string/sliding_transparent_view_description" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="@integer/contact_list_card_layout_weight"
+            android:layout_weight="@integer/sliding_card_layout_weight"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/quickcontact_starting_empty_height"
-                android:contentDescription="@string/quickcontact_transparent_view_description"
+                android:layout_height="@dimen/sliding_starting_empty_height"
+                android:contentDescription="@string/sliding_transparent_view_description"
                 android:id="@+id/transparent_view" />
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/toolbar_parent">
-                <include layout="@layout/quickcontact_header" />
+                <include layout="@layout/sliding_header" />
             </FrameLayout>
 
-            <include layout="@layout/quickcontact_content" />
+            <include layout="@layout/sliding_content" />
 
         </LinearLayout>
 
@@ -64,10 +64,10 @@
             android:id="@+id/empty_end_column"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="@integer/contact_list_space_layout_weight"
-            android:contentDescription="@string/quickcontact_transparent_view_description" />
+            android:layout_weight="@integer/sliding_space_layout_weight"
+            android:contentDescription="@string/sliding_transparent_view_description" />
 
     </LinearLayout>
 
-    <include layout="@layout/quickcontact_title" />
+    <include layout="@layout/sliding_title" />
 </com.klinker.android.sliding.MultiShrinkScroller>

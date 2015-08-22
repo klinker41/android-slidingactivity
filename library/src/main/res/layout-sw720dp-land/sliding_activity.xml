@@ -33,8 +33,8 @@
 
           <View
               android:layout_width="match_parent"
-              android:layout_height="@dimen/quickcontact_starting_empty_height"
-              android:contentDescription="@string/quickcontact_transparent_view_description"
+              android:layout_height="@dimen/sliding_starting_empty_height"
+              android:contentDescription="@string/sliding_transparent_view_description"
               android:id="@+id/transparent_view" />
 
           <LinearLayout
@@ -48,13 +48,13 @@
                    android:background="@android:color/transparent"
                    android:id="@+id/toolbar_parent">
 
-                    <include layout="@layout/quickcontact_header" />
+                    <include layout="@layout/sliding_header" />
 
-                    <include layout="@layout/quickcontact_title" />
+                    <include layout="@layout/sliding_title" />
 
                </FrameLayout>
 
-               <include layout="@layout/quickcontact_content" />
+               <include layout="@layout/sliding_content" />
 
           </LinearLayout>
 

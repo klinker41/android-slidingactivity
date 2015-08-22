@@ -17,6 +17,6 @@
 
 <resources>
 
-    <integer name="quickcontact_title_lines">1</integer>
+    <integer name="sliding_title_lines">1</integer>
 
 </resources>

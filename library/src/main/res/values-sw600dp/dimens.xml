@@ -17,7 +17,7 @@
 
 <resources>
 
-    <dimen name="quick_contact_photo_container_height">360dip</dimen>
-    <dimen name="quick_contact_header_max_height">400dp</dimen>
+    <dimen name="sliding_photo_container_height">360dip</dimen>
+    <dimen name="sliding_header_max_height">400dp</dimen>
 
 </resources>

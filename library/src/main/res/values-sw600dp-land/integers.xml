@@ -17,7 +17,7 @@
 
 <resources>
 
-    <integer name="contact_list_space_layout_weight">1</integer>
-    <integer name="contact_list_card_layout_weight">6</integer>
+    <integer name="sliding_space_layout_weight">1</integer>
+    <integer name="sliding_card_layout_weight">6</integer>
 
 </resources>

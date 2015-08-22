@@ -26,14 +26,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -52,8 +48,6 @@ import android.widget.LinearLayout;
 import android.widget.Scroller;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import java.lang.reflect.Method;
 
 /**
  * A custom {@link ViewGroup} that operates similarly to a {@link ScrollView}, except with multiple
@@ -82,6 +76,9 @@ public class MultiShrinkScroller extends FrameLayout {
      */
     private static final int PIXELS_PER_SECOND = 1000;
 
+    /**
+     * The duration that the activity should take to animate onto screen.
+     */
     private static final int ANIMATION_DURATION = 300;
 
     /**
@@ -100,132 +97,97 @@ public class MultiShrinkScroller extends FrameLayout {
      */
     private static final float COLOR_BLENDING_START_RATIO = 0.5f;
 
+    /**
+     * Dampen the animations slightly.
+     */
     private static final float SPRING_DAMPENING_FACTOR = 0.01f;
 
-    /**
-     * When displaying a letter tile drawable, this alpha value should be used at the intermediate
-     * toolbar height.
-     */
-    private static final float DESIRED_INTERMEDIATE_LETTER_TILE_ALPHA = 0.8f;
+    private float[] lastEventPosition = { 0, 0 };
+    private VelocityTracker velocityTracker;
+    private boolean isBeingDragged = false;
+    private boolean receivedDown = false;
+    private boolean isFullscreenDownwardsFling = false;
+    private ScrollView scrollView;
+    private View scrollViewChild;
+    private View toolbar;
+    private ImageView photoView;
+    private View photoViewContainer;
+    private View transparentView;
+    private MultiShrinkScrollerListener listener;
+    private TextView largeTextView;
+    private View photoTouchInterceptOverlay;
+    private TextView invisiblePlaceholderTextView;
+    private View titleGradientView;
+    private View actionBarGradientView;
+    private View startColumn;
+    private int headerTintColor;
+    private int maximumHeaderHeight;
+    private int minimumHeaderHeight;
+    private int intermediateHeaderHeight;
+    private boolean isOpenImageSquare;
+    private int maximumHeaderTextSize;
+    private int collapsedTitleBottomMargin;
+    private int collapsedTitleStartMargin;
+    private int minimumPortraitHeaderHeight;
+    private int maximumPortraitHeaderHeight;
+    private boolean hasEverTouchedTheTop;
+    private boolean isTouchDisabledForDismissAnimation;
 
-    private float[] mLastEventPosition = { 0, 0 };
-    private VelocityTracker mVelocityTracker;
-    private boolean mIsBeingDragged = false;
-    private boolean mReceivedDown = false;
-    /**
-     * Did the current downwards fling/scroll-animation start while we were fullscreen?
-     */
-    private boolean mIsFullscreenDownwardsFling = false;
-
-    private ScrollView mScrollView;
-    private View mScrollViewChild;
-    private View mToolbar;
-    private ImageView mPhotoView;
-    private View mPhotoViewContainer;
-    private View mTransparentView;
-    private MultiShrinkScrollerListener mListener;
-    private TextView mLargeTextView;
-    private View mPhotoTouchInterceptOverlay;
-    /** Contains desired size & vertical offset of the title, once the header is fully compressed */
-    private TextView mInvisiblePlaceholderTextView;
-    private View mTitleGradientView;
-    private View mActionBarGradientView;
-    private View mStartColumn;
-    private int mHeaderTintColor;
-    private int mMaximumHeaderHeight;
-    private int mMinimumHeaderHeight;
-    /**
-     * When the contact photo is tapped, it is resized to max size or this size. This value also
-     * sometimes represents the maximum achievable header size achieved by scrolling. To enforce
-     * this maximum in scrolling logic, always access this value via
-     * {@link #getMaximumScrollableHeaderHeight}.
-     */
-    private int mIntermediateHeaderHeight;
-    /**
-     * If true, regular scrolling can expand the header beyond mIntermediateHeaderHeight. The
-     * header, that contains the contact photo, can expand to a height equal its width.
-     */
-    private boolean mIsOpenContactSquare;
-    private int mMaximumHeaderTextSize;
-    private int mCollapsedTitleBottomMargin;
-    private int mCollapsedTitleStartMargin;
-    private int mMinimumPortraitHeaderHeight;
-    private int mMaximumPortraitHeaderHeight;
-    /**
-     * True once the header has touched the top of the screen at least once.
-     */
-    private boolean mHasEverTouchedTheTop;
-    private boolean mIsTouchDisabledForDismissAnimation;
-
-    private final Scroller mScroller;
-    private final EdgeEffect mEdgeGlowBottom;
-    private final EdgeEffect mEdgeGlowTop;
-    private final int mTouchSlop;
-    private final int mMaximumVelocity;
-    private final int mMinimumVelocity;
-    private final int mDismissDistanceOnScroll;
-    private final int mDismissDistanceOnRelease;
-    private final int mSnapToTopSlopHeight;
-    private final int mTransparentStartHeight;
-    private final int mMaximumTitleMargin;
-    private final float mToolbarElevation;
-    private final boolean mIsTwoPanel;
-    private final float mLandscapePhotoRatio;
-    private final int mActionBarSize;
-
-    // Objects used to perform color filtering on the header. These are stored as fields for
-    // the sole purpose of avoiding "new" operations inside animation loops.
-    private final ColorMatrix mWhitenessColorMatrix = new ColorMatrix();
-    private final ColorMatrix mColorMatrix = new ColorMatrix();
-    private final float[] mAlphaMatrixValues = {
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 1, 0
-    };
-    private final ColorMatrix mMultiplyBlendMatrix = new ColorMatrix();
-    private final float[] mMultiplyBlendMatrixValues = {
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 1, 0
-    };
+    private final Scroller scroller;
+    private final EdgeEffect edgeGlowBottom;
+    private final EdgeEffect edgeGlowTop;
+    private final int touchSlop;
+    private final int maximumVelocity;
+    private final int minimumVelocity;
+    private final int dismissDistanceOnScroll;
+    private final int dismissDistanceOnRelease;
+    private final int snapToTopSlopHeight;
+    private final int transparentStartHeight;
+    private final int maximumTitleMargin;
+    private final float toolbarElevation;
+    private final boolean isTwoPanel;
+    private final float landscapePhotoRatio;
+    private final int actionBarSize;
 
     private static final float X1 = 0.16f;
     private static final float Y1 = 0.4f;
     private static final float X2 = 0.2f;
     private static final float Y2 = 1f;
-    private final PathInterpolator mTextSizePathInterpolator;
+    private final PathInterpolator textSizePathInterpolator;
 
-    private final int[] mGradientColors = new int[] {0,0x88000000};
-    private GradientDrawable mTitleGradientDrawable = new GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM, mGradientColors);
-    private GradientDrawable mActionBarGradientDrawable = new GradientDrawable(
-            GradientDrawable.Orientation.BOTTOM_TOP, mGradientColors);
+    private final int[] gradientColors = new int[] {0,0x88000000};
+    private GradientDrawable titleGradientDrawable = new GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM, gradientColors);
+    private GradientDrawable actionBarGradientDrawable = new GradientDrawable(
+            GradientDrawable.Orientation.BOTTOM_TOP, gradientColors);
 
+    /**
+     * Interface for listening to scroll events.
+     */
     public interface MultiShrinkScrollerListener {
+
         void onScrolledOffBottom();
-
         void onStartScrollOffBottom();
-
         void onTransparentViewHeightChange(float ratio);
-
         void onEntranceAnimationDone();
-
         void onEnterFullscreen();
-
         void onExitFullscreen();
+
     }
 
-    private final AnimatorListener mSnapToBottomListener = new AnimatorListenerAdapter() {
+    /**
+     * Listener for snaping the content to the bottom of the screen.
+     */
+    private final AnimatorListener snapToBottomListener = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(Animator animation) {
-            if (getScrollUntilOffBottom() > 0 && mListener != null) {
+            if (getScrollUntilOffBottom() > 0 && listener != null) {
                 // Due to a rounding error, after the animation finished we haven't fully scrolled
                 // off the screen. Lie to the listener: tell it that we did scroll off the screen.
-                mListener.onScrolledOffBottom();
+                listener.onScrolledOffBottom();
+
                 // No other messages need to be sent to the listener.
-                mListener = null;
+                listener = null;
             }
         }
     };
@@ -234,7 +196,7 @@ public class MultiShrinkScroller extends FrameLayout {
      * Interpolator from android.support.v4.view.ViewPager. Snappier and more elastic feeling
      * than the default interpolator.
      */
-    private static final Interpolator sInterpolator = new Interpolator() {
+    private static final Interpolator INTERPOLATOR = new Interpolator() {
 
         /**
          * {@inheritDoc}
@@ -246,79 +208,93 @@ public class MultiShrinkScroller extends FrameLayout {
         }
     };
 
+    /**
+     * Create a new instance of MultiShrinkScroller.
+     * @param context
+     */
     public MultiShrinkScroller(Context context) {
         this(context, null);
     }
 
+    /**
+     * Create a new instance of MultiShrinkScroller.
+     * @param context
+     * @param attrs
+     */
     public MultiShrinkScroller(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+    /**
+     * Create a new instance of MultiShrinkScroller.
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     */
     public MultiShrinkScroller(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         setFocusable(false);
-        // Drawing must be enabled in order to support EdgeEffect
-        setWillNotDraw(/* willNotDraw = */ false);
+        setWillNotDraw(false);
 
-        mEdgeGlowBottom = new EdgeEffect(context);
-        mEdgeGlowTop = new EdgeEffect(context);
-        mScroller = new Scroller(context, sInterpolator);
-        mTouchSlop = configuration.getScaledTouchSlop();
-        mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
-        mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
-        mTransparentStartHeight = (int) getResources().getDimension(
-                R.dimen.quickcontact_starting_empty_height);
-        mToolbarElevation = getResources().getDimension(
-                R.dimen.quick_contact_toolbar_elevation);
-        mIsTwoPanel = getResources().getBoolean(R.bool.quickcontact_two_panel);
-        mMaximumTitleMargin = (int) getResources().getDimension(
-                R.dimen.quickcontact_title_initial_margin);
+        edgeGlowBottom = new EdgeEffect(context);
+        edgeGlowTop = new EdgeEffect(context);
+        scroller = new Scroller(context, INTERPOLATOR);
+        touchSlop = configuration.getScaledTouchSlop();
+        minimumVelocity = configuration.getScaledMinimumFlingVelocity();
+        maximumVelocity = configuration.getScaledMaximumFlingVelocity();
+        transparentStartHeight = (int) getResources().getDimension(
+                R.dimen.sliding_starting_empty_height);
+        toolbarElevation = getResources().getDimension(
+                R.dimen.sliding_toolbar_elevation);
+        isTwoPanel = getResources().getBoolean(R.bool.sliding_two_panel);
+        maximumTitleMargin = (int) getResources().getDimension(
+                R.dimen.sliding_title_initial_margin);
 
-        mDismissDistanceOnScroll = (int) getResources().getDimension(
-                R.dimen.quickcontact_dismiss_distance_on_scroll);
-        mDismissDistanceOnRelease = (int) getResources().getDimension(
-                R.dimen.quickcontact_dismiss_distance_on_release);
-        mSnapToTopSlopHeight = (int) getResources().getDimension(
-                R.dimen.quickcontact_snap_to_top_slop_height);
+        dismissDistanceOnScroll = (int) getResources().getDimension(
+                R.dimen.sliding_dismiss_distance_on_scroll);
+        dismissDistanceOnRelease = (int) getResources().getDimension(
+                R.dimen.sliding_dismiss_distance_on_release);
+        snapToTopSlopHeight = (int) getResources().getDimension(
+                R.dimen.sliding_snap_to_top_slop_height);
 
         final TypedValue photoRatio = new TypedValue();
-        getResources().getValue(R.dimen.quickcontact_landscape_photo_ratio, photoRatio,
-                            /* resolveRefs = */ true);
-        mLandscapePhotoRatio = photoRatio.getFloat();
+        getResources().getValue(R.dimen.sliding_landscape_photo_ratio, photoRatio, true);
+        landscapePhotoRatio = photoRatio.getFloat();
 
         final TypedArray attributeArray = context.obtainStyledAttributes(
                 new int[]{android.R.attr.actionBarSize});
-        mActionBarSize = attributeArray.getDimensionPixelSize(0, 0);
-        mMinimumHeaderHeight = mActionBarSize;
+        actionBarSize = attributeArray.getDimensionPixelSize(0, 0);
+        minimumHeaderHeight = actionBarSize;
         // This value is approximately equal to the portrait ActionBar size. It isn't exactly the
         // same, since the landscape and portrait ActionBar sizes can be different.
-        mMinimumPortraitHeaderHeight = mMinimumHeaderHeight;
+        minimumPortraitHeaderHeight = minimumHeaderHeight;
         attributeArray.recycle();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mTextSizePathInterpolator = new PathInterpolator(X1, Y1, X2, Y2);
+            textSizePathInterpolator = new PathInterpolator(X1, Y1, X2, Y2);
         } else {
-            mTextSizePathInterpolator = null;
+            textSizePathInterpolator = null;
         }
     }
 
     /**
-     * This method must be called inside the Activity's OnCreate.
+     * This method must be called inside the Activity's onCreate. Initialize everything.
      */
     public void initialize(MultiShrinkScrollerListener listener, boolean isOpenContactSquare) {
-        mScrollView = (ScrollView) findViewById(R.id.content_scroller);
-        mScrollViewChild = findViewById(R.id.content_container);
-        mToolbar = findViewById(R.id.toolbar_parent);
-        mPhotoViewContainer = findViewById(R.id.toolbar_parent);
-        mTransparentView = findViewById(R.id.transparent_view);
-        mLargeTextView = (TextView) findViewById(R.id.large_title);
-        mInvisiblePlaceholderTextView = (TextView) findViewById(R.id.placeholder_textview);
-        mStartColumn = findViewById(R.id.empty_start_column);
+        scrollView = (ScrollView) findViewById(R.id.content_scroller);
+        scrollViewChild = findViewById(R.id.content_container);
+        toolbar = findViewById(R.id.toolbar_parent);
+        photoViewContainer = findViewById(R.id.toolbar_parent);
+        transparentView = findViewById(R.id.transparent_view);
+        largeTextView = (TextView) findViewById(R.id.large_title);
+        invisiblePlaceholderTextView = (TextView) findViewById(R.id.placeholder_textview);
+        startColumn = findViewById(R.id.empty_start_column);
+
         // Touching the empty space should close the card
-        if (mStartColumn != null) {
-            mStartColumn.setOnClickListener(new OnClickListener() {
+        if (startColumn != null) {
+            startColumn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     scrollOffBottom();
@@ -331,20 +307,20 @@ public class MultiShrinkScroller extends FrameLayout {
                 }
             });
         }
-        mListener = listener;
-        mIsOpenContactSquare = isOpenContactSquare;
+        this.listener = listener;
+        this.isOpenImageSquare = isOpenContactSquare;
 
-        mPhotoView = (ImageView) findViewById(R.id.photo);
+        photoView = (ImageView) findViewById(R.id.photo);
 
-        mTitleGradientView = findViewById(R.id.title_gradient);
-        mTitleGradientView.setBackgroundDrawable(mTitleGradientDrawable);
-        mActionBarGradientView = findViewById(R.id.action_bar_gradient);
-        mActionBarGradientView.setBackgroundDrawable(mActionBarGradientDrawable);
-        mCollapsedTitleStartMargin = ((Toolbar) findViewById(R.id.toolbar)).getContentInsetStart();
+        titleGradientView = findViewById(R.id.title_gradient);
+        titleGradientView.setBackgroundDrawable(titleGradientDrawable);
+        actionBarGradientView = findViewById(R.id.action_bar_gradient);
+        actionBarGradientView.setBackgroundDrawable(actionBarGradientDrawable);
+        collapsedTitleStartMargin = ((Toolbar) findViewById(R.id.toolbar)).getContentInsetStart();
 
-        mPhotoTouchInterceptOverlay = findViewById(R.id.photo_touch_intercept_overlay);
-        if (!mIsTwoPanel) {
-            mPhotoTouchInterceptOverlay.setOnClickListener(new OnClickListener() {
+        photoTouchInterceptOverlay = findViewById(R.id.photo_touch_intercept_overlay);
+        if (!isTwoPanel) {
+            photoTouchInterceptOverlay.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     expandHeader();
@@ -352,42 +328,42 @@ public class MultiShrinkScroller extends FrameLayout {
             });
         }
 
-        SchedulingUtils.doOnPreDraw(this, /* drawNextFrame = */ false, new Runnable() {
+        SchedulingUtils.doOnPreDraw(this, false, new Runnable() {
             @Override
             public void run() {
-                if (!mIsTwoPanel) {
-                    mMaximumHeaderHeight = getResources().getDimensionPixelSize(R.dimen.quick_contact_header_max_height);
-                    mIntermediateHeaderHeight = (int) (mMaximumHeaderHeight
+                if (!isTwoPanel) {
+                    maximumHeaderHeight = getResources().getDimensionPixelSize(R.dimen.sliding_header_max_height);
+                    intermediateHeaderHeight = (int) (maximumHeaderHeight
                             * INTERMEDIATE_HEADER_HEIGHT_RATIO);
                 }
-                mMaximumPortraitHeaderHeight = mIsTwoPanel ? getHeight()
-                        : mPhotoViewContainer.getWidth();
+                maximumPortraitHeaderHeight = isTwoPanel ? getHeight()
+                        : photoViewContainer.getWidth();
                 setHeaderHeight(getMaximumScrollableHeaderHeight());
-                mMaximumHeaderTextSize = mLargeTextView.getHeight();
-                if (mIsTwoPanel) {
-                    mMaximumHeaderHeight = getHeight();
-                    mMinimumHeaderHeight = mMaximumHeaderHeight;
-                    mIntermediateHeaderHeight = mMaximumHeaderHeight;
+                maximumHeaderTextSize = largeTextView.getHeight();
+                if (isTwoPanel) {
+                    maximumHeaderHeight = getHeight();
+                    minimumHeaderHeight = maximumHeaderHeight;
+                    intermediateHeaderHeight = maximumHeaderHeight;
 
                     // Permanently set photo width and height.
                     final ViewGroup.LayoutParams photoLayoutParams
-                            = mPhotoViewContainer.getLayoutParams();
-                    photoLayoutParams.height = mMaximumHeaderHeight;
-                    photoLayoutParams.width = (int) (mMaximumHeaderHeight * mLandscapePhotoRatio);
-                    mPhotoViewContainer.setLayoutParams(photoLayoutParams);
+                            = photoViewContainer.getLayoutParams();
+                    photoLayoutParams.height = maximumHeaderHeight;
+                    photoLayoutParams.width = (int) (maximumHeaderHeight * landscapePhotoRatio);
+                    photoViewContainer.setLayoutParams(photoLayoutParams);
 
                     // Permanently set title width and margin.
                     final LayoutParams largeTextLayoutParams
-                            = (LayoutParams) mLargeTextView.getLayoutParams();
+                            = (LayoutParams) largeTextView.getLayoutParams();
                     largeTextLayoutParams.width = photoLayoutParams.width -
                             largeTextLayoutParams.leftMargin - largeTextLayoutParams.rightMargin;
                     largeTextLayoutParams.gravity = Gravity.BOTTOM | Gravity.START;
-                    mLargeTextView.setLayoutParams(largeTextLayoutParams);
+                    largeTextView.setLayoutParams(largeTextLayoutParams);
                 } else {
-                    // Set the width of mLargeTextView as if it was nested inside
-                    // mPhotoViewContainer.
-                    mLargeTextView.setWidth(mPhotoViewContainer.getWidth()
-                            - 2 * mMaximumTitleMargin);
+                    // Set the width of largeTextView as if it was nested inside
+                    // photoViewContainer.
+                    largeTextView.setWidth(photoViewContainer.getWidth()
+                            - 2 * maximumTitleMargin);
                 }
 
                 calculateCollapsedLargeTitlePadding();
@@ -399,40 +375,49 @@ public class MultiShrinkScroller extends FrameLayout {
 
     private void configureGradientViewHeights() {
         final LayoutParams actionBarGradientLayoutParams
-                = (LayoutParams) mActionBarGradientView.getLayoutParams();
-        actionBarGradientLayoutParams.height = mActionBarSize;
-        mActionBarGradientView.setLayoutParams(actionBarGradientLayoutParams);
+                = (LayoutParams) actionBarGradientView.getLayoutParams();
+        actionBarGradientLayoutParams.height = actionBarSize;
+        actionBarGradientView.setLayoutParams(actionBarGradientLayoutParams);
         final LayoutParams titleGradientLayoutParams
-                = (LayoutParams) mTitleGradientView.getLayoutParams();
+                = (LayoutParams) titleGradientView.getLayoutParams();
         final float TITLE_GRADIENT_SIZE_COEFFICIENT = 1.25f;
         final LayoutParams largeTextLayoutParms
-                = (LayoutParams) mLargeTextView.getLayoutParams();
-        titleGradientLayoutParams.height = (int) ((mLargeTextView.getHeight()
+                = (LayoutParams) largeTextView.getLayoutParams();
+        titleGradientLayoutParams.height = (int) ((largeTextView.getHeight()
                 + largeTextLayoutParms.bottomMargin) * TITLE_GRADIENT_SIZE_COEFFICIENT);
-        mTitleGradientView.setLayoutParams(titleGradientLayoutParams);
+        titleGradientView.setLayoutParams(titleGradientLayoutParams);
     }
 
+    /**
+     * Set the title for the large text view that will be adjusted as the activity scrolls.
+     * @param title the title.
+     */
     public void setTitle(String title) {
-        mLargeTextView.setText(title);
-        mPhotoTouchInterceptOverlay.setContentDescription(title);
+        largeTextView.setText(title);
+        photoTouchInterceptOverlay.setContentDescription(title);
     }
 
+    /**
+     * Catch the touch event and act on it.
+     * @param event the touch event.
+     * @return true if we should start dragging, otherwise false.
+     */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (mVelocityTracker == null) {
-            mVelocityTracker = VelocityTracker.obtain();
+        if (velocityTracker == null) {
+            velocityTracker = VelocityTracker.obtain();
         }
-        mVelocityTracker.addMovement(event);
+        velocityTracker.addMovement(event);
 
         // The only time we want to intercept touch events is when we are being dragged.
         return shouldStartDrag(event);
     }
 
     private boolean shouldStartDrag(MotionEvent event) {
-        if (mIsTouchDisabledForDismissAnimation) return false;
+        if (isTouchDisabledForDismissAnimation) return false;
 
-        if (mIsBeingDragged) {
-            mIsBeingDragged = false;
+        if (isBeingDragged) {
+            isBeingDragged = false;
             return false;
         }
 
@@ -441,11 +426,11 @@ public class MultiShrinkScroller extends FrameLayout {
             // start a drag.
             case MotionEvent.ACTION_DOWN:
                 updateLastEventPosition(event);
-                if (!mScroller.isFinished()) {
+                if (!scroller.isFinished()) {
                     startDrag();
                     return true;
                 } else {
-                    mReceivedDown = true;
+                    receivedDown = true;
                 }
                 break;
 
@@ -463,24 +448,28 @@ public class MultiShrinkScroller extends FrameLayout {
         return false;
     }
 
+    /**
+     * Catch the touch event and act on it.
+     * @param event the touch event.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (mIsTouchDisabledForDismissAnimation) return true;
+        if (isTouchDisabledForDismissAnimation) return true;
 
         final int action = event.getAction();
 
-        if (mVelocityTracker == null) {
-            mVelocityTracker = VelocityTracker.obtain();
+        if (velocityTracker == null) {
+            velocityTracker = VelocityTracker.obtain();
         }
-        mVelocityTracker.addMovement(event);
+        velocityTracker.addMovement(event);
 
-        if (!mIsBeingDragged) {
+        if (!isBeingDragged) {
             if (shouldStartDrag(event)) {
                 return true;
             }
 
-            if (action == MotionEvent.ACTION_UP && mReceivedDown) {
-                mReceivedDown = false;
+            if (action == MotionEvent.ACTION_UP && receivedDown) {
+                receivedDown = false;
                 return performClick();
             }
             return true;
@@ -490,17 +479,17 @@ public class MultiShrinkScroller extends FrameLayout {
             case MotionEvent.ACTION_MOVE:
                 final float delta = updatePositionAndComputeDelta(event);
                 scrollTo(0, getScroll() + (int) delta);
-                mReceivedDown = false;
+                receivedDown = false;
 
-                if (mIsBeingDragged) {
+                if (isBeingDragged) {
                     final int distanceFromMaxScrolling = getMaximumScrollUpwards() - getScroll();
                     if (delta > distanceFromMaxScrolling && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         // The ScrollView is being pulled upwards while there is no more
                         // content offscreen, and the view port is already fully expanded.
-                        mEdgeGlowBottom.onPull(delta / getHeight(), 1 - event.getX() / getWidth());
+                        edgeGlowBottom.onPull(delta / getHeight(), 1 - event.getX() / getWidth());
                     }
 
-                    if (!mEdgeGlowBottom.isFinished()) {
+                    if (!edgeGlowBottom.isFinished()) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                             postInvalidateOnAnimation();
                         } else {
@@ -518,21 +507,27 @@ public class MultiShrinkScroller extends FrameLayout {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 stopDrag(action == MotionEvent.ACTION_CANCEL);
-                mReceivedDown = false;
+                receivedDown = false;
                 break;
         }
 
         return true;
     }
 
+    /**
+     * Sets the tint color that should be applied to the header. If an image is present, this
+     * will go behind the image and show over it as the activity is scrolled, otherwise it will
+     * just be the color displayed at the top of the screen.
+     * @param color the primary color for the activity to display.
+     */
     public void setHeaderTintColor(int color) {
-        mHeaderTintColor = color;
+        headerTintColor = color;
         updatePhotoTintAndDropShadow();
         // We want to use the same amount of alpha on the new tint color as the previous tint color.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            final int edgeEffectAlpha = Color.alpha(mEdgeGlowBottom.getColor());
-            mEdgeGlowBottom.setColor((color & 0xffffff) | Color.argb(edgeEffectAlpha, 0, 0, 0));
-            mEdgeGlowTop.setColor(mEdgeGlowBottom.getColor());
+            final int edgeEffectAlpha = Color.alpha(edgeGlowBottom.getColor());
+            edgeGlowBottom.setColor((color & 0xffffff) | Color.argb(edgeEffectAlpha, 0, 0, 0));
+            edgeGlowTop.setColor(edgeGlowBottom.getColor());
         }
     }
 
@@ -540,30 +535,30 @@ public class MultiShrinkScroller extends FrameLayout {
      * Expand to maximum size.
      */
     private void expandHeader() {
-        if (getHeaderHeight() != mMaximumHeaderHeight) {
+        if (getHeaderHeight() != maximumHeaderHeight) {
             final ObjectAnimator animator = ObjectAnimator.ofInt(this, "headerHeight",
-                    mMaximumHeaderHeight);
+                    maximumHeaderHeight);
             animator.setDuration(ANIMATION_DURATION);
             animator.start();
             // Scroll nested scroll view to its top
-            if (mScrollView.getScrollY() != 0) {
-                ObjectAnimator.ofInt(mScrollView, "scrollY", -mScrollView.getScrollY()).start();
+            if (scrollView.getScrollY() != 0) {
+                ObjectAnimator.ofInt(scrollView, "scrollY", -scrollView.getScrollY()).start();
             }
         }
     }
 
     private void startDrag() {
-        mIsBeingDragged = true;
-        mScroller.abortAnimation();
+        isBeingDragged = true;
+        scroller.abortAnimation();
     }
 
     private void stopDrag(boolean cancelled) {
-        mIsBeingDragged = false;
+        isBeingDragged = false;
         if (!cancelled && getChildCount() > 0) {
             final float velocity = getCurrentVelocity();
-            if (velocity > mMinimumVelocity || velocity < -mMinimumVelocity) {
+            if (velocity > minimumVelocity || velocity < -minimumVelocity) {
                 fling(-velocity);
-                onDragFinished(mScroller.getFinalY() - mScroller.getStartY());
+                onDragFinished(scroller.getFinalY() - scroller.getStartY());
             } else {
                 onDragFinished(/* flingDelta = */ 0);
             }
@@ -571,12 +566,12 @@ public class MultiShrinkScroller extends FrameLayout {
             onDragFinished(/* flingDelta = */ 0);
         }
 
-        if (mVelocityTracker != null) {
-            mVelocityTracker.recycle();
-            mVelocityTracker = null;
+        if (velocityTracker != null) {
+            velocityTracker.recycle();
+            velocityTracker = null;
         }
 
-        mEdgeGlowBottom.onRelease();
+        edgeGlowBottom.onRelease();
     }
 
     private void onDragFinished(int flingDelta) {
@@ -597,25 +592,25 @@ public class MultiShrinkScroller extends FrameLayout {
      * @return TRUE if QuickContacts will snap/fling to to top after this method call.
      */
     private boolean snapToTopOnDragFinished(int flingDelta) {
-        if (!mHasEverTouchedTheTop) {
+        if (!hasEverTouchedTheTop) {
             // If the current fling is predicted to scroll past the top, then we don't need to snap
             // to the top. However, if the fling only flings past the top by a tiny amount,
             // it will look nicer to snap than to fling.
             final float predictedScrollPastTop = getTransparentViewHeight() - flingDelta;
-            if (predictedScrollPastTop < -mSnapToTopSlopHeight) {
+            if (predictedScrollPastTop < -snapToTopSlopHeight) {
                 return false;
             }
 
-            if (getTransparentViewHeight() <= mTransparentStartHeight) {
+            if (getTransparentViewHeight() <= transparentStartHeight) {
                 // We are above the starting scroll position so snap to the top.
-                mScroller.forceFinished(true);
+                scroller.forceFinished(true);
                 smoothScrollBy(getTransparentViewHeight());
                 return true;
             }
             return false;
         }
-        if (getTransparentViewHeight() < mDismissDistanceOnRelease) {
-            mScroller.forceFinished(true);
+        if (getTransparentViewHeight() < dismissDistanceOnRelease) {
+            scroller.forceFinished(true);
             smoothScrollBy(getTransparentViewHeight());
             return true;
         }
@@ -626,13 +621,13 @@ public class MultiShrinkScroller extends FrameLayout {
      * If needed, scroll all the subviews off the bottom of the Window.
      */
     private void snapToBottomOnDragFinished() {
-        if (mHasEverTouchedTheTop) {
-            if (getTransparentViewHeight() > mDismissDistanceOnRelease) {
+        if (hasEverTouchedTheTop) {
+            if (getTransparentViewHeight() > dismissDistanceOnRelease) {
                 scrollOffBottom();
             }
             return;
         }
-        if (getTransparentViewHeight() > mTransparentStartHeight) {
+        if (getTransparentViewHeight() > transparentStartHeight) {
             scrollOffBottom();
         }
     }
@@ -642,14 +637,14 @@ public class MultiShrinkScroller extends FrameLayout {
      * without waiting for the user to finish their drag.
      */
     private boolean shouldDismissOnScroll() {
-        return mHasEverTouchedTheTop && getTransparentViewHeight() > mDismissDistanceOnScroll;
+        return hasEverTouchedTheTop && getTransparentViewHeight() > dismissDistanceOnScroll;
     }
 
     /**
      * Return ratio of non-transparent:viewgroup-height for this viewgroup at the starting position.
      */
     public float getStartingTransparentHeightRatio() {
-        return getTransparentHeightRatio(mTransparentStartHeight);
+        return getTransparentHeightRatio(transparentStartHeight);
     }
 
     private float getTransparentHeightRatio(int transparentHeight) {
@@ -658,25 +653,29 @@ public class MultiShrinkScroller extends FrameLayout {
         return 1.0f - Math.max(Math.min(1.0f, heightRatio), 0f);
     }
 
+    /**
+     * Scroll the activity off the bottom of the screen.
+     */
     public void scrollOffBottom() {
-        mIsTouchDisabledForDismissAnimation = true;
+        isTouchDisabledForDismissAnimation = true;
         final Interpolator interpolator = new AcceleratingFlingInterpolator(
                 EXIT_FLING_ANIMATION_DURATION_MS, getCurrentVelocity(),
                 getScrollUntilOffBottom());
-        mScroller.forceFinished(true);
+        scroller.forceFinished(true);
         ObjectAnimator translateAnimation = ObjectAnimator.ofInt(this, "scroll",
                 getScroll() - getScrollUntilOffBottom());
         translateAnimation.setRepeatCount(0);
         translateAnimation.setInterpolator(interpolator);
         translateAnimation.setDuration(EXIT_FLING_ANIMATION_DURATION_MS);
-        translateAnimation.addListener(mSnapToBottomListener);
+        translateAnimation.addListener(snapToBottomListener);
         translateAnimation.start();
-        if (mListener != null) {
-            mListener.onStartScrollOffBottom();
+        if (listener != null) {
+            listener.onStartScrollOffBottom();
         }
     }
 
     /**
+     * Scroll the activity up as the entrace animation.
      * @param scrollToCurrentPosition if true, will scroll from the bottom of the screen to the
      * current position. Otherwise, will scroll from the bottom of the screen to the top of the
      * screen.
@@ -702,56 +701,54 @@ public class MultiShrinkScroller extends FrameLayout {
         animator.addUpdateListener(new AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                if (animation.getAnimatedValue().equals(desiredValue) && mListener != null) {
-                    mListener.onEntranceAnimationDone();
+                if (animation.getAnimatedValue().equals(desiredValue) && listener != null) {
+                    listener.onEntranceAnimationDone();
                 }
             }
         });
         animator.start();
     }
 
+    /**
+     * Scroll to a certain position.
+     * @param x the x position.
+     * @param y the y position.
+     */
     @Override
     public void scrollTo(int x, int y) {
         final int delta = y - getScroll();
         boolean wasFullscreen = getScrollNeededToBeFullScreen() <= 0;
+
         if (delta > 0) {
             scrollUp(delta);
         } else {
             scrollDown(delta);
         }
+
         updatePhotoTintAndDropShadow();
         updateHeaderTextSizeAndMargin();
         final boolean isFullscreen = getScrollNeededToBeFullScreen() <= 0;
-        mHasEverTouchedTheTop |= isFullscreen;
-        if (mListener != null) {
+        hasEverTouchedTheTop |= isFullscreen;
+
+        if (listener != null) {
             if (wasFullscreen && !isFullscreen) {
-                 mListener.onExitFullscreen();
+                 listener.onExitFullscreen();
             } else if (!wasFullscreen && isFullscreen) {
-                mListener.onEnterFullscreen();
+                listener.onEnterFullscreen();
             }
             if (!isFullscreen || !wasFullscreen) {
-                mListener.onTransparentViewHeightChange(
+                listener.onTransparentViewHeightChange(
                         getTransparentHeightRatio(getTransparentViewHeight()));
             }
         }
     }
 
     /**
-     * Change the height of the header/toolbar. Do *not* use this outside animations. This was
-     * designed for use by {@link #prepareForShrinkingScrollChild}.
+     * Get the current toolbar height.
+     * @return the toolbar height.
      */
-    public void setToolbarHeight(int delta) {
-        final ViewGroup.LayoutParams toolbarLayoutParams
-                = mToolbar.getLayoutParams();
-        toolbarLayoutParams.height = delta;
-        mToolbar.setLayoutParams(toolbarLayoutParams);
-
-        updatePhotoTintAndDropShadow();
-        updateHeaderTextSizeAndMargin();
-    }
-
     public int getToolbarHeight() {
-        return mToolbar.getLayoutParams().height;
+        return toolbar.getLayoutParams().height;
     }
 
     /**
@@ -759,17 +756,25 @@ public class MultiShrinkScroller extends FrameLayout {
      */
     public void setHeaderHeight(int height) {
         final ViewGroup.LayoutParams toolbarLayoutParams
-                = mToolbar.getLayoutParams();
+                = toolbar.getLayoutParams();
         toolbarLayoutParams.height = height;
-        mToolbar.setLayoutParams(toolbarLayoutParams);
+        toolbar.setLayoutParams(toolbarLayoutParams);
         updatePhotoTintAndDropShadow();
         updateHeaderTextSizeAndMargin();
     }
 
+    /**
+     * Gets the current header height.
+     * @return the header height.
+     */
     public int getHeaderHeight() {
-        return mToolbar.getLayoutParams().height;
+        return toolbar.getLayoutParams().height;
     }
 
+    /**
+     * Set where to scroll to.
+     * @param scroll the y scroll position.
+     */
     public void setScroll(int scroll) {
         scrollTo(0, scroll);
     }
@@ -779,30 +784,30 @@ public class MultiShrinkScroller extends FrameLayout {
      * performed on the ToolBar. This is the value inspected by animators.
      */
     public int getScroll() {
-        return mTransparentStartHeight - getTransparentViewHeight()
+        return transparentStartHeight - getTransparentViewHeight()
                 + getMaximumScrollableHeaderHeight() - getToolbarHeight()
-                + mScrollView.getScrollY();
+                + scrollView.getScrollY();
     }
 
     private int getMaximumScrollableHeaderHeight() {
-        return mIsOpenContactSquare ? mMaximumHeaderHeight : mIntermediateHeaderHeight;
+        return isOpenImageSquare ? maximumHeaderHeight : intermediateHeaderHeight;
     }
 
     /**
      * A variant of {@link #getScroll} that pretends the header is never larger than
-     * than mIntermediateHeaderHeight. This function is sometimes needed when making scrolling
+     * than intermediateHeaderHeight. This function is sometimes needed when making scrolling
      * decisions that will not change the header size (ie, snapping to the bottom or top).
      *
-     * When mIsOpenContactSquare is true, this function considers mIntermediateHeaderHeight ==
-     * mMaximumHeaderHeight, since snapping decisions will be made relative the full header
-     * size when mIsOpenContactSquare = true.
+     * When isOpenImageSquare is true, this function considers intermediateHeaderHeight ==
+     * maximumHeaderHeight, since snapping decisions will be made relative the full header
+     * size when isOpenImageSquare = true.
      *
      * This value should never be used in conjunction with {@link #getScroll} values.
      */
     private int getScroll_ignoreOversizedHeaderForSnapping() {
-        return mTransparentStartHeight - getTransparentViewHeight()
+        return transparentStartHeight - getTransparentViewHeight()
                 + Math.max(getMaximumScrollableHeaderHeight() - getToolbarHeight(), 0)
-                + mScrollView.getScrollY();
+                + scrollView.getScrollY();
     }
 
     /**
@@ -818,27 +823,33 @@ public class MultiShrinkScroller extends FrameLayout {
      */
     private int getScrollUntilOffBottom() {
         return getHeight() + getScroll_ignoreOversizedHeaderForSnapping()
-                - mTransparentStartHeight;
+                - transparentStartHeight;
     }
 
+    /**
+     * Compute the scroll for the action.
+     */
     @Override
     public void computeScroll() {
-        if (mScroller.computeScrollOffset()) {
+        if (scroller.computeScrollOffset()) {
             // Examine the fling results in order to activate EdgeEffect and halt flings.
             final int oldScroll = getScroll();
-            scrollTo(0, mScroller.getCurrY());
-            final int delta = mScroller.getCurrY() - oldScroll;
+            scrollTo(0, scroller.getCurrY());
+            final int delta = scroller.getCurrY() - oldScroll;
             final int distanceFromMaxScrolling = getMaximumScrollUpwards() - getScroll();
+
             if (delta > distanceFromMaxScrolling && distanceFromMaxScrolling > 0) {
-                mEdgeGlowBottom.onAbsorb((int) mScroller.getCurrVelocity());
+                edgeGlowBottom.onAbsorb((int) scroller.getCurrVelocity());
             }
-            if (mIsFullscreenDownwardsFling && getTransparentViewHeight() > 0) {
+
+            if (isFullscreenDownwardsFling && getTransparentViewHeight() > 0) {
                 // Halt the fling once QuickContact's top is on screen.
                 scrollTo(0, getScroll() + getTransparentViewHeight());
-                mEdgeGlowTop.onAbsorb((int) mScroller.getCurrVelocity());
-                mScroller.abortAnimation();
-                mIsFullscreenDownwardsFling = false;
+                edgeGlowTop.onAbsorb((int) scroller.getCurrVelocity());
+                scroller.abortAnimation();
+                isFullscreenDownwardsFling = false;
             }
+
             if (!awakenScrollBars()) {
                 // Keep on drawing until the animation has finished.
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -847,14 +858,19 @@ public class MultiShrinkScroller extends FrameLayout {
                     postInvalidate();
                 }
             }
-            if (mScroller.getCurrY() >= getMaximumScrollUpwards()) {
+
+            if (scroller.getCurrY() >= getMaximumScrollUpwards()) {
                 // Halt the fling once QuickContact's bottom is on screen.
-                mScroller.abortAnimation();
-                mIsFullscreenDownwardsFling = false;
+                scroller.abortAnimation();
+                isFullscreenDownwardsFling = false;
             }
         }
     }
 
+    /**
+     * Draw all components on the screen.
+     * @param canvas the canvas to draw on.
+     */
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
@@ -862,7 +878,7 @@ public class MultiShrinkScroller extends FrameLayout {
         final int width = getWidth() - getPaddingLeft() - getPaddingRight();
         final int height = getHeight();
 
-        if (!mEdgeGlowBottom.isFinished()) {
+        if (!edgeGlowBottom.isFinished()) {
             final int restoreCount = canvas.save();
 
             // Draw the EdgeEffect on the bottom of the Window (Or a little bit below the bottom
@@ -873,13 +889,13 @@ public class MultiShrinkScroller extends FrameLayout {
                     height + getMaximumScrollUpwards() - getScroll());
 
             canvas.rotate(180, width, 0);
-            if (mIsTwoPanel) {
+            if (isTwoPanel) {
                 // Only show the EdgeEffect on the bottom of the ScrollView.
-                mEdgeGlowBottom.setSize(mScrollView.getWidth(), height);
+                edgeGlowBottom.setSize(scrollView.getWidth(), height);
             } else {
-                mEdgeGlowBottom.setSize(width, height);
+                edgeGlowBottom.setSize(width, height);
             }
-            if (mEdgeGlowBottom.draw(canvas)) {
+            if (edgeGlowBottom.draw(canvas)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     postInvalidateOnAnimation();
                 } else {
@@ -889,15 +905,15 @@ public class MultiShrinkScroller extends FrameLayout {
             canvas.restoreToCount(restoreCount);
         }
 
-        if (!mEdgeGlowTop.isFinished()) {
+        if (!edgeGlowTop.isFinished()) {
             final int restoreCount = canvas.save();
-            if (mIsTwoPanel) {
-                mEdgeGlowTop.setSize(mScrollView.getWidth(), height);
-                canvas.translate(mPhotoViewContainer.getWidth(), 0);
+            if (isTwoPanel) {
+                edgeGlowTop.setSize(scrollView.getWidth(), height);
+                canvas.translate(photoViewContainer.getWidth(), 0);
             } else {
-                mEdgeGlowTop.setSize(width, height);
+                edgeGlowTop.setSize(width, height);
             }
-            if (mEdgeGlowTop.draw(canvas)) {
+            if (edgeGlowTop.draw(canvas)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     postInvalidateOnAnimation();
                 } else {
@@ -909,46 +925,46 @@ public class MultiShrinkScroller extends FrameLayout {
     }
 
     private float getCurrentVelocity() {
-        if (mVelocityTracker == null) {
+        if (velocityTracker == null) {
             return 0;
         }
-        mVelocityTracker.computeCurrentVelocity(PIXELS_PER_SECOND, mMaximumVelocity);
-        return mVelocityTracker.getYVelocity();
+        velocityTracker.computeCurrentVelocity(PIXELS_PER_SECOND, maximumVelocity);
+        return velocityTracker.getYVelocity();
     }
 
     private void fling(float velocity) {
         // For reasons I do not understand, scrolling is less janky when maxY=Integer.MAX_VALUE
         // then when maxY is set to an actual value.
-        mScroller.fling(0, getScroll(), 0, (int) velocity, 0, 0, -Integer.MAX_VALUE,
+        scroller.fling(0, getScroll(), 0, (int) velocity, 0, 0, -Integer.MAX_VALUE,
                 Integer.MAX_VALUE);
-        if (velocity < 0 && mTransparentView.getHeight() <= 0) {
-            mIsFullscreenDownwardsFling = true;
+        if (velocity < 0 && transparentView.getHeight() <= 0) {
+            isFullscreenDownwardsFling = true;
         }
         invalidate();
     }
 
     private int getMaximumScrollUpwards() {
-        if (!mIsTwoPanel) {
-            return mTransparentStartHeight
+        if (!isTwoPanel) {
+            return transparentStartHeight
                     // How much the Header view can compress
                     + getMaximumScrollableHeaderHeight() - getFullyCompressedHeaderHeight()
                     // How much the ScrollView can scroll. 0, if child is smaller than ScrollView.
-                    + Math.max(0, mScrollViewChild.getHeight() - getHeight()
+                    + Math.max(0, scrollViewChild.getHeight() - getHeight()
                     + getFullyCompressedHeaderHeight());
         } else {
-            return mTransparentStartHeight
+            return transparentStartHeight
                     // How much the ScrollView can scroll. 0, if child is smaller than ScrollView.
-                    + Math.max(0, mScrollViewChild.getHeight() - getHeight());
+                    + Math.max(0, scrollViewChild.getHeight() - getHeight());
         }
     }
 
     private int getTransparentViewHeight() {
-        return mTransparentView.getLayoutParams().height;
+        return transparentView.getLayoutParams().height;
     }
 
     private void setTransparentViewHeight(int height) {
-        mTransparentView.getLayoutParams().height = height;
-        mTransparentView.setLayoutParams(mTransparentView.getLayoutParams());
+        transparentView.getLayoutParams().height = height;
+        transparentView.setLayoutParams(transparentView.getLayoutParams());
     }
 
     private void scrollUp(int delta) {
@@ -959,16 +975,16 @@ public class MultiShrinkScroller extends FrameLayout {
             delta -= originalValue - getTransparentViewHeight();
         }
         final ViewGroup.LayoutParams toolbarLayoutParams
-                = mToolbar.getLayoutParams();
+                = toolbar.getLayoutParams();
         if (toolbarLayoutParams.height > getFullyCompressedHeaderHeight()) {
             final int originalValue = toolbarLayoutParams.height;
             toolbarLayoutParams.height -= delta;
             toolbarLayoutParams.height = Math.max(toolbarLayoutParams.height,
                     getFullyCompressedHeaderHeight());
-            mToolbar.setLayoutParams(toolbarLayoutParams);
+            toolbar.setLayoutParams(toolbarLayoutParams);
             delta -= originalValue - toolbarLayoutParams.height;
         }
-        mScrollView.scrollBy(0, delta);
+        scrollView.scrollBy(0, delta);
     }
 
     /**
@@ -976,31 +992,31 @@ public class MultiShrinkScroller extends FrameLayout {
      * allow the the ScrollView to scroll unless there is new content off of the edge of ScrollView.
      */
     private int getFullyCompressedHeaderHeight() {
-        return Math.min(Math.max(mToolbar.getLayoutParams().height - getOverflowingChildViewSize(),
-                mMinimumHeaderHeight), getMaximumScrollableHeaderHeight());
+        return Math.min(Math.max(toolbar.getLayoutParams().height - getOverflowingChildViewSize(),
+                minimumHeaderHeight), getMaximumScrollableHeaderHeight());
     }
 
     /**
-     * Returns the amount of mScrollViewChild that doesn't fit inside its parent.
+     * Returns the amount of scrollViewChild that doesn't fit inside its parent.
      */
     private int getOverflowingChildViewSize() {
-        final int usedScrollViewSpace = mScrollViewChild.getHeight();
-        return -getHeight() + usedScrollViewSpace + mToolbar.getLayoutParams().height;
+        final int usedScrollViewSpace = scrollViewChild.getHeight();
+        return -getHeight() + usedScrollViewSpace + toolbar.getLayoutParams().height;
     }
 
     private void scrollDown(int delta) {
-        if (mScrollView.getScrollY() > 0) {
-            final int originalValue = mScrollView.getScrollY();
-            mScrollView.scrollBy(0, delta);
-            delta -= mScrollView.getScrollY() - originalValue;
+        if (scrollView.getScrollY() > 0) {
+            final int originalValue = scrollView.getScrollY();
+            scrollView.scrollBy(0, delta);
+            delta -= scrollView.getScrollY() - originalValue;
         }
-        final ViewGroup.LayoutParams toolbarLayoutParams = mToolbar.getLayoutParams();
+        final ViewGroup.LayoutParams toolbarLayoutParams = toolbar.getLayoutParams();
         if (toolbarLayoutParams.height < getMaximumScrollableHeaderHeight()) {
             final int originalValue = toolbarLayoutParams.height;
             toolbarLayoutParams.height -= delta;
             toolbarLayoutParams.height = Math.min(toolbarLayoutParams.height,
                     getMaximumScrollableHeaderHeight());
-            mToolbar.setLayoutParams(toolbarLayoutParams);
+            toolbar.setLayoutParams(toolbarLayoutParams);
             delta -= originalValue - toolbarLayoutParams.height;
         }
         setTransparentViewHeight(getTransparentViewHeight() - delta);
@@ -1009,10 +1025,10 @@ public class MultiShrinkScroller extends FrameLayout {
             post(new Runnable() {
                 @Override
                 public void run() {
-                    if (mListener != null) {
-                        mListener.onScrolledOffBottom();
+                    if (listener != null) {
+                        listener.onScrolledOffBottom();
                         // No other messages need to be sent to the listener.
-                        mListener = null;
+                        listener = null;
                     }
                 }
             });
@@ -1023,89 +1039,89 @@ public class MultiShrinkScroller extends FrameLayout {
      * Set the header size and padding, based on the current scroll position.
      */
     private void updateHeaderTextSizeAndMargin() {
-        if (mIsTwoPanel) {
+        if (isTwoPanel) {
             // The text size stays at a constant size & location in two panel layouts.
             return;
         }
 
         // The pivot point for scaling should be middle of the starting side.
-        mLargeTextView.setPivotX(0);
-        mLargeTextView.setPivotY(mLargeTextView.getHeight() / 2);
+        largeTextView.setPivotX(0);
+        largeTextView.setPivotY(largeTextView.getHeight() / 2);
 
-        final int toolbarHeight = mToolbar.getLayoutParams().height;
-        mPhotoTouchInterceptOverlay.setClickable(toolbarHeight != mMaximumHeaderHeight);
+        final int toolbarHeight = toolbar.getLayoutParams().height;
+        photoTouchInterceptOverlay.setClickable(toolbarHeight != maximumHeaderHeight);
 
-        if (toolbarHeight >= mMaximumHeaderHeight) {
+        if (toolbarHeight >= maximumHeaderHeight) {
             // Everything is full size when the header is fully expanded.
-            mLargeTextView.setScaleX(1);
-            mLargeTextView.setScaleY(1);
+            largeTextView.setScaleX(1);
+            largeTextView.setScaleY(1);
             setInterpolatedTitleMargins(1);
             return;
         }
 
-        final float ratio = (toolbarHeight  - mMinimumHeaderHeight)
-                / (float)(mMaximumHeaderHeight - mMinimumHeaderHeight);
-        final float minimumSize = mInvisiblePlaceholderTextView.getHeight();
+        final float ratio = (toolbarHeight  - minimumHeaderHeight)
+                / (float)(maximumHeaderHeight - minimumHeaderHeight);
+        final float minimumSize = invisiblePlaceholderTextView.getHeight();
         float bezierOutput;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            bezierOutput = mTextSizePathInterpolator.getInterpolation(ratio);
+            bezierOutput = textSizePathInterpolator.getInterpolation(ratio);
         } else {
             // since we can't use the path interpolator here, just interpolate linearly instead
             bezierOutput = ratio;
         }
 
-        float scale = (minimumSize + (mMaximumHeaderTextSize - minimumSize) * bezierOutput)
-                / mMaximumHeaderTextSize;
+        float scale = (minimumSize + (maximumHeaderTextSize - minimumSize) * bezierOutput)
+                / maximumHeaderTextSize;
 
         // Clamp to reasonable/finite values before passing into framework. The values
         // can be wacky before the first pre-render.
         bezierOutput = Math.min(bezierOutput, 1.0f);
         scale = Math.min(scale, 1.0f);
 
-        mLargeTextView.setScaleX(scale);
-        mLargeTextView.setScaleY(scale);
+        largeTextView.setScaleX(scale);
+        largeTextView.setScaleY(scale);
         setInterpolatedTitleMargins(bezierOutput);
     }
 
     /**
-     * Calculate the padding around mLargeTextView so that it will look appropriate once it
+     * Calculate the padding around largeTextView so that it will look appropriate once it
      * finishes moving into its target location/size.
      */
     private void calculateCollapsedLargeTitlePadding() {
-        mCollapsedTitleBottomMargin =
-                (mMinimumHeaderHeight - mLargeTextView.getMeasuredHeight()) / 2;
+        collapsedTitleBottomMargin =
+                (minimumHeaderHeight - largeTextView.getMeasuredHeight()) / 2;
     }
 
     /**
      * Interpolate the title's margin size. When {@param x}=1, use the maximum title margins.
-     * When {@param x}=0, use the margin values taken from {@link #mInvisiblePlaceholderTextView}.
+     * When {@param x}=0, use the margin values taken from {@link #invisiblePlaceholderTextView}.
      */
     private void setInterpolatedTitleMargins(float x) {
         final LayoutParams titleLayoutParams
-                = (LayoutParams) mLargeTextView.getLayoutParams();
+                = (LayoutParams) largeTextView.getLayoutParams();
         final LinearLayout.LayoutParams toolbarLayoutParams
-                = (LinearLayout.LayoutParams) mToolbar.getLayoutParams();
+                = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
 
         // Need to add more to margin start if there is a start column
-        int startColumnWidth = mStartColumn == null ? 0 : mStartColumn.getWidth();
+        int startColumnWidth = startColumn == null ? 0 : startColumn.getWidth();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            titleLayoutParams.setMarginStart((int) (mCollapsedTitleStartMargin * (1 - x)
-                    + mMaximumTitleMargin * x) + startColumnWidth);
+            titleLayoutParams.setMarginStart((int) (collapsedTitleStartMargin * (1 - x)
+                    + maximumTitleMargin * x) + startColumnWidth);
         }
 
         // How offset the title should be from the bottom of the toolbar
-        final int pretendBottomMargin =  (int) (mCollapsedTitleBottomMargin * (1 - x)
-                + mMaximumTitleMargin * x) ;
+        final int pretendBottomMargin =  (int) (collapsedTitleBottomMargin * (1 - x)
+                + maximumTitleMargin * x) ;
         // Calculate how offset the title should be from the top of the screen. Instead of
-        // calling mLargeTextView.getHeight() use the mMaximumHeaderTextSize for this calculation.
-        // The getHeight() value acts unexpectedly when mLargeTextView is partially clipped by
+        // calling largeTextView.getHeight() use the maximumHeaderTextSize for this calculation.
+        // The getHeight() value acts unexpectedly when largeTextView is partially clipped by
         // its parent.
         titleLayoutParams.topMargin = getTransparentViewHeight()
                 + toolbarLayoutParams.height - pretendBottomMargin
-                - mMaximumHeaderTextSize;
+                - maximumHeaderTextSize;
         titleLayoutParams.bottomMargin = 0;
-        mLargeTextView.setLayoutParams(titleLayoutParams);
+        largeTextView.setLayoutParams(titleLayoutParams);
     }
 
     private void updatePhotoTintAndDropShadow() {
@@ -1114,117 +1130,61 @@ public class MultiShrinkScroller extends FrameLayout {
         final int toolbarHeight = getToolbarHeight();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (toolbarHeight <= mMinimumHeaderHeight && !mIsTwoPanel) {
-                mPhotoViewContainer.setElevation(mToolbarElevation);
+            if (toolbarHeight <= minimumHeaderHeight && !isTwoPanel) {
+                photoViewContainer.setElevation(toolbarElevation);
             } else {
-                mPhotoViewContainer.setElevation(0);
+                photoViewContainer.setElevation(0);
             }
         }
 
-        // Reuse an existing mColorFilter (to avoid GC pauses) to change the photo's tint.
-        mPhotoView.clearColorFilter();
-        mColorMatrix.reset();
-
         final int gradientAlpha;
-        if (mIsTwoPanel) {
-            mColorMatrix.reset();
-            mColorMatrix.postConcat(alphaMatrix(DESIRED_INTERMEDIATE_LETTER_TILE_ALPHA,
-                    mHeaderTintColor));
+        final float colorAlpha;
+        if (isTwoPanel) {
+            colorAlpha = 0;
             gradientAlpha = 0x44;
         } else {
-            // We want a function that has DESIRED_INTERMEDIATE_LETTER_TILE_ALPHA value
-            // at the intermediate position and uses TILE_EXPONENT. Finding an equation
-            // that satisfies this condition requires the following arithmetic.
-            final float ratio = calculateHeightRatioToFullyOpen(toolbarHeight);
-            final float intermediateRatio = calculateHeightRatioToFullyOpen((int)
-                    (mMaximumPortraitHeaderHeight * INTERMEDIATE_HEADER_HEIGHT_RATIO));
-            final float TILE_EXPONENT = 3f;
-            final float slowingFactor = (float) ((1 - intermediateRatio) / intermediateRatio
-                    / (1 - Math.pow(1 - DESIRED_INTERMEDIATE_LETTER_TILE_ALPHA, 1/TILE_EXPONENT)));
-            float linearBeforeIntermediate = Math.max(1 - (1 - ratio) / intermediateRatio
-                    / slowingFactor, 0);
-            float colorAlpha = 1 - (float) Math.pow(linearBeforeIntermediate, TILE_EXPONENT);
-            mColorMatrix.postConcat(alphaMatrix(colorAlpha, mHeaderTintColor));
+            float ratio = ((toolbarHeight - minimumHeaderHeight) /
+                    (float) (maximumHeaderHeight - minimumHeaderHeight));
+            if (toolbarHeight >= maximumHeaderHeight) {
+                colorAlpha = 0;
+            } else if (toolbarHeight >= intermediateHeaderHeight && toolbarHeight < maximumHeaderHeight) {
+                colorAlpha = (-0.25f * ratio) + .25f;
+            } else {
+                colorAlpha = (-1.5f * ratio) + 1;
+            }
+
             gradientAlpha = 0;
         }
 
-        // TODO: remove re-allocation of ColorMatrixColorFilter objects (b/17627000)
-        mPhotoView.setColorFilter(new ColorMatrixColorFilter(mColorMatrix));
-
         // Tell the photo view what tint we are trying to achieve. Depending on the type of
         // drawable used, the photo view may or may not use this tint.
-        mPhotoView.setBackgroundColor(mHeaderTintColor);
-        mTitleGradientDrawable.setAlpha(gradientAlpha);
-        mActionBarGradientDrawable.setAlpha(gradientAlpha);
-    }
-
-    private float calculateHeightRatioToFullyOpen(int height) {
-        return (height - mMinimumPortraitHeaderHeight)
-                / (float) (mMaximumPortraitHeaderHeight - mMinimumPortraitHeaderHeight);
-    }
-
-    private float calculateHeightRatioToBlendingStartHeight(int height) {
-        final float intermediateHeight = mMaximumPortraitHeaderHeight
-                * COLOR_BLENDING_START_RATIO;
-        final float interpolatingHeightRange = intermediateHeight - mMinimumPortraitHeaderHeight;
-        if (height > intermediateHeight) {
-            return 0;
-        }
-        return (intermediateHeight - height) / interpolatingHeightRange;
-    }
-
-    /**
-     * Simulates alpha blending an image with {@param color}.
-     */
-    private ColorMatrix alphaMatrix(float alpha, int color) {
-        mAlphaMatrixValues[0] = Color.red(color) * alpha / 255;
-        mAlphaMatrixValues[6] = Color.green(color) * alpha / 255;
-        mAlphaMatrixValues[12] = Color.blue(color) * alpha / 255;
-        mAlphaMatrixValues[4] = 255 * (1 - alpha);
-        mAlphaMatrixValues[9] = 255 * (1 - alpha);
-        mAlphaMatrixValues[14] = 255 * (1 - alpha);
-        mWhitenessColorMatrix.set(mAlphaMatrixValues);
-        return mWhitenessColorMatrix;
-    }
-
-    /**
-     * Simulates multiply blending an image with a single {@param color}.
-     *
-     * Multiply blending is [Sa * Da, Sc * Dc]. See {@link android.graphics.PorterDuff}.
-     */
-    private ColorMatrix multiplyBlendMatrix(int color, float alpha) {
-        mMultiplyBlendMatrixValues[0] = multiplyBlend(Color.red(color), alpha);
-        mMultiplyBlendMatrixValues[6] = multiplyBlend(Color.green(color), alpha);
-        mMultiplyBlendMatrixValues[12] = multiplyBlend(Color.blue(color), alpha);
-        mMultiplyBlendMatrix.set(mMultiplyBlendMatrixValues);
-        return mMultiplyBlendMatrix;
-    }
-
-    private float multiplyBlend(int color, float alpha) {
-        return color * alpha / 255.0f + (1 - alpha);
+        photoView.setBackgroundColor(headerTintColor);
+        photoTouchInterceptOverlay.setBackgroundColor(ColorUtils.adjustAlpha(headerTintColor, colorAlpha));
+        titleGradientDrawable.setAlpha(gradientAlpha);
+        actionBarGradientDrawable.setAlpha(gradientAlpha);
     }
 
     private void updateLastEventPosition(MotionEvent event) {
-        mLastEventPosition[0] = event.getX();
-        mLastEventPosition[1] = event.getY();
+        lastEventPosition[0] = event.getX();
+        lastEventPosition[1] = event.getY();
     }
 
     private boolean motionShouldStartDrag(MotionEvent event) {
-        final float deltaY = event.getY() - mLastEventPosition[1];
-        return deltaY > mTouchSlop || deltaY < -mTouchSlop;
+        final float deltaY = event.getY() - lastEventPosition[1];
+        return deltaY > touchSlop || deltaY < -touchSlop;
     }
 
     private float updatePositionAndComputeDelta(MotionEvent event) {
         final int VERTICAL = 1;
-        final float position = mLastEventPosition[VERTICAL];
+        final float position = lastEventPosition[VERTICAL];
         updateLastEventPosition(event);
         float elasticityFactor = 1;
-        if (position < mLastEventPosition[VERTICAL] && mHasEverTouchedTheTop) {
+        if (position < lastEventPosition[VERTICAL] && hasEverTouchedTheTop) {
             // As QuickContacts is dragged from the top of the window, its rate of movement will
             // slow down in proportion to its distance from the top. This will feel springy.
-            elasticityFactor += mTransparentView.getHeight() * SPRING_DAMPENING_FACTOR;
+            elasticityFactor += transparentView.getHeight() * SPRING_DAMPENING_FACTOR;
         }
-        return (position - mLastEventPosition[VERTICAL]) / elasticityFactor;
+        return (position - lastEventPosition[VERTICAL]) / elasticityFactor;
     }
 
     private void smoothScrollBy(int delta) {
@@ -1234,7 +1194,7 @@ public class MultiShrinkScroller extends FrameLayout {
             throw new IllegalArgumentException("Smooth scrolling by delta=0 is "
                     + "pointless and harmful");
         }
-        mScroller.startScroll(0, getScroll(), 0, delta);
+        scroller.startScroll(0, getScroll(), 0, delta);
         invalidate();
     }
 
@@ -1247,27 +1207,27 @@ public class MultiShrinkScroller extends FrameLayout {
      */
     private static class AcceleratingFlingInterpolator implements Interpolator {
 
-        private final float mStartingSpeedPixelsPerFrame;
-        private final float mDurationMs;
-        private final int mPixelsDelta;
-        private final float mNumberFrames;
+        private final float startingSpeedPixelsPerFrame;
+        private final float durationMs;
+        private final int pixelsDelta;
+        private final float numberFrames;
 
         public AcceleratingFlingInterpolator(int durationMs, float startingSpeedPixelsPerSecond,
                 int pixelsDelta) {
-            mStartingSpeedPixelsPerFrame = startingSpeedPixelsPerSecond / getRefreshRate();
-            mDurationMs = durationMs;
-            mPixelsDelta = pixelsDelta;
-            mNumberFrames = mDurationMs / getFrameIntervalMs();
+            startingSpeedPixelsPerFrame = startingSpeedPixelsPerSecond / getRefreshRate();
+            this.durationMs = durationMs;
+            this.pixelsDelta = pixelsDelta;
+            numberFrames = this.durationMs / getFrameIntervalMs();
         }
 
         @Override
         public float getInterpolation(float input) {
-            final float animationIntervalNumber = mNumberFrames * input;
-            final float linearDelta = (animationIntervalNumber * mStartingSpeedPixelsPerFrame)
-                    / mPixelsDelta;
+            final float animationIntervalNumber = numberFrames * input;
+            final float linearDelta = (animationIntervalNumber * startingSpeedPixelsPerFrame)
+                    / pixelsDelta;
             // Add the results of a linear interpolator (with the initial speed) with the
             // results of a AccelerateInterpolator.
-            if (mStartingSpeedPixelsPerFrame > 0) {
+            if (startingSpeedPixelsPerFrame > 0) {
                 return Math.min(input * input + linearDelta, 1);
             } else {
                 // Initial fling was in the wrong direction, make sure that the quadratic component
@@ -1289,33 +1249,4 @@ public class MultiShrinkScroller extends FrameLayout {
         }
     }
 
-    /**
-     * Expand the header if the mScrollViewChild is about to shrink by enough to create new empty
-     * space at the bottom of this ViewGroup.
-     */
-    public void prepareForShrinkingScrollChild(int heightDelta) {
-        // TODO
-        // The Transition framework may suppress layout on the scene root and its children. If
-        // mScrollView has its layout suppressed, user scrolling interactions will not display
-        // correctly. By turning suppress off for mScrollView, mScrollView properly adjusts its
-        // graphics as the user scrolls during the transition.
-        // mScrollView.suppressLayout(false);
-
-        final int newEmptyScrollViewSpace = -getOverflowingChildViewSize() + heightDelta;
-        if (newEmptyScrollViewSpace > 0 && !mIsTwoPanel) {
-            final int newDesiredToolbarHeight = Math.min(getToolbarHeight()
-                    + newEmptyScrollViewSpace, getMaximumScrollableHeaderHeight());
-            ObjectAnimator.ofInt(this, "toolbarHeight", newDesiredToolbarHeight).setDuration(
-                    ANIMATION_DURATION).start();
-        }
-    }
-
-    public void prepareForExpandingScrollChild() {
-        // TODO
-        // The Transition framework may suppress layout on the scene root and its children. If
-        // mScrollView has its layout suppressed, user scrolling interactions will not display
-        // correctly. By turning suppress off for mScrollView, mScrollView properly adjusts its
-        // graphics as the user scrolls during the transition.
-        // mScrollView.suppressLayout(false);
-    }
 }

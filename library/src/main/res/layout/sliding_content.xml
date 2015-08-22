@@ -23,13 +23,13 @@
     android:id="@+id/content_scroller"
     android:background="@color/card_margin_color">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="@dimen/first_card_marginTop"
         android:id="@+id/content_container" >
 
-    </LinearLayout>
+    </FrameLayout>
 
 </com.klinker.android.sliding.TouchlessScrollView>

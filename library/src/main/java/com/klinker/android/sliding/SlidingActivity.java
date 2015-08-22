@@ -16,63 +16,95 @@
 
 package com.klinker.android.sliding;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
+/**
+ * Sliding activity that handles all interaction with users. It will be shown with about 150dp of
+ * space at the top when initially launched and you can then scroll up the activity and close this
+ * gap. Once it has been scrolled up, scrolling down will dismiss the activity.
+ *
+ * Usage will vary on what you would like to do. The following methods are available to customize
+ * this activity:
+ *
+ * setTitle()
+ * setImage()
+ * setPrimaryColors()
+ * setAccentColor()
+ * setFab()
+ *
+ * You may use any combination of these to achieve the desired look.
+ */
 public abstract class SlidingActivity extends AppCompatActivity {
 
     private static final int ANIMATION_STATUS_BAR_COLOR_CHANGE_DURATION = 150;
     private static final int SCRIM_COLOR = Color.argb(0xC8, 0, 0, 0);
+    private static final int DEFAULT_PRIMARY_COLOR = 0xff607D8B;
+    private static final int DEFAULT_PRIMARY_DARK_COLOR = 0xff37474F;
 
-    private int mStatusBarColor;
-    private boolean mHasAlreadyBeenOpened;
+    private int statusBarColor;
+    private boolean hasAlreadyBeenOpened;
+    private ImageView photoView;
+    private View photoViewTempBackground;
+    private MultiShrinkScroller scroller;
+    private FrameLayout content;
+    private ColorDrawable windowScrim;
+    private boolean isEntranceAnimationFinished;
+    private boolean isExitAnimationInProgress;
+    private boolean isStarting;
 
-    private ImageView mPhotoView;
-    private MultiShrinkScroller mScroller;
-    private LinearLayout content;
-    private ColorDrawable mWindowScrim;
-    private boolean mIsEntranceAnimationFinished;
-    private boolean mIsExitAnimationInProgress;
-
+    /**
+     * Set up all relevant data for the activity including scrollers, etc. This is a final method,
+     * any implementing class should instead implement init() and do what work you would like to do
+     * there instead.
+     * @param savedInstanceState the saved instance state.
+     */
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        isStarting = true;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
-        // Show QuickContact in front of soft input
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                 WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
-        setContentView(R.layout.quickcontact_activity);
+        setContentView(R.layout.sliding_activity);
 
-        mScroller = (MultiShrinkScroller) findViewById(R.id.multiscroller);
-        content = (LinearLayout) findViewById(R.id.content_container);
+        scroller = (MultiShrinkScroller) findViewById(R.id.multiscroller);
+        content = (FrameLayout) findViewById(R.id.content_container);
 
-        mPhotoView = (ImageView) findViewById(R.id.photo);
+        photoView = (ImageView) findViewById(R.id.photo);
+        photoViewTempBackground = findViewById(R.id.photo_background);
         final View transparentView = findViewById(R.id.transparent_view);
-        if (mScroller != null) {
+        if (scroller != null) {
             transparentView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mScroller.scrollOffBottom();
+                    scroller.scrollOffBottom();
                 }
             });
         }
@@ -89,28 +121,28 @@ public abstract class SlidingActivity extends AppCompatActivity {
 
         // Put a TextView with a known resource id into the ActionBar. This allows us to easily
         // find the correct TextView location & size later.
-        toolbar.addView(getLayoutInflater().inflate(R.layout.quickcontact_title_placeholder, null));
+        toolbar.addView(getLayoutInflater().inflate(R.layout.sliding_title_placeholder, null));
 
-        mHasAlreadyBeenOpened = savedInstanceState != null;
-        mIsEntranceAnimationFinished = mHasAlreadyBeenOpened;
-        mWindowScrim = new ColorDrawable(SCRIM_COLOR);
-        mWindowScrim.setAlpha(0);
-        getWindow().setBackgroundDrawable(mWindowScrim);
+        hasAlreadyBeenOpened = savedInstanceState != null;
+        isEntranceAnimationFinished = hasAlreadyBeenOpened;
+        windowScrim = new ColorDrawable(SCRIM_COLOR);
+        windowScrim.setAlpha(0);
+        getWindow().setBackgroundDrawable(windowScrim);
 
-        mScroller.initialize(mMultiShrinkScrollerListener, false);
+        scroller.initialize(mMultiShrinkScrollerListener, false);
 
-        SchedulingUtils.doOnPreDraw(mScroller, /* drawNextFrame = */ true,
+        SchedulingUtils.doOnPreDraw(scroller, /* drawNextFrame = */ true,
                 new Runnable() {
                     @Override
                     public void run() {
-                        if (!mHasAlreadyBeenOpened) {
+                        if (!hasAlreadyBeenOpened) {
                             // The initial scrim opacity must match the scrim opacity that would be
                             // achieved by scrolling to the starting position.
-                            final float alphaRatio = mScroller.getStartingTransparentHeightRatio();
+                            final float alphaRatio = scroller.getStartingTransparentHeightRatio();
                             final int duration = getResources().getInteger(
                                     android.R.integer.config_shortAnimTime);
                             final int desiredAlpha = (int) (0xFF * alphaRatio);
-                            ObjectAnimator o = ObjectAnimator.ofInt(mWindowScrim, "alpha", 0,
+                            ObjectAnimator o = ObjectAnimator.ofInt(windowScrim, "alpha", 0,
                                     desiredAlpha).setDuration(duration);
 
                             o.start();
@@ -120,79 +152,173 @@ public abstract class SlidingActivity extends AppCompatActivity {
 
         init(savedInstanceState);
         showActivity();
+
+        isStarting = false;
     }
 
+    /**
+     * Initialize all of your data here, as you would with onCreate() normally.
+     * @param savedInstanceState the saved instance state.
+     */
     public abstract void init(Bundle savedInstanceState);
 
+    /**
+     * Set the title for the scroller.
+     * @param title the title to display.
+     */
     @Override
     public final void setTitle(CharSequence title) {
         setHeaderNameText(title.toString());
     }
 
+    /**
+     * Set the title for the scroller.
+     * @param resId the title res id to display.
+     */
     @Override
     public final void setTitle(int resId) {
         setHeaderNameText(resId);
     }
 
-    public void setPrimaryColor(int primaryColor, int primaryColorDark) {
+    /**
+     * Set the primary colors for the activity. The primary color will be displayed as the
+     * background on the header, the primary color dark will be used for coloring the status
+     * bar on Lollipop+.
+     * @param primaryColor the primary color to display.
+     * @param primaryColorDark the primary dark color to display.
+     */
+    public void setPrimaryColors(int primaryColor, int primaryColorDark) {
         setThemeColor(primaryColor, primaryColorDark);
     }
 
+    /**
+     * Set the accent color for the activity. The accent color will be used for things like the
+     * FAB if available.
+     * @param accentColor the accent color to display.
+     */
     public void setAccentColor(int accentColor) {
         // TODO
     }
 
+    /**
+     * Set the content to be displayed in the scrolling area.
+     * @param resId the resource id to inflate for the content.
+     */
     public void setContent(int resId) {
         setContent(getLayoutInflater().inflate(resId, null, false));
     }
 
+    /**
+     * Set the content to be displayed in the scrolling area.
+     * @param view the view to use for the content.
+     */
     public void setContent(View view) {
         content.addView(view);
     }
 
+    /**
+     * Set the image to be displayed in the header.
+     * @param resId the resource id to use for the bitmap to be created for the header.
+     */
     public void setImage(int resId) {
-        setImage(getResources().getDrawable(resId));
+        setImage(BitmapFactory.decodeResource(getResources(), resId));
     }
 
-    public void setImage(Drawable drawable) {
-        mPhotoView.setImageDrawable(drawable);
+    /**
+     * Set the image to be displayed in the header. The image will be set immediately.
+     *
+     * If the activity is still starting when it is set (ie you call this in your init() method)
+     * then the activity will use Palette to extract the primary colors from the image for you and
+     * set them correctly. In this case, there is no reason to call setPrimaryColors(). If you
+     * would like to manually set the colors still, call setPrimaryColors() after you have called
+     * setImage().
+     *
+     * If the activity has already been started and your calling this after the fact (ie you might
+     * have just downloaded the image from a url or needed to load it in the background) then the
+     * activity will not use Palette to extract any colors. If this is the case, you should still
+     * call setPrimaryColors() in the init() method. The image will be animated in with a circular
+     * reveal in this case if the user is on a compatible system. Otherwise it will fade in.
+     *
+     * @param bitmap the bitmap to use for the animation.
+     */
+    public void setImage(Bitmap bitmap) {
+        photoView.setImageBitmap(bitmap);
+
+        if (isStarting) {
+            Palette palette = Palette.from(bitmap).generate();
+            setPrimaryColors(palette.getVibrantColor(DEFAULT_PRIMARY_COLOR),
+                    palette.getDarkVibrantColor(DEFAULT_PRIMARY_DARK_COLOR));
+        } else {
+            photoViewTempBackground.setBackgroundDrawable(photoView.getBackground());
+            photoViewTempBackground.setVisibility(View.VISIBLE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                int cx = (int) photoView.getX() + photoView.getMeasuredWidth() / 2;
+                int cy = (int) photoView.getY() + photoView.getMeasuredHeight() / 2;
+                int finalRadius = photoView.getWidth();
+
+                Animator anim = ViewAnimationUtils.createCircularReveal(photoView, cx, cy,
+                        0, finalRadius);
+                anim.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        photoViewTempBackground.setVisibility(View.GONE);
+                    }
+                });
+                anim.start();
+            } else {
+                photoView.setAlpha(0f);
+                photoView.animate()
+                        .alpha(1f)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                photoView.setAlpha(1f);
+                                photoViewTempBackground.setVisibility(View.GONE);
+                            }
+                        })
+                        .start();
+            }
+        }
     }
 
     @Override
     protected final void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        mHasAlreadyBeenOpened = true;
-        mIsEntranceAnimationFinished = true;
+        hasAlreadyBeenOpened = true;
+        isEntranceAnimationFinished = true;
     }
 
     private void runEntranceAnimation() {
-        if (mHasAlreadyBeenOpened) {
+        if (hasAlreadyBeenOpened) {
             return;
         }
-        mHasAlreadyBeenOpened = true;
-        mScroller.scrollUpForEntranceAnimation(
+        hasAlreadyBeenOpened = true;
+        scroller.scrollUpForEntranceAnimation(
                 getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE
         );
     }
 
     private void setHeaderNameText(int resId) {
-        if (mScroller != null) {
-            mScroller.setTitle(getText(resId) == null ? null : getText(resId).toString());
+        if (scroller != null) {
+            scroller.setTitle(getText(resId) == null ? null : getText(resId).toString());
         }
     }
 
     private void setHeaderNameText(String value) {
         if (!TextUtils.isEmpty(value)) {
-            if (mScroller != null) {
-                mScroller.setTitle(value);
+            if (scroller != null) {
+                scroller.setTitle(value);
             }
         }
     }
 
     private void showActivity() {
-        if (mScroller != null) {
-            mScroller.setVisibility(View.VISIBLE);
-            SchedulingUtils.doOnPreDraw(mScroller, /* drawNextFrame = */ false,
+        if (scroller != null) {
+            scroller.setVisibility(View.VISIBLE);
+            SchedulingUtils.doOnPreDraw(scroller, /* drawNextFrame = */ false,
                     new Runnable() {
                         @Override
                         public void run() {
@@ -203,21 +329,21 @@ public abstract class SlidingActivity extends AppCompatActivity {
     }
 
     private void setThemeColor(int primaryColor, int primaryColorDark) {
-        mScroller.setHeaderTintColor(primaryColor);
-        mStatusBarColor = primaryColorDark;
+        scroller.setHeaderTintColor(primaryColor);
+        statusBarColor = primaryColorDark;
         updateStatusBarColor();
     }
 
     private void updateStatusBarColor() {
-        if (mScroller == null) {
+        if (scroller == null) {
             return;
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             final int desiredStatusBarColor;
             // Only use a custom status bar color if QuickContacts touches the top of the viewport.
-            if (mScroller.getScrollNeededToBeFullScreen() <= 0) {
-                desiredStatusBarColor = mStatusBarColor;
+            if (scroller.getScrollNeededToBeFullScreen() <= 0) {
+                desiredStatusBarColor = statusBarColor;
             } else {
                 desiredStatusBarColor = Color.TRANSPARENT;
             }
@@ -230,22 +356,30 @@ public abstract class SlidingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handle the back button being pressed, dismiss the activity.
+     */
     @Override
     public void onBackPressed() {
-        if (mScroller != null) {
-            if (!mIsExitAnimationInProgress) {
-                mScroller.scrollOffBottom();
+        if (scroller != null) {
+            if (!isExitAnimationInProgress) {
+                scroller.scrollOffBottom();
             }
         } else {
             super.onBackPressed();
         }
     }
 
+    /**
+     * Finish the activity and override the normal animation, we already animated the activity
+     * off of the screen by scrolling it off the bottom.
+     */
     @Override
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);
     }
+
 
     private final MultiShrinkScroller.MultiShrinkScrollerListener mMultiShrinkScrollerListener
             = new MultiShrinkScroller.MultiShrinkScrollerListener() {
@@ -266,18 +400,18 @@ public abstract class SlidingActivity extends AppCompatActivity {
 
         @Override
         public void onStartScrollOffBottom() {
-            mIsExitAnimationInProgress = true;
+            isExitAnimationInProgress = true;
         }
 
         @Override
         public void onEntranceAnimationDone() {
-            mIsEntranceAnimationFinished = true;
+            isEntranceAnimationFinished = true;
         }
 
         @Override
         public void onTransparentViewHeightChange(float ratio) {
-            if (mIsEntranceAnimationFinished) {
-                mWindowScrim.setAlpha((int) (0xFF * ratio));
+            if (isEntranceAnimationFinished) {
+                windowScrim.setAlpha((int) (0xFF * ratio));
             }
         }
     };
