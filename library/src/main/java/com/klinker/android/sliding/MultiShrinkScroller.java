@@ -1108,14 +1108,6 @@ public class MultiShrinkScroller extends FrameLayout {
     }
 
     private void updatePhotoTintAndDropShadow() {
-        if (mIsTwoPanel) {
-            // When in two panel mode, UX considers photo tinting unnecessary for non letter
-            // tile photos.
-            mTitleGradientDrawable.setAlpha(0xFF);
-            mActionBarGradientDrawable.setAlpha(0xFF);
-            return;
-        }
-
         // We need to use toolbarLayoutParams to determine the height, since the layout
         // params can be updated before the height change is reflected inside the View#getHeight().
         final int toolbarHeight = getToolbarHeight();
@@ -1137,7 +1129,7 @@ public class MultiShrinkScroller extends FrameLayout {
             mColorMatrix.reset();
             mColorMatrix.postConcat(alphaMatrix(DESIRED_INTERMEDIATE_LETTER_TILE_ALPHA,
                     mHeaderTintColor));
-            gradientAlpha = 0;
+            gradientAlpha = 0x44;
         } else {
             // We want a function that has DESIRED_INTERMEDIATE_LETTER_TILE_ALPHA value
             // at the intermediate position and uses TILE_EXPONENT. Finding an equation

@@ -19,6 +19,7 @@ package com.klinker.android.sliding;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -159,7 +160,9 @@ public abstract class SlidingActivity extends AppCompatActivity {
             return;
         }
         mHasAlreadyBeenOpened = true;
-        mScroller.scrollUpForEntranceAnimation(true);
+        mScroller.scrollUpForEntranceAnimation(
+                getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE
+        );
     }
 
     private void setHeaderNameText(int resId) {
