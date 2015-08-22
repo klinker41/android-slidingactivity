@@ -30,6 +30,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public abstract class SlidingActivity extends AppCompatActivity {
@@ -40,7 +41,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
     private int mStatusBarColor;
     private boolean mHasAlreadyBeenOpened;
 
-    private QuickContactImageView mPhotoView;
+    private ImageView mPhotoView;
     private MultiShrinkScroller mScroller;
     private LinearLayout content;
     private ColorDrawable mWindowScrim;
@@ -64,7 +65,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
         mScroller = (MultiShrinkScroller) findViewById(R.id.multiscroller);
         content = (LinearLayout) findViewById(R.id.content_container);
 
-        mPhotoView = (QuickContactImageView) findViewById(R.id.photo);
+        mPhotoView = (ImageView) findViewById(R.id.photo);
         final View transparentView = findViewById(R.id.transparent_view);
         if (mScroller != null) {
             transparentView.setOnClickListener(new OnClickListener() {

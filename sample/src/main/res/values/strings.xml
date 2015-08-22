@@ -18,6 +18,10 @@
 
     <string name="app_name">Sliding Activity</string>
     <string name="show_normal_sliding_activity">Show Normal Sliding Activity</string>
+    <string name="show_menu_item_activity">Show Menu Item Sliding Activity</string>
+    <string name="bug">Bug Report</string>
+    <string name="submit_feedback">Submit Feedback</string>
+    <string name="normal_sliding_activity">Normal Sliding Activity</string>
 
     <string name="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negare non possum. Quae qui non vident, nihil
         umquam magnum ac cognitione dignum amaverunt. Ergo hoc quidem apparet, nos ad agendum esse natos.
@@ -73,7 +77,6 @@
         Nunc ita separantur, ut disiuncta sint, quo nihil potest esse
         perversius. In his igitur partibus duabus nihil erat, quod Zeno commutare gestiret. Est enim effectrix
         multarum et magnarum voluptatum. Bonum negas esse divitias, praeposìtum esse dicis?
-
     </string>
 
 </resources>

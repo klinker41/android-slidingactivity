@@ -34,9 +34,21 @@ public class SampleActivity extends AppCompatActivity {
                 showNormalExample();
             }
         });
+
+        findViewById(R.id.show_menu_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMenuItemExample();
+            }
+        });
     }
 
     private void showNormalExample() {
         startActivity(new Intent(this, NormalActivity.class));
     }
+
+    private void showMenuItemExample() {
+        startActivity(new Intent(this, MenuItemActivity.class));
+    }
+
 }

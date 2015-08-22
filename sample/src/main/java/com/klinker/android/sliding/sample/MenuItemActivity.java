@@ -17,19 +17,39 @@
 package com.klinker.android.sliding.sample;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.klinker.android.sliding.SlidingActivity;
 
-public class NormalActivity extends SlidingActivity {
+public class MenuItemActivity extends SlidingActivity {
 
     @Override
     public void init(Bundle savedInstanceState) {
-        setTitle(R.string.normal_sliding_activity);
+        setTitle(R.string.submit_feedback);
         setPrimaryColor(
-                getResources().getColor(R.color.normal_sliding_activity_primary),
-                getResources().getColor(R.color.normal_sliding_activity_primary_dark)
+                getResources().getColor(R.color.menu_item_activity_primary),
+                getResources().getColor(R.color.menu_item_activity_primary_dark)
         );
         setContent(R.layout.activity_content);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_bug:
+                Toast.makeText(this, R.string.bug, Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        return true;
     }
 
 }

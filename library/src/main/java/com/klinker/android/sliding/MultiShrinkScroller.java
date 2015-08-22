@@ -47,6 +47,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.PathInterpolator;
 import android.widget.EdgeEffect;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
 import android.widget.ScrollView;
@@ -119,7 +120,7 @@ public class MultiShrinkScroller extends FrameLayout {
     private ScrollView mScrollView;
     private View mScrollViewChild;
     private View mToolbar;
-    private QuickContactImageView mPhotoView;
+    private ImageView mPhotoView;
     private View mPhotoViewContainer;
     private View mTransparentView;
     private MultiShrinkScrollerListener mListener;
@@ -333,7 +334,7 @@ public class MultiShrinkScroller extends FrameLayout {
         mListener = listener;
         mIsOpenContactSquare = isOpenContactSquare;
 
-        mPhotoView = (QuickContactImageView) findViewById(R.id.photo);
+        mPhotoView = (ImageView) findViewById(R.id.photo);
 
         mTitleGradientView = findViewById(R.id.title_gradient);
         mTitleGradientView.setBackgroundDrawable(mTitleGradientDrawable);
@@ -1152,7 +1153,7 @@ public class MultiShrinkScroller extends FrameLayout {
 
         // Tell the photo view what tint we are trying to achieve. Depending on the type of
         // drawable used, the photo view may or may not use this tint.
-        mPhotoView.setTint(mHeaderTintColor);
+        mPhotoView.setBackgroundColor(mHeaderTintColor);
         mTitleGradientDrawable.setAlpha(gradientAlpha);
         mActionBarGradientDrawable.setAlpha(gradientAlpha);
     }
