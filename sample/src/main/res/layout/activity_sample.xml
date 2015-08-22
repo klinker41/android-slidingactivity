@@ -37,4 +37,10 @@
         android:text="@string/show_menu_item_activity"
         android:id="@+id/show_menu_item"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/show_image_activity"
+        android:id="@+id/show_image"/>
+
 </LinearLayout>

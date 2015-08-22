@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -147,6 +148,14 @@ public abstract class SlidingActivity extends AppCompatActivity {
 
     public void setContent(View view) {
         content.addView(view);
+    }
+
+    public void setImage(int resId) {
+        setImage(getResources().getDrawable(resId));
+    }
+
+    public void setImage(Drawable drawable) {
+        mPhotoView.setImageDrawable(drawable);
     }
 
     @Override

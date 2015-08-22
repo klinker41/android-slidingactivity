@@ -41,6 +41,13 @@ public class SampleActivity extends AppCompatActivity {
                 showMenuItemExample();
             }
         });
+
+        findViewById(R.id.show_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImageExample();
+            }
+        });
     }
 
     private void showNormalExample() {
@@ -49,6 +56,10 @@ public class SampleActivity extends AppCompatActivity {
 
     private void showMenuItemExample() {
         startActivity(new Intent(this, MenuItemActivity.class));
+    }
+
+    private void showImageExample() {
+        startActivity(new Intent(this, ImageActivity.class));
     }
 
 }
