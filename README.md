@@ -21,7 +21,7 @@ Include the following in your gradle script:
 
 ```groovy
 dependencies {
-    compile 'com.klinkerapps:sliding_activity:1.0.0'
+    compile 'com.klinkerapps:sliding-activity:1.0.0'
 }
 ```
 
@@ -145,9 +145,9 @@ If you would like to not have the scrolling content animate up onto the screen a
 
 If you're using the library and want to be included in the list, email me at <jake@klinkerapps.com> and I'll get your app added to the list!
 
-## YouTube Video
+## YouTube
 
-Much higher quality than the GIFs above and more options shown: (https://www.youtube.com/watch?v=fWcmy7q09aM)
+Much higher quality than the GIFs above and more options shown: https://www.youtube.com/watch?v=fWcmy7q09aM
 
 ## Contributing
 

@@ -17,15 +17,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    compileSdkVersion Integer.parseInt(project.COMPILE_SDK_VERSION)
+    buildToolsVersion project.BUILD_TOOLS_VERSION
 
     defaultConfig {
         applicationId "com.klinker.android.sliding.sample"
-        minSdkVersion 14
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion Integer.parseInt(project.MIN_SDK_VERSION)
+        targetSdkVersion Integer.parseInt(project.TARGET_SDK_VERSION)
+        versionCode Integer.parseInt(project.VERSION_CODE)
+        versionName project.VERSION_NAME
     }
 
     buildTypes {
@@ -43,6 +43,6 @@ android {
 dependencies {
     compile project(':library')
 
-    compile 'com.android.support:cardview-v7:23.0.0'
+    compile "com.android.support:cardview-v7:${project.ANDROID_SUPPORT_VERSION}"
     compile 'de.hdodenhof:circleimageview:1.3.0'
 }
