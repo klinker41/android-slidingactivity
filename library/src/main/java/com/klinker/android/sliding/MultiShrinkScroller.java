@@ -28,8 +28,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -37,6 +39,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewConfiguration;
+import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -45,6 +48,7 @@ import android.widget.EdgeEffect;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Scroller;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -111,6 +115,7 @@ public class MultiShrinkScroller extends FrameLayout {
     private View scrollViewChild;
     private View toolbar;
     private ImageView photoView;
+    private FloatingActionButton fab;
     private View photoViewContainer;
     private View transparentView;
     private MultiShrinkScrollerListener listener;
@@ -128,10 +133,9 @@ public class MultiShrinkScroller extends FrameLayout {
     private int maximumHeaderTextSize;
     private int collapsedTitleBottomMargin;
     private int collapsedTitleStartMargin;
-    private int minimumPortraitHeaderHeight;
-    private int maximumPortraitHeaderHeight;
     private boolean hasEverTouchedTheTop;
     private boolean isTouchDisabledForDismissAnimation;
+    private boolean enableFab = false;
 
     private final Scroller scroller;
     private final EdgeEffect edgeGlowBottom;
@@ -176,7 +180,7 @@ public class MultiShrinkScroller extends FrameLayout {
     }
 
     /**
-     * Listener for snaping the content to the bottom of the screen.
+     * Listener for snapping the content to the bottom of the screen.
      */
     private final AnimatorListener snapToBottomListener = new AnimatorListenerAdapter() {
         @Override
@@ -267,9 +271,6 @@ public class MultiShrinkScroller extends FrameLayout {
                 new int[]{android.R.attr.actionBarSize});
         actionBarSize = attributeArray.getDimensionPixelSize(0, 0);
         minimumHeaderHeight = actionBarSize;
-        // This value is approximately equal to the portrait ActionBar size. It isn't exactly the
-        // same, since the landscape and portrait ActionBar sizes can be different.
-        minimumPortraitHeaderHeight = minimumHeaderHeight;
         attributeArray.recycle();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -311,6 +312,7 @@ public class MultiShrinkScroller extends FrameLayout {
         this.isOpenImageSquare = isOpenContactSquare;
 
         photoView = (ImageView) findViewById(R.id.photo);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         titleGradientView = findViewById(R.id.title_gradient);
         titleGradientView.setBackgroundDrawable(titleGradientDrawable);
@@ -326,6 +328,22 @@ public class MultiShrinkScroller extends FrameLayout {
                     expandHeader();
                 }
             });
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                scrollView.setOnScrollChangeListener(new OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                        updateFabStatus(scrollY);
+                    }
+                });
+            } else {
+                scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                    @Override
+                    public void onScrollChanged() {
+                        updateFabStatus(scrollView.getScrollY());
+                    }
+                });
+            }
         }
 
         SchedulingUtils.doOnPreDraw(this, false, new Runnable() {
@@ -336,8 +354,6 @@ public class MultiShrinkScroller extends FrameLayout {
                     intermediateHeaderHeight = (int) (maximumHeaderHeight
                             * INTERMEDIATE_HEADER_HEIGHT_RATIO);
                 }
-                maximumPortraitHeaderHeight = isTwoPanel ? getHeight()
-                        : photoViewContainer.getWidth();
                 setHeaderHeight(getMaximumScrollableHeaderHeight());
                 maximumHeaderTextSize = largeTextView.getHeight();
                 if (isTwoPanel) {
@@ -727,6 +743,7 @@ public class MultiShrinkScroller extends FrameLayout {
 
         updatePhotoTintAndDropShadow();
         updateHeaderTextSizeAndMargin();
+        updateFabStatus();
         final boolean isFullscreen = getScrollNeededToBeFullScreen() <= 0;
         hasEverTouchedTheTop |= isFullscreen;
 
@@ -1084,6 +1101,53 @@ public class MultiShrinkScroller extends FrameLayout {
     }
 
     /**
+     * Update the FAB visibility state depending on toolbar height.
+     */
+    private void updateFabStatus() {
+        if (enableFab) {
+            if (getToolbarHeight() >= intermediateHeaderHeight) {
+                if (!fab.isShown()) {
+                    fab.show();
+                }
+            } else {
+                if (fab.isShown()) {
+                    fab.hide();
+                }
+            }
+        }
+    }
+
+    /**
+     * Update the FAB visibility state depending on scrollview state.
+     * @param scrollY the y value of the scroll.
+     */
+    private void updateFabStatus(int scrollY) {
+        if (enableFab) {
+            if (scrollY < scrollView.getMeasuredHeight() / 10) {
+                if (!fab.isShown()) {
+                    fab.show();
+                }
+            } else {
+                if (fab.isShown()) {
+                    fab.hide();
+                }
+            }
+        }
+    }
+
+    /**
+     * Set whether or not the FAB should be displayed.
+     * @param enableFab whether to enable the fab.
+     */
+    public void setEnableFab(boolean enableFab) {
+        this.enableFab = enableFab;
+
+        if (!enableFab) {
+            fab.hide();
+        }
+    }
+
+    /**
      * Calculate the padding around largeTextView so that it will look appropriate once it
      * finishes moving into its target location/size.
      */
@@ -1099,8 +1163,8 @@ public class MultiShrinkScroller extends FrameLayout {
     private void setInterpolatedTitleMargins(float x) {
         final LayoutParams titleLayoutParams
                 = (LayoutParams) largeTextView.getLayoutParams();
-        final LinearLayout.LayoutParams toolbarLayoutParams
-                = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
+        final ViewGroup.LayoutParams toolbarLayoutParams
+                = toolbar.getLayoutParams();
 
         // Need to add more to margin start if there is a start column
         int startColumnWidth = startColumn == null ? 0 : startColumn.getWidth();

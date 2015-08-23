@@ -17,6 +17,6 @@
 
 <resources>
 
-    <integer name="sliding_title_lines">2</integer>
+    <integer name="sliding_title_lines">5</integer>
 
 </resources>

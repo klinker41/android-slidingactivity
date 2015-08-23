@@ -17,6 +17,8 @@
 
 <resources>
 
-    <color name="card_margin_color">#f4f4f4</color>
+    <color name="light_background">#FAFAFA</color>
+    <color name="dark_background">#303030</color>
+    <color name="fab_ripple">#88ffffff</color>
 
 </resources>

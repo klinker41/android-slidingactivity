@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,6 +29,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -51,7 +53,8 @@ import android.widget.ImageView;
  * setImage()
  * setPrimaryColors()
  * setAccentColor()
- * setFab()
+ * enableFab()
+ * disableFab()
  *
  * You may use any combination of these to achieve the desired look.
  */
@@ -65,6 +68,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
     private int statusBarColor;
     private boolean hasAlreadyBeenOpened;
     private ImageView photoView;
+    private FloatingActionButton fab;
     private View photoViewTempBackground;
     private MultiShrinkScroller scroller;
     private FrameLayout content;
@@ -129,7 +133,10 @@ public abstract class SlidingActivity extends AppCompatActivity {
         windowScrim.setAlpha(0);
         getWindow().setBackgroundDrawable(windowScrim);
 
-        scroller.initialize(mMultiShrinkScrollerListener, false);
+        scroller.initialize(multiShrinkScrollerListener, false);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        disableFab(); // default to having the fab be off
 
         SchedulingUtils.doOnPreDraw(scroller, /* drawNextFrame = */ true,
                 new Runnable() {
@@ -192,12 +199,34 @@ public abstract class SlidingActivity extends AppCompatActivity {
     }
 
     /**
-     * Set the accent color for the activity. The accent color will be used for things like the
-     * FAB if available.
-     * @param accentColor the accent color to display.
+     * Enable an FAB on the screen.
+     * @param color the color for the FAB.
+     * @param drawableRes the drawable to display on the FAB.
+     * @param onClickListener the listener to activate when clicked on.
      */
-    public void setAccentColor(int accentColor) {
-        // TODO
+    public void enableFab(int color, int drawableRes, OnClickListener onClickListener) {
+        fab.setBackgroundTintList(
+                new ColorStateList(
+                        new int[][] {
+                                new int[] {}
+                        },
+                        new int[] {
+                                color
+                        }
+                )
+        );
+
+        fab.setImageDrawable(getResources().getDrawable(drawableRes));
+        fab.setOnClickListener(onClickListener);
+
+        scroller.setEnableFab(true);
+    }
+
+    /**
+     * Disable showing the FAB on the screen.
+     */
+    public void disableFab() {
+        scroller.setEnableFab(false);
     }
 
     /**
@@ -259,6 +288,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
 
                 Animator anim = ViewAnimationUtils.createCircularReveal(photoView, cx, cy,
                         0, finalRadius);
+                anim.setDuration(500);
                 anim.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
@@ -281,6 +311,23 @@ public abstract class SlidingActivity extends AppCompatActivity {
                         })
                         .start();
             }
+        }
+    }
+
+    /**
+     * Set the theme to light or dark. You should call this before setContent() if you wish for the
+     * theme to affect your inflated content.
+     * @param dark true for dark theme, false for light theme.
+     */
+    public void setDark(boolean dark) {
+        if (dark) {
+            setTheme(R.style.Theme_Sliding);
+            findViewById(R.id.content_scroller)
+                    .setBackgroundColor(getResources().getColor(R.color.dark_background));
+        } else {
+            setTheme(R.style.Theme_Sliding_Light);
+            findViewById(R.id.content_scroller)
+                    .setBackgroundColor(getResources().getColor(R.color.light_background));
         }
     }
 
@@ -381,7 +428,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
     }
 
 
-    private final MultiShrinkScroller.MultiShrinkScrollerListener mMultiShrinkScrollerListener
+    private final MultiShrinkScroller.MultiShrinkScrollerListener multiShrinkScrollerListener
             = new MultiShrinkScroller.MultiShrinkScrollerListener() {
         @Override
         public void onScrolledOffBottom() {

@@ -43,4 +43,16 @@
         android:text="@string/show_image_activity"
         android:id="@+id/show_image"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/show_dark_activity"
+        android:id="@+id/show_dark"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/show_fab_activity"
+        android:id="@+id/show_fab"/>
+
 </LinearLayout>

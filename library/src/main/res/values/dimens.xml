@@ -28,5 +28,8 @@
     <dimen name="sliding_toolbar_elevation">4.5dp</dimen>
     <dimen name="sliding_header_max_height">300dp</dimen>
     <dimen name="first_card_marginTop">12dp</dimen>
+    <dimen name="fab_marginTop">-56dp</dimen>
+    <dimen name="fab_marginRight">0dp</dimen>
+    <dimen name="fab_marginBottom">0dp</dimen>
 
 </resources>

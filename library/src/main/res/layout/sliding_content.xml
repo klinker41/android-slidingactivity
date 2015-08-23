@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:id="@+id/content_scroller"
-    android:background="@color/card_margin_color">
+    android:background="@color/light_background">
 
     <FrameLayout
         android:layout_width="match_parent"

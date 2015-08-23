@@ -48,6 +48,20 @@ public class SampleActivity extends AppCompatActivity {
                 showImageExample();
             }
         });
+
+        findViewById(R.id.show_dark).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDarkExample();
+            }
+        });
+
+        findViewById(R.id.show_fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFabExample();
+            }
+        });
     }
 
     private void showNormalExample() {
@@ -60,6 +74,14 @@ public class SampleActivity extends AppCompatActivity {
 
     private void showImageExample() {
         startActivity(new Intent(this, ImageActivity.class));
+    }
+
+    private void showDarkExample() {
+        startActivity(new Intent(this, DarkActivity.class));
+    }
+
+    private void showFabExample() {
+        startActivity(new Intent(this, FabActivity.class));
     }
 
 }
