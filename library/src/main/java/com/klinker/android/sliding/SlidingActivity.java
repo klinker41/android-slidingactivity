@@ -51,8 +51,8 @@ import android.widget.ImageView;
  *
  * setTitle()
  * setImage()
+ * setContent()
  * setPrimaryColors()
- * setAccentColor()
  * setFab()
  * disableHeader()
  * enableFullscreen()
