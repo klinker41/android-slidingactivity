@@ -319,6 +319,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
      */
     public void disableHeader() {
         scroller.disableHeader();
+        content.setPadding(0,0,0,0);
     }
 
     /**
