@@ -26,6 +26,7 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="content_background">@color/light_background</item>
     </style>
 
     <style name="Theme.Sliding" parent="@style/Theme.AppCompat.NoActionBar">
@@ -37,6 +38,7 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="content_background">@color/dark_background</item>
     </style>
 
 </resources>

@@ -138,22 +138,20 @@ public abstract class SlidingActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         disableFab(); // default to having the fab be off
 
-        SchedulingUtils.doOnPreDraw(scroller, /* drawNextFrame = */ true,
+        SchedulingUtils.doOnPreDraw(scroller, true,
                 new Runnable() {
                     @Override
                     public void run() {
-                        if (!hasAlreadyBeenOpened) {
-                            // The initial scrim opacity must match the scrim opacity that would be
-                            // achieved by scrolling to the starting position.
-                            final float alphaRatio = scroller.getStartingTransparentHeightRatio();
-                            final int duration = getResources().getInteger(
-                                    android.R.integer.config_shortAnimTime);
-                            final int desiredAlpha = (int) (0xFF * alphaRatio);
-                            ObjectAnimator o = ObjectAnimator.ofInt(windowScrim, "alpha", 0,
-                                    desiredAlpha).setDuration(duration);
+                        // The initial scrim opacity must match the scrim opacity that would be
+                        // achieved by scrolling to the starting position.
+                        final float alphaRatio = scroller.getStartingTransparentHeightRatio();
+                        final int duration = getResources().getInteger(
+                                android.R.integer.config_shortAnimTime);
+                        final int desiredAlpha = (int) (0xFF * alphaRatio);
+                        ObjectAnimator o = ObjectAnimator.ofInt(windowScrim, "alpha", 0,
+                                desiredAlpha).setDuration(duration);
 
-                            o.start();
-                        }
+                        o.start();
                     }
                 });
 
@@ -311,23 +309,6 @@ public abstract class SlidingActivity extends AppCompatActivity {
                         })
                         .start();
             }
-        }
-    }
-
-    /**
-     * Set the theme to light or dark. You should call this before setContent() if you wish for the
-     * theme to affect your inflated content.
-     * @param dark true for dark theme, false for light theme.
-     */
-    public void setDark(boolean dark) {
-        if (dark) {
-            setTheme(R.style.Theme_Sliding);
-            findViewById(R.id.content_scroller)
-                    .setBackgroundColor(getResources().getColor(R.color.dark_background));
-        } else {
-            setTheme(R.style.Theme_Sliding_Light);
-            findViewById(R.id.content_scroller)
-                    .setBackgroundColor(getResources().getColor(R.color.light_background));
         }
     }
 

@@ -33,7 +33,6 @@ public class DarkActivity extends SlidingActivity {
     @Override
     public void init(Bundle savedInstanceState) {
         setTitle(R.string.dark_activity);
-        setDark(true);
         setPrimaryColors(
                 getResources().getColor(R.color.dark_activity_primary),
                 getResources().getColor(R.color.dark_activity_primary_dark)
