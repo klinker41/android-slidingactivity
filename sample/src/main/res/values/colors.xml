@@ -28,6 +28,8 @@
     <color name="fab_activity_primary">#673ab7</color>
     <color name="fab_activity_primary_dark">#512da8</color>
     <color name="fab_activity_accent">#607d8b</color>
+    <color name="no_header_activity_primary">#FFEB3B</color>
+    <color name="no_header_activity_priamry_dark">#F9A825</color>
     <color name="talon_activity_primary">#00BCD4</color>
     <color name="talon_activity_primary_dark">#00838F</color>
     <color name="talon_activity_accent">#E91E63</color>

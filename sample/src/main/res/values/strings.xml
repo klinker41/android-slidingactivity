@@ -22,7 +22,8 @@
     <string name="show_menu_item_activity">Show Menu Item Sliding Activity</string>
     <string name="show_image_activity">Show Image Sliding Activity</string>
     <string name="show_dark_activity">Show Dark Sliding Activity</string>
-    <string name="show_fab_activity">Show FAB Activity</string>
+    <string name="show_fab_activity">Show FAB Sliding Activity</string>
+    <string name="show_no_header_activity">Show No Header Sliding Activity</string>
     <string name="show_talon_activity">Show Talon for Twitter Example</string>
 
     <string name="bug">Bug Report</string>

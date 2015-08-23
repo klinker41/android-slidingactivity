@@ -414,6 +414,17 @@ public class MultiShrinkScroller extends FrameLayout {
     }
 
     /**
+     * Disables the header at the top of the activity, only the content will be shown.
+     */
+    public void disableHeader() {
+        intermediateHeaderHeight = 0;
+        maximumHeaderHeight = 0;
+        minimumHeaderHeight = 0;
+        largeTextView.setVisibility(View.GONE);
+        ((View) photoView.getParent()).setVisibility(View.GONE);
+    }
+
+    /**
      * Catch the touch event and act on it.
      * @param event the touch event.
      * @return true if we should start dragging, otherwise false.

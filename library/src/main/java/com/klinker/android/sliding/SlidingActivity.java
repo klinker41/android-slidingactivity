@@ -54,6 +54,7 @@ import android.widget.ImageView;
  * setPrimaryColors()
  * setAccentColor()
  * setFab()
+ * disableHeader()
  *
  * You may use any combination of these to achieve the desired look.
  */
@@ -309,6 +310,13 @@ public abstract class SlidingActivity extends AppCompatActivity {
                         .start();
             }
         }
+    }
+
+    /**
+     * Disables the header and only displays the scrolling content below it.
+     */
+    public void disableHeader() {
+        scroller.disableHeader();
     }
 
     @Override

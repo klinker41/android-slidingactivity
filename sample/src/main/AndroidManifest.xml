@@ -71,6 +71,14 @@
             android:windowSoftInputMode="stateUnchanged"/>
 
         <activity
+            android:name=".NoHeaderActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sliding"
+            android:windowSoftInputMode="stateUnchanged"/>
+
+        <activity
             android:name=".TalonActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
