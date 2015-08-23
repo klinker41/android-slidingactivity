@@ -16,7 +16,10 @@
 
 package com.klinker.android.sliding.sample;
 
+import android.app.ActivityManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.view.Menu;
 
@@ -42,7 +45,9 @@ public class TalonActivity extends SlidingActivity {
                 getResources().getColor(R.color.talon_activity_primary_dark)
         );
 
-        setContent(R.layout.activity_talon);
+        if (checkMemory()) {
+            setContent(R.layout.activity_talon);
+        }
 
         // delay this so that the animation shows and we don't change the activity colors
         new Handler().postDelayed(new Runnable() {
@@ -68,6 +73,25 @@ public class TalonActivity extends SlidingActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_talon, menu);
         return true;
+    }
+
+    /**
+     * Oops, this is a really big layout with lots of images and no optimizations done to it, older
+     * or lower end devices might run out of memory! Sorry to those devs with these devices.
+     * @return true if device has 1GB of memory and can show the content.
+     */
+    private boolean checkMemory() {
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        activityManager.getMemoryInfo(mi);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            long availableMegs = mi.totalMem / 1048576L;
+            return availableMegs >= 1000;
+        } else {
+            long availableMegs = mi.availMem / 1048576L;
+            return availableMegs >= 1000;
+        }
     }
 
 }
