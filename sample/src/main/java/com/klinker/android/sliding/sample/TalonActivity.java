@@ -44,6 +44,7 @@ public class TalonActivity extends SlidingActivity {
 
         setContent(R.layout.activity_talon);
 
+        // delay this so that the animation shows and we don't change the activity colors
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

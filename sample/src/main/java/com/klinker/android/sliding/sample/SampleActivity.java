@@ -35,6 +35,13 @@ public class SampleActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.show_fullscreen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFullscreenExample();
+            }
+        });
+
         findViewById(R.id.show_menu_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +87,10 @@ public class SampleActivity extends AppCompatActivity {
 
     private void showNormalExample() {
         startActivity(new Intent(this, NormalActivity.class));
+    }
+
+    private void showFullscreenExample() {
+        startActivity(new Intent(this, FullscreenActivity.class));
     }
 
     private void showMenuItemExample() {

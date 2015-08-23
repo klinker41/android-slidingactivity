@@ -88,7 +88,7 @@
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="sans-serif-light"
                 android:textSize="12sp"
-                android:text="41d"/>
+                android:text="4d"/>
 
             <ImageView
                 android:layout_width="16dp"

@@ -55,6 +55,7 @@ import android.widget.ImageView;
  * setAccentColor()
  * setFab()
  * disableHeader()
+ * enableFullscreen()
  *
  * You may use any combination of these to achieve the desired look.
  */
@@ -76,6 +77,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
     private boolean isEntranceAnimationFinished;
     private boolean isExitAnimationInProgress;
     private boolean isStarting;
+    private boolean startFullscreen = false;
 
     /**
      * Set up all relevant data for the activity including scrollers, etc. This is a final method,
@@ -319,6 +321,14 @@ public abstract class SlidingActivity extends AppCompatActivity {
         scroller.disableHeader();
     }
 
+    /**
+     * Starts the activity as fullscreen instead of first requiring the user to scroll up. This
+     * needs to be called in init()
+     */
+    public void enableFullscreen() {
+        startFullscreen = true;
+    }
+
     @Override
     protected final void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -332,7 +342,8 @@ public abstract class SlidingActivity extends AppCompatActivity {
         }
         hasAlreadyBeenOpened = true;
         scroller.scrollUpForEntranceAnimation(
-                getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE
+                getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE &&
+                        !startFullscreen
         );
     }
 
