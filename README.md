@@ -50,6 +50,19 @@ public class NormalActivity extends SlidingActivity {
 
 This will create an activity with the given title, the primary colors, and whatever is included in the activity_content layout.
 
+You also need to reference the activity into your AndroidManifest.xml:
+
+```xml
+<activity
+    android:name=".NormalActivity"
+    android:excludeFromRecents="true"
+    android:launchMode="singleTop"
+    android:taskAffinity=""
+    android:theme="@style/Theme.Sliding.Light"
+    android:windowSoftInputMode="stateUnchanged"/>
+```
+
+More Details:
 First, extend SlidingActivity. Instead of overriding onCreate(), instead override init() and set all of your options for the app there. These options include:
 
  - setTitle()
