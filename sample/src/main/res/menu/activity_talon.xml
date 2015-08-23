@@ -15,9 +15,25 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <attr name="content_background" format="reference"/>
-    <attr name="popup_theme" format="reference"/>
+    <item android:title="Change Profile Picture"
+        app:showAsAction="never"/>
 
-</resources>
+    <item android:title="Change Profile Banner"
+        app:showAsAction="never"/>
+
+    <item android:title="Change Profile Info"
+        app:showAsAction="never"/>
+
+    <item android:title="Mute"
+        app:showAsAction="never"/>
+
+    <item android:title="Mute Retweets"
+        app:showAsAction="never"/>
+
+    <item android:title="Muffle User"
+        app:showAsAction="never"/>
+
+</menu>

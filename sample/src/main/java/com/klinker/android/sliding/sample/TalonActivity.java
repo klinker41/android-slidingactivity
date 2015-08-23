@@ -17,15 +17,16 @@
 package com.klinker.android.sliding.sample;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
+import android.os.Handler;
+import android.view.Menu;
 
 import com.klinker.android.sliding.SlidingActivity;
 
 /**
- * Activity demonstrating a very simple implementation of a sliding activity with an FAB.
+ * Activity mocking out the profile page on Talon for Twitter and demonstrating the power of
+ * sliding activities.
  */
-public class FabActivity extends SlidingActivity {
+public class TalonActivity extends SlidingActivity {
 
     /**
      * Initialize our values, this is overridden instead of onCreate as it should be in all
@@ -34,22 +35,38 @@ public class FabActivity extends SlidingActivity {
      */
     @Override
     public void init(Bundle savedInstanceState) {
-        setTitle(R.string.fab_activity);
+        setTitle(R.string.talon_activity);
+
         setPrimaryColors(
-                getResources().getColor(R.color.fab_activity_primary),
-                getResources().getColor(R.color.fab_activity_primary_dark)
+                getResources().getColor(R.color.talon_activity_primary),
+                getResources().getColor(R.color.talon_activity_primary_dark)
         );
-        setContent(R.layout.activity_content);
+
+        setContent(R.layout.activity_talon);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setImage(R.drawable.twitter_profile);
+            }
+        }, 500);
+
         setFab(
-                getResources().getColor(R.color.fab_activity_accent),
-                R.drawable.ic_debug,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(FabActivity.this, "FAB Clicked", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                getResources().getColor(R.color.talon_activity_accent),
+                R.drawable.ic_add,
+                null
         );
+    }
+
+    /**
+     * Creates the options menu.
+     * @param menu the menu.
+     * @return true.
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_talon, menu);
+        return true;
     }
 
 }

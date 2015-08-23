@@ -55,4 +55,10 @@
         android:text="@string/show_fab_activity"
         android:id="@+id/show_fab"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/show_talon_activity"
+        android:id="@+id/show_talon"/>
+
 </LinearLayout>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2015 Jacob Klinker
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp">
+
+        <!-- The tweeters picture -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/favorite_2_profile"
+            app:border_width="0dp"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="13dp"
+            android:layout_marginStart="13dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="Brandal Wagener"
+                android:fontFamily="sans-serif-light"
+                android:paddingTop="4dp"
+                android:singleLine="true"
+                android:gravity="top"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="\@Brandal24"
+                android:fontFamily="sans-serif-light"
+                android:singleLine="true"
+                android:gravity="top"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginRight="6dp"
+            android:gravity="right|bottom">
+
+            <TextView
+                android:layout_height="16dp"
+                android:layout_width="16dp"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif-light"
+                android:textSize="12sp"
+                android:text="41d"/>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_message"
+                android:scaleType="fitCenter" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:paddingTop="12dp"
+        android:text="I wish that the earth, sea, and sky up above will send me someone to lava 🌋"
+        android:fontFamily="sans-serif-light"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp" />
+
+</LinearLayout>

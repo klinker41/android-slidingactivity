@@ -62,6 +62,13 @@ public class SampleActivity extends AppCompatActivity {
                 showFabExample();
             }
         });
+
+        findViewById(R.id.show_talon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTalonExample();
+            }
+        });
     }
 
     private void showNormalExample() {
@@ -82,6 +89,10 @@ public class SampleActivity extends AppCompatActivity {
 
     private void showFabExample() {
         startActivity(new Intent(this, FabActivity.class));
+    }
+
+    private void showTalonExample() {
+        startActivity(new Intent(this, TalonActivity.class));
     }
 
 }

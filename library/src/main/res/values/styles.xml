@@ -27,6 +27,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="content_background">@color/light_background</item>
+        <item name="popup_theme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
     <style name="Theme.Sliding" parent="@style/Theme.AppCompat.NoActionBar">
@@ -39,6 +40,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="content_background">@color/dark_background</item>
+        <item name="popup_theme">@style/ThemeOverlay.AppCompat</item>
     </style>
 
 </resources>

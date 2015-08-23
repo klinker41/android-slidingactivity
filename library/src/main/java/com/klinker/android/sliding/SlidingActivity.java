@@ -53,8 +53,7 @@ import android.widget.ImageView;
  * setImage()
  * setPrimaryColors()
  * setAccentColor()
- * enableFab()
- * disableFab()
+ * setFab()
  *
  * You may use any combination of these to achieve the desired look.
  */
@@ -202,7 +201,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
      * @param drawableRes the drawable to display on the FAB.
      * @param onClickListener the listener to activate when clicked on.
      */
-    public void enableFab(int color, int drawableRes, OnClickListener onClickListener) {
+    public void setFab(int color, int drawableRes, OnClickListener onClickListener) {
         fab.setBackgroundTintList(
                 new ColorStateList(
                         new int[][] {
@@ -223,7 +222,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
     /**
      * Disable showing the FAB on the screen.
      */
-    public void disableFab() {
+    private void disableFab() {
         scroller.setEnableFab(false);
     }
 

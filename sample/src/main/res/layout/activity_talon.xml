@@ -15,9 +15,14 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <attr name="content_background" format="reference"/>
-    <attr name="popup_theme" format="reference"/>
+    <include layout="@layout/talon_stats_card"/>
+    <include layout="@layout/talon_tweets_card"/>
+    <include layout="@layout/talon_mentions_card"/>
+    <include layout="@layout/talon_favorites_card"/>
 
-</resources>
+</LinearLayout>

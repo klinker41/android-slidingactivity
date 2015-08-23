@@ -70,6 +70,14 @@
             android:theme="@style/Theme.Sliding.Light"
             android:windowSoftInputMode="stateUnchanged"/>
 
+        <activity
+            android:name=".TalonActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sliding.Light"
+            android:windowSoftInputMode="stateUnchanged"/>
+
     </application>
 
 </manifest>
