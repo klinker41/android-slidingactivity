@@ -66,11 +66,11 @@ import android.widget.TextView;
  * features are missing. For example: handling of KEYCODES, OverScroll bounce and saving
  * scroll state in savedInstanceState bundles.
  *
- * Before copying this approach to nested scrolling, consider whether something simpler & less
+ * Before copying this approach to nested scrolling, consider whether something simpler and less
  * customized will work for you. For example, see the re-usable StickyHeaderListView used by
  * WifiSetupActivity (very nice). Alternatively, check out Google+'s cover photo scrolling or
  * Android L's built in nested scrolling support. I thought I needed a more custom ViewGroup in
- * order to track velocity, modify EdgeEffect color & perform the originally specified animations.
+ * order to track velocity, modify EdgeEffect color and perform the originally specified animations.
  * As a result this ViewGroup has non-standard talkback and keyboard support.
  */
 public class MultiShrinkScroller extends FrameLayout {

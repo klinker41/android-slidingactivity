@@ -26,7 +26,7 @@ import android.widget.ScrollView;
  * A {@link ScrollView} that doesn't respond or intercept touch events.
  *
  * This is used in combination with {@link com.klinker.android.sliding.MultiShrinkScroller} so
- * that MultiShrinkScroller can handle all scrolling & saving.
+ * that MultiShrinkScroller can handle all scrolling and saving.
  */
 public class TouchlessScrollView extends ScrollView {
 
