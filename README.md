@@ -1,4 +1,4 @@
-# Android Sliding Activity
+# Android Sliding Activity Library
 
 ![Preview](preview.gif)
 ![Preview Landscape](preview_landscape.gif)
@@ -140,8 +140,8 @@ If you would like to not have the scrolling content animate up onto the screen a
 
 ## Current Apps Using Sliding Activities
 
-[Talon for Twitter](https://play.google.com/store/apps/details?id=com.klinker.android.twitter_l)
-[EvolveSMS](https://play.google.com/store/apps/details?id=com.klinker.android.evolve_sms)
+ - [Talon for Twitter](https://play.google.com/store/apps/details?id=com.klinker.android.twitter_l)
+ - [EvolveSMS](https://play.google.com/store/apps/details?id=com.klinker.android.evolve_sms)
 
 If you're using the library and want to be included in the list, email me at <jake@klinkerapps.com> and I'll get your app added to the list!
 
