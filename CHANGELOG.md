@@ -1,5 +1,9 @@
 ## Changelog
 
+### Version 1.1.1:
+- Fade in the header text after it is set
+- Remove the padding from the content view because it caused a weird coloring effect
+
 ### Version 1.1.0:
 - Add an 'Inbox' style expansion animation to the window
 
