@@ -16,6 +16,7 @@
 
 package com.klinker.android.sliding.sample;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.klinker.android.sliding.SlidingActivity;
@@ -33,11 +34,22 @@ public class NoHeaderActivity extends SlidingActivity {
     @Override
     public void init(Bundle savedInstanceState) {
         disableHeader();
+        enableFullscreen();
         setPrimaryColors(
                 getResources().getColor(R.color.normal_sliding_activity_primary),
                 getResources().getColor(R.color.normal_sliding_activity_primary_dark)
         );
         setContent(R.layout.activity_content);
+
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra(SampleActivity.ARG_USE_EXPANSION, false)) {
+            expandFromPoints(
+                    intent.getIntExtra(SampleActivity.ARG_EXPANSION_LEFT_OFFSET, 0),
+                    intent.getIntExtra(SampleActivity.ARG_EXPANSION_TOP_OFFSET, 0),
+                    intent.getIntExtra(SampleActivity.ARG_EXPANSION_VIEW_WIDTH, 0),
+                    intent.getIntExtra(SampleActivity.ARG_EXPANSION_VIEW_HEIGHT, 0)
+            );
+        }
     }
 
 }

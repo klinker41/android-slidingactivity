@@ -16,6 +16,7 @@
 
 package com.klinker.android.sliding.sample;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 /**

@@ -20,6 +20,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -29,6 +31,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -38,6 +41,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -78,6 +84,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
     private boolean isExitAnimationInProgress;
     private boolean isStarting;
     private boolean startFullscreen = false;
+    private MultiShrinkScroller.OpenAnimation openAnimation = MultiShrinkScroller.OpenAnimation.SLIDE_UP;
 
     /**
      * Set up all relevant data for the activity including scrollers, etc. This is a final method,
@@ -319,6 +326,20 @@ public abstract class SlidingActivity extends AppCompatActivity {
      */
     public void disableHeader() {
         scroller.disableHeader();
+        content.setPadding(0, 0, 0, 0);
+    }
+
+    /**
+     * Perform an Inbox style expansion from the previous activity instead of the simple slide up expansion
+     *
+     * @param leftOffset how many pixels from the left edge of the screen the view you are expanding from is.
+     * @param topOffset how many pixels from the top edge of the screen the view you are expanding from is.
+     * @param viewWidth the width of the view you are expanding from.
+     * @param viewHeight the height of the view you are expanding from/
+     */
+    public void expandFromPoints(int leftOffset, int topOffset, int viewWidth, int viewHeight) {
+        openAnimation = MultiShrinkScroller.OpenAnimation.EXPAND_FROM_VIEW;
+        scroller.setExpansionPoints(leftOffset, topOffset, viewWidth, viewHeight);
     }
 
     /**
@@ -340,11 +361,28 @@ public abstract class SlidingActivity extends AppCompatActivity {
         if (hasAlreadyBeenOpened) {
             return;
         }
+
         hasAlreadyBeenOpened = true;
-        scroller.scrollUpForEntranceAnimation(
-                getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE &&
-                        !startFullscreen
-        );
+
+        if (openAnimation == MultiShrinkScroller.OpenAnimation.EXPAND_FROM_VIEW) {
+            // hide the content and show it in a bit, much smoother animation
+
+            content.setVisibility(View.GONE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    content.setVisibility(View.VISIBLE);
+                    content.setAlpha(0f);
+                    content.animate()
+                            .alpha(1f)
+                            .start();
+                }
+            }, MultiShrinkScroller.ANIMATION_DURATION);
+        }
+
+        boolean openToCurrentPosition =  getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE &&
+                !startFullscreen;
+        scroller.performEntranceAnimation(openAnimation, openToCurrentPosition);
     }
 
     private void setHeaderNameText(int resId) {
@@ -447,6 +485,34 @@ public abstract class SlidingActivity extends AppCompatActivity {
         @Override
         public void onStartScrollOffBottom() {
             isExitAnimationInProgress = true;
+
+            if (openAnimation != MultiShrinkScroller.OpenAnimation.SLIDE_UP) {
+                content.removeAllViews();
+                photoView.setVisibility(View.GONE);
+                photoViewTempBackground.setVisibility(View.VISIBLE);
+
+                final Interpolator interpolator;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    interpolator = AnimationUtils.loadInterpolator(SlidingActivity.this,
+                            android.R.interpolator.linear_out_slow_in);
+                } else {
+                    interpolator = new DecelerateInterpolator();
+                }
+
+                final ValueAnimator contentAlpha = ValueAnimator.ofFloat(1f, 0f);
+                contentAlpha.setInterpolator(interpolator);
+                contentAlpha.setDuration(MultiShrinkScroller.ANIMATION_DURATION + 300);
+                contentAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        float val = (float) animation.getAnimatedValue();
+                        scroller.setAlpha(val);
+                        windowScrim.setAlpha((int) (0xFF * val));
+                    }
+                });
+                contentAlpha.start();
+            }
         }
 
         @Override

@@ -151,24 +151,6 @@ If you would like to not show the header on the screen and only have your scroll
 
 If you would like to not have the scrolling content animate up onto the screen and leave a little bit of extra room at the top, you can call ```enableFullscreen()``` inside init(). After doing this, the activity can still be slid down to dismiss it.
 
-#### expandFromPoints(int,int,int,int)
-
-This property creates an [Inbox](https://play.google.com/store/apps/details?id=com.google.android.apps.inbox) style expansion from anywhere on the screen. As with many methods, the parameters are left offset, top offset, width, and height, which describe the size of the box that you want to expand from.
-
-``` java
-Intent intent = getIntent();
-if (intent.getBooleanExtra(SampleActivity.ARG_USE_EXPANSION, false)) {
-    expandFromPoints(
-            intent.getIntExtra(SampleActivity.ARG_EXPANSION_LEFT_OFFSET, 0),
-            intent.getIntExtra(SampleActivity.ARG_EXPANSION_TOP_OFFSET, 0),
-            intent.getIntExtra(SampleActivity.ARG_EXPANSION_VIEW_WIDTH, 0),
-            intent.getIntExtra(SampleActivity.ARG_EXPANSION_VIEW_HEIGHT, 0)
-    );
-}
-```
-
-My suggestion: in the [SampleActivity.startActivity(Intent)](https://github.com/klinker41/android-slidingactivity/blob/master/sample/src/main/java/com/klinker/android/sliding/sample/SampleActivity.java) function, you can see that I pass the expansion parameters as extras on the intent. I would recommend using this method to pass the view from the activity under the SlidingActivity, to the SlidingActivity. Of course, you can add the extras to the intent however you want, you do not have to override ```Activity.startActivity()``` to do this.
-
 ## Current Apps Using Sliding Activities
 
  - [Talon for Twitter](https://play.google.com/store/apps/details?id=com.klinker.android.twitter_l)

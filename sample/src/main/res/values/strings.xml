@@ -18,6 +18,7 @@
 
     <string name="app_name">Sliding Activity</string>
 
+    <string name="use_expansion_animation">Use Expansion Animation</string>
     <string name="show_normal_sliding_activity">Show Normal Sliding Activity</string>
     <string name="show_normal_sliding_activity_fullscreen">Show Normal Sliding Activity (Fullscreen)</string>
     <string name="show_menu_item_activity">Show Menu Item Sliding Activity</string>

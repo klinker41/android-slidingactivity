@@ -20,8 +20,15 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 
 public class SampleActivity extends AppCompatActivity {
+
+    public static final String ARG_USE_EXPANSION = "arg_use_expansion";
+    public static final String ARG_EXPANSION_LEFT_OFFSET = "arg_left_offset";
+    public static final String ARG_EXPANSION_TOP_OFFSET = "arg_top_offset";
+    public static final String ARG_EXPANSION_VIEW_WIDTH = "arg_view_width";
+    public static final String ARG_EXPANSION_VIEW_HEIGHT = "arg_view_height";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +122,25 @@ public class SampleActivity extends AppCompatActivity {
 
     private void showTalonExample() {
         startActivity(new Intent(this, TalonActivity.class));
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        if (((CheckBox)findViewById(R.id.use_expansion_check)).isChecked()) {
+            intent.putExtra(ARG_USE_EXPANSION, true);
+
+            View expansionView = findViewById(R.id.expansion_view);
+
+            int location[] = new int[2];
+            expansionView.getLocationInWindow(location);
+
+            intent.putExtra(ARG_EXPANSION_LEFT_OFFSET, location[0]);
+            intent.putExtra(ARG_EXPANSION_TOP_OFFSET, location[1]);
+            intent.putExtra(ARG_EXPANSION_VIEW_WIDTH, expansionView.getWidth());
+            intent.putExtra(ARG_EXPANSION_VIEW_HEIGHT, expansionView.getHeight());
+        }
+
+        super.startActivity(intent);
     }
 
 }

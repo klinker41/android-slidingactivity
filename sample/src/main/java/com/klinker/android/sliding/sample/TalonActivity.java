@@ -17,6 +17,7 @@
 package com.klinker.android.sliding.sample;
 
 import android.app.ActivityManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
@@ -62,6 +63,16 @@ public class TalonActivity extends SlidingActivity {
                 R.drawable.ic_add,
                 null
         );
+
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra(SampleActivity.ARG_USE_EXPANSION, false)) {
+            expandFromPoints(
+                    intent.getIntExtra(SampleActivity.ARG_EXPANSION_LEFT_OFFSET, 0),
+                    intent.getIntExtra(SampleActivity.ARG_EXPANSION_TOP_OFFSET, 0),
+                    intent.getIntExtra(SampleActivity.ARG_EXPANSION_VIEW_WIDTH, 0),
+                    intent.getIntExtra(SampleActivity.ARG_EXPANSION_VIEW_HEIGHT, 0)
+            );
+        }
     }
 
     /**

@@ -29,6 +29,13 @@
         android:orientation="vertical"
         tools:context="com.klinker.android.sliding.sample.SampleActivity">
 
+        <CheckBox
+            android:id="@+id/use_expansion_check"
+            android:text="@string/use_expansion_animation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,6 +83,12 @@
             android:layout_height="wrap_content"
             android:text="@string/show_talon_activity"
             android:id="@+id/show_talon"/>
+
+        <View
+            android:id="@+id/expansion_view"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
 
     </LinearLayout>
 
