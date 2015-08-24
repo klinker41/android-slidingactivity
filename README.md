@@ -168,7 +168,9 @@ if (intent.getBooleanExtra(SampleActivity.ARG_USE_EXPANSION, false)) {
 
 My suggestion: in the [SampleActivity.addExpansionArgs(Intent)](https://github.com/klinker41/android-slidingactivity/blob/master/sample/src/main/java/com/klinker/android/sliding/sample/SampleActivity.java) function, you can see that I pass the expansion parameters as extras on the intent. I would recommend using this method to pass the view from the activity under the SlidingActivity, to the SlidingActivity. 
 
-You can use the built in dark
+#### Theming
+
+Two themes are included with the library that are specifically created for a SlidingActivity. You can use either ```Theme.Sliding``` or ```Theme.Sliding.Light``` when registering your sliding activity in the AndroidManifest.xml file. You can also use these themes as a parent to your own custom themes and use those instead if you would like.
 
 ## Current Apps Using Sliding Activities
 
