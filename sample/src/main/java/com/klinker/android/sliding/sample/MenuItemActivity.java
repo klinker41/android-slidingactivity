@@ -19,6 +19,7 @@ package com.klinker.android.sliding.sample;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.klinker.android.sliding.SlidingActivity;
@@ -41,7 +42,14 @@ public class MenuItemActivity extends SlidingActivity {
                 getResources().getColor(R.color.menu_item_activity_primary),
                 getResources().getColor(R.color.menu_item_activity_primary_dark)
         );
-        setContent(R.layout.activity_content);
+        setContent(R.layout.activity_feedback);
+
+        findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**

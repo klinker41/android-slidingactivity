@@ -33,66 +33,51 @@
         <activity
             android:name=".NormalActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.Sliding.Light"
-            android:windowSoftInputMode="stateUnchanged"/>
+            android:theme="@style/Theme.Sliding.Light"/>
 
         <activity
             android:name=".FullscreenActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.Sliding.Light"
-            android:windowSoftInputMode="stateUnchanged"/>
+            android:theme="@style/Theme.Sliding.Light"/>
 
         <activity
             android:name=".MenuItemActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTop"
             android:taskAffinity=""
             android:theme="@style/Theme.Sliding.Light"
-            android:windowSoftInputMode="stateUnchanged"/>
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".ImageActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.Sliding.Light"
-            android:windowSoftInputMode="stateUnchanged"/>
+            android:theme="@style/Theme.Sliding.Light"/>
 
         <activity
             android:name=".DarkActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.Sliding"
-            android:windowSoftInputMode="stateUnchanged"/>
+            android:theme="@style/Theme.Sliding"/>
 
         <activity
             android:name=".FabActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.Sliding.Light"
-            android:windowSoftInputMode="stateUnchanged"/>
+            android:theme="@style/Theme.Sliding.Light"/>
 
         <activity
             android:name=".NoHeaderActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.Sliding"
-            android:windowSoftInputMode="stateUnchanged"/>
+            android:theme="@style/Theme.Sliding"/>
 
         <activity
             android:name=".TalonActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.Sliding.Light"
-            android:windowSoftInputMode="stateUnchanged"/>
+            android:theme="@style/Theme.Sliding.Light"/>
 
     </application>
 

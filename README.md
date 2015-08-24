@@ -56,10 +56,8 @@ You also need to reference the activity into your AndroidManifest.xml:
 <activity
     android:name=".NormalActivity"
     android:excludeFromRecents="true"
-    android:launchMode="singleTop"
     android:taskAffinity=""
-    android:theme="@style/Theme.Sliding.Light"
-    android:windowSoftInputMode="stateUnchanged"/>
+    android:theme="@style/Theme.Sliding.Light"/>
 ```
 
 More Details:
