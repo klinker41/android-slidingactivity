@@ -22,7 +22,7 @@ Include the following in your gradle script:
 
 ```groovy
 dependencies {
-    compile 'com.klinkerapps:sliding-activity:1.0.0'
+    compile 'com.klinkerapps:sliding-activity:1.1.0'
 }
 ```
 
@@ -167,6 +167,8 @@ if (intent.getBooleanExtra(SampleActivity.ARG_USE_EXPANSION, false)) {
 ```
 
 My suggestion: in the [SampleActivity.addExpansionArgs(Intent)](https://github.com/klinker41/android-slidingactivity/blob/master/sample/src/main/java/com/klinker/android/sliding/sample/SampleActivity.java) function, you can see that I pass the expansion parameters as extras on the intent. I would recommend using this method to pass the view from the activity under the SlidingActivity, to the SlidingActivity. 
+
+You can use the built in dark
 
 ## Current Apps Using Sliding Activities
 
