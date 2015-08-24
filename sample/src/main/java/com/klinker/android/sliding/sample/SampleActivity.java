@@ -93,39 +93,38 @@ public class SampleActivity extends AppCompatActivity {
     }
 
     private void showNormalExample() {
-        startActivity(new Intent(this, NormalActivity.class));
+        startActivity(addExpansionArgs(new Intent(this, NormalActivity.class)));
     }
 
     private void showFullscreenExample() {
-        startActivity(new Intent(this, FullscreenActivity.class));
+        startActivity(addExpansionArgs(new Intent(this, FullscreenActivity.class)));
     }
 
     private void showMenuItemExample() {
-        startActivity(new Intent(this, MenuItemActivity.class));
+        startActivity(addExpansionArgs(new Intent(this, MenuItemActivity.class)));
     }
 
     private void showImageExample() {
-        startActivity(new Intent(this, ImageActivity.class));
+        startActivity(addExpansionArgs(new Intent(this, ImageActivity.class)));
     }
 
     private void showDarkExample() {
-        startActivity(new Intent(this, DarkActivity.class));
+        startActivity(addExpansionArgs(new Intent(this, DarkActivity.class)));
     }
 
     private void showFabExample() {
-        startActivity(new Intent(this, FabActivity.class));
+        startActivity(addExpansionArgs(new Intent(this, FabActivity.class)));
     }
 
     private void showNoHeaderExample() {
-        startActivity(new Intent(this, NoHeaderActivity.class));
+        startActivity(addExpansionArgs(new Intent(this, NoHeaderActivity.class)));
     }
 
     private void showTalonExample() {
-        startActivity(new Intent(this, TalonActivity.class));
+        startActivity(addExpansionArgs(new Intent(this, TalonActivity.class)));
     }
 
-    @Override
-    public void startActivity(Intent intent) {
+    public Intent addExpansionArgs(Intent intent) {
         if (((CheckBox)findViewById(R.id.use_expansion_check)).isChecked()) {
             intent.putExtra(ARG_USE_EXPANSION, true);
 
@@ -140,7 +139,7 @@ public class SampleActivity extends AppCompatActivity {
             intent.putExtra(ARG_EXPANSION_VIEW_HEIGHT, expansionView.getHeight());
         }
 
-        super.startActivity(intent);
+        return intent;
     }
 
 }

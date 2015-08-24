@@ -166,7 +166,7 @@ if (intent.getBooleanExtra(SampleActivity.ARG_USE_EXPANSION, false)) {
 }
 ```
 
-My suggestion: in the [SampleActivity.startActivity(Intent)](https://github.com/klinker41/android-slidingactivity/blob/master/sample/src/main/java/com/klinker/android/sliding/sample/SampleActivity.java) function, you can see that I pass the expansion parameters as extras on the intent. I would recommend using this method to pass the view from the activity under the SlidingActivity, to the SlidingActivity. Of course, you can add the extras to the intent however you want, you do not have to override ```Activity.startActivity()``` to do this.
+My suggestion: in the [SampleActivity.addExpansionArgs(Intent)](https://github.com/klinker41/android-slidingactivity/blob/master/sample/src/main/java/com/klinker/android/sliding/sample/SampleActivity.java) function, you can see that I pass the expansion parameters as extras on the intent. I would recommend using this method to pass the view from the activity under the SlidingActivity, to the SlidingActivity. 
 
 ## Current Apps Using Sliding Activities
 
