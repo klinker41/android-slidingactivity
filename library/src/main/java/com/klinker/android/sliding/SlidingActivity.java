@@ -496,8 +496,6 @@ public abstract class SlidingActivity extends AppCompatActivity {
 
             if (scroller.willUseReverseExpansion()) {
                 content.removeAllViews();
-                photoView.setVisibility(View.GONE);
-                photoViewTempBackground.setVisibility(View.VISIBLE);
 
                 final Interpolator interpolator;
 
