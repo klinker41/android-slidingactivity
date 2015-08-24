@@ -416,6 +416,11 @@ public class MultiShrinkScroller extends FrameLayout {
     public void setTitle(String title) {
         largeTextView.setText(title);
         photoTouchInterceptOverlay.setContentDescription(title);
+
+        largeTextView.setAlpha(0f);
+        largeTextView.animate()
+                .alpha(1f)
+                .start();
     }
 
     /**
