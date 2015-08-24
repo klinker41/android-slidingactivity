@@ -685,6 +685,9 @@ public class MultiShrinkScroller extends FrameLayout {
         return 1.0f - Math.max(Math.min(1.0f, heightRatio), 0f);
     }
 
+    public boolean willUseReverseExpansion() {
+        return openAnimation == OpenAnimation.EXPAND_FROM_VIEW && hasEverTouchedTheTop;
+    }
     /**
      * Scroll the activity off the bottom of the screen.
      */
@@ -692,7 +695,7 @@ public class MultiShrinkScroller extends FrameLayout {
         isTouchDisabledForDismissAnimation = true;
         scroller.forceFinished(true);
 
-        if (openAnimation == OpenAnimation.SLIDE_UP) {
+        if (!willUseReverseExpansion()) {
             final Interpolator interpolator = new AcceleratingFlingInterpolator(
                     EXIT_FLING_ANIMATION_DURATION_MS, getCurrentVelocity(),
                     getScrollUntilOffBottom());
@@ -790,7 +793,7 @@ public class MultiShrinkScroller extends FrameLayout {
         int screenHeight = size.y;
         int screenWidth = size.x;
 
-        final ValueAnimator heightExpansion = ValueAnimator.ofInt(expansionViewHeight, screenHeight);
+        final ValueAnimator heightExpansion = ValueAnimator.ofInt(expansionViewHeight, getHeight());
         heightExpansion.setInterpolator(interpolator);
         heightExpansion.setDuration(ANIMATION_DURATION);
         heightExpansion.addUpdateListener(new AnimatorUpdateListener() {

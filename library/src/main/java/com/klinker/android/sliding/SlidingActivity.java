@@ -494,7 +494,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
         public void onStartScrollOffBottom() {
             isExitAnimationInProgress = true;
 
-            if (openAnimation != MultiShrinkScroller.OpenAnimation.SLIDE_UP) {
+            if (scroller.willUseReverseExpansion()) {
                 content.removeAllViews();
                 photoView.setVisibility(View.GONE);
                 photoViewTempBackground.setVisibility(View.VISIBLE);
