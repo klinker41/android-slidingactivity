@@ -2,6 +2,7 @@
 
 ![Preview](preview.gif)
 ![Preview Landscape](preview_landscape.gif)
+![Preview Inbox Animation](preview_inbox_animation.gif)
 
 Easily create activities that can slide vertically on the screen and fit well into the Material Design age.
 
