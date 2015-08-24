@@ -688,6 +688,7 @@ public class MultiShrinkScroller extends FrameLayout {
     public boolean willUseReverseExpansion() {
         return openAnimation == OpenAnimation.EXPAND_FROM_VIEW && hasEverTouchedTheTop;
     }
+
     /**
      * Scroll the activity off the bottom of the screen.
      */
