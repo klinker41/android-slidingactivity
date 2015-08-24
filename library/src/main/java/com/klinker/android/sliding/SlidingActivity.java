@@ -82,6 +82,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
     private ColorDrawable windowScrim;
     private boolean isEntranceAnimationFinished;
     private boolean isExitAnimationInProgress;
+    private boolean isExitAnimationFinished;
     private boolean isStarting;
     private boolean startFullscreen = false;
     private MultiShrinkScroller.OpenAnimation openAnimation = MultiShrinkScroller.OpenAnimation.SLIDE_UP;
@@ -101,9 +102,6 @@ public abstract class SlidingActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
-                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
         setContentView(R.layout.sliding_activity);
 
@@ -460,8 +458,17 @@ public abstract class SlidingActivity extends AppCompatActivity {
      */
     @Override
     public void finish() {
-        super.finish();
-        overridePendingTransition(0, 0);
+        if (scroller != null) {
+            if (!isExitAnimationFinished) {
+                scroller.scrollOffBottom();
+            } else {
+                super.finish();
+                overridePendingTransition(0, 0);
+            }
+        } else {
+            super.finish();
+            overridePendingTransition(0, 0);
+        }
     }
 
 
@@ -469,6 +476,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
             = new MultiShrinkScroller.MultiShrinkScrollerListener() {
         @Override
         public void onScrolledOffBottom() {
+            isExitAnimationFinished = true;
             finish();
         }
 
