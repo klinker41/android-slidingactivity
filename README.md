@@ -181,7 +181,7 @@ If you're using the library and want to be included in the list, email me at <ja
 
 ## APK Download
 
-If you'd like to check out the sample app first, you can download an APK [here](http://build.klinker.xyz/job/Andorid-SlidingActivity/lastSuccessfulBuild/artifact/sample/build/outputs/apk/sample-debug.apk).
+If you'd like to check out the sample app first, you can download an APK [here](https://www.dropbox.com/s/zpr0ykwl07539uq/sliding-activity-sample.apk?dl=0).
 
 ## YouTube
 
