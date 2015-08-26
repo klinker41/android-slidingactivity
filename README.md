@@ -179,6 +179,10 @@ Two themes are included with the library that are specifically created for a Sli
 
 If you're using the library and want to be included in the list, email me at <jake@klinkerapps.com> and I'll get your app added to the list!
 
+## APK Download
+
+If you'd like to check out the sample app first, you can download an APK [here](http://build.klinker.xyz/job/Andorid-SlidingActivity/lastSuccessfulBuild/artifact/sample/build/outputs/apk/sample-debug.apk).
+
 ## YouTube
 
 Much higher quality than the GIFs above and more options shown: https://www.youtube.com/watch?v=fWcmy7q09aM
