@@ -18,6 +18,8 @@ package com.klinker.android.sliding.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import com.klinker.android.sliding.MultiShrinkScroller;
 import com.klinker.android.sliding.SlidingActivity;
@@ -34,14 +36,23 @@ public class CustomHeaderActivity extends SlidingActivity {
      */
     @Override
     public void init(Bundle savedInstanceState) {
-        setTitle(R.string.normal_sliding_activity);
+        setTitle(R.string.custom_sliding_activity);
         setPrimaryColors(
-                getResources().getColor(R.color.normal_sliding_activity_primary),
-                getResources().getColor(R.color.normal_sliding_activity_primary_dark)
+                getResources().getColor(R.color.dark_activity_primary),
+                getResources().getColor(R.color.dark_activity_primary_dark)
         );
         setContent(R.layout.activity_content);
         setHeaderContent(R.layout.activity_custom_header);
-
+        setFab(
+                getResources().getColor(R.color.fab_activity_accent),
+                R.drawable.ic_debug,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(CustomHeaderActivity.this, "FAB Clicked", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
         Intent intent = getIntent();
         if (intent.getBooleanExtra(SampleActivity.ARG_USE_EXPANSION, false)) {
             expandFromPoints(

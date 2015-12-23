@@ -32,6 +32,7 @@ import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -1395,8 +1396,10 @@ public class MultiShrinkScroller extends FrameLayout {
                 colorAlpha = 0;
             } else if (toolbarHeight >= intermediateHeaderHeight && toolbarHeight < maximumHeaderHeight) {
                 colorAlpha = (-0.25f * ratio) + .25f;
-            } else {
+            } else if(maximumHeaderHeight > intermediateHeaderHeight || ratio > 0.67){
                 colorAlpha = (-1.5f * ratio) + 1;
+            } else {
+                colorAlpha = 1;
             }
 
             gradientAlpha = 0;

@@ -5,21 +5,23 @@
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:src="@drawable/profile_picture"
         app:civ_border_width="3dp"
         app:civ_border_color="#FFF"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image2"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:src="@drawable/profile_picture"
-        app:civ_border_width="3dp"
-        app:civ_border_color="#FFF"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="My Profile"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffff" />
+
 </LinearLayout>
