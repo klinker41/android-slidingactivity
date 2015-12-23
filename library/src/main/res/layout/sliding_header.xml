@@ -30,6 +30,12 @@
         android:layout_height="match_parent"
         android:clickable="false"
         android:scaleType="centerCrop" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/header_content_container">
+
+    </FrameLayout>
 
     <View
         android:id="@+id/photo_touch_intercept_overlay"
@@ -55,5 +61,6 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="?popup_theme"
         android:id="@+id/toolbar"/>
+
 
 </merge>

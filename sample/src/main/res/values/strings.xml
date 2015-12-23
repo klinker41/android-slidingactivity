@@ -26,11 +26,13 @@
     <string name="show_dark_activity">Show Dark Sliding Activity</string>
     <string name="show_fab_activity">Show FAB Sliding Activity</string>
     <string name="show_no_header_activity">Show No Header Sliding Activity</string>
+    <string name="show_custom_header_activity">Show Custom Header Sliding Activity</string>
     <string name="show_talon_activity">Show Talon for Twitter Example</string>
 
     <string name="bug">Bug Report</string>
 
     <string name="normal_sliding_activity">Normal Sliding Activity</string>
+    <string name="custom_sliding_activity">Custom Header Activitiy</string>
     <string name="submit_feedback">Submit Feedback</string>
     <string name="image_activity">Image Activity</string>
     <string name="dark_activity">Dark Activity</string>
