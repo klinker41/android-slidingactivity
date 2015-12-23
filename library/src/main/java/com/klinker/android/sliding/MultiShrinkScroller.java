@@ -32,15 +32,14 @@ import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -50,8 +49,8 @@ import android.view.animation.PathInterpolator;
 import android.widget.EdgeEffect;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Scroller;
 import android.widget.ScrollView;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 /**

@@ -174,6 +174,11 @@ public abstract class SlidingActivity extends AppCompatActivity {
      */
     public abstract void init(Bundle savedInstanceState);
 
+    /**
+     * Use this method to pre-configure scroller. It will be called before initialisation
+     *
+     * @param scroller {@link MultiShrinkScroller} instance
+     */
     protected void configureScroller(MultiShrinkScroller scroller){
 
     }
@@ -254,10 +259,18 @@ public abstract class SlidingActivity extends AppCompatActivity {
         content.addView(view);
     }
 
-    public void setHeaderContent(int resId){
+    /**
+     * Set the content to be displayed inside the header area
+     * @param resId the resource id to inflate for the content.
+     */
+    public void setHeaderContent(int resId) {
         setHeaderContent(getLayoutInflater().inflate(resId, null, false));
     }
 
+    /**
+     * Set the content to be displayed in the header area.
+     * @param view the view to use for the content.
+     */
     public void setHeaderContent(View view){
         headerContent.addView(view);
     }
