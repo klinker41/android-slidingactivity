@@ -21,7 +21,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -40,7 +39,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewAnimationUtils;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -86,6 +84,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
     private boolean isStarting;
     private boolean startFullscreen = false;
     private MultiShrinkScroller.OpenAnimation openAnimation = MultiShrinkScroller.OpenAnimation.SLIDE_UP;
+    private FrameLayout headerContent;
 
     /**
      * Set up all relevant data for the activity including scrollers, etc. This is a final method,
@@ -107,6 +106,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
 
         scroller = (MultiShrinkScroller) findViewById(R.id.multiscroller);
         content = (FrameLayout) findViewById(R.id.content_container);
+        headerContent = (FrameLayout) findViewById(R.id.header_content_container);
 
         photoView = (ImageView) findViewById(R.id.photo);
         photoViewTempBackground = findViewById(R.id.photo_background);
@@ -248,6 +248,14 @@ public abstract class SlidingActivity extends AppCompatActivity {
      */
     public void setContent(View view) {
         content.addView(view);
+    }
+
+    public void setHeaderContent(int resId){
+        setHeaderContent(getLayoutInflater().inflate(resId, null, false));
+    }
+
+    public void setHeaderContent(View view){
+        headerContent.addView(view);
     }
 
     /**
