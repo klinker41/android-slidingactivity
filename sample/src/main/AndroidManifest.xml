@@ -35,6 +35,11 @@
             android:excludeFromRecents="true"
             android:taskAffinity=""
             android:theme="@style/Theme.Sliding.Light"/>
+        <activity
+            android:name=".CustomHeaderActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sliding.Light"/>
 
         <activity
             android:name=".FullscreenActivity"

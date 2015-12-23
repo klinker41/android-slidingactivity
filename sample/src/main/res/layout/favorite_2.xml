@@ -39,7 +39,7 @@
             android:layout_marginRight="2dp"
             android:layout_marginLeft="2dp"
             android:src="@drawable/favorite_2_profile"
-            app:border_width="0dp"/>
+            app:civ_border_width="0dp"/>
 
         <LinearLayout
             android:orientation="vertical"

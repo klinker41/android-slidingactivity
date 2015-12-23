@@ -84,6 +84,13 @@ public class SampleActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.show_custom_header).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCustomHeaderExample();
+            }
+        });
+
         findViewById(R.id.show_talon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +125,10 @@ public class SampleActivity extends AppCompatActivity {
 
     private void showNoHeaderExample() {
         startActivity(addExpansionArgs(new Intent(this, NoHeaderActivity.class)));
+    }
+
+    private void showCustomHeaderExample() {
+        startActivity(addExpansionArgs(new Intent(this, CustomHeaderActivity.class)));
     }
 
     private void showTalonExample() {
