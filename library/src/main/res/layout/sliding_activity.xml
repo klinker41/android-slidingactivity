@@ -30,19 +30,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/sliding_starting_empty_height"
-            android:contentDescription="@string/sliding_transparent_view_description"
-            android:id="@+id/transparent_view" />
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sliding_starting_empty_height"
+                android:contentDescription="@string/sliding_transparent_view_description"
+                android:id="@+id/transparent_view" />
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@id/transparent_view"
                 android:id="@+id/toolbar_parent">
                 <include layout="@layout/sliding_header" />
             </FrameLayout>
