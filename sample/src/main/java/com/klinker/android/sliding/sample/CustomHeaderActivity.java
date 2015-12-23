@@ -19,6 +19,7 @@ package com.klinker.android.sliding.sample;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.klinker.android.sliding.MultiShrinkScroller;
 import com.klinker.android.sliding.SlidingActivity;
 
 /**
@@ -52,4 +53,9 @@ public class CustomHeaderActivity extends SlidingActivity {
         }
     }
 
+    @Override
+    protected void configureScroller(MultiShrinkScroller scroller) {
+        super.configureScroller(scroller);
+        scroller.setIntermediateHeaderHeightRatio(1);
+    }
 }

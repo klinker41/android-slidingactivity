@@ -139,7 +139,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
         windowScrim = new ColorDrawable(SCRIM_COLOR);
         windowScrim.setAlpha(0);
         getWindow().setBackgroundDrawable(windowScrim);
-
+        configureScroller(scroller);
         scroller.initialize(multiShrinkScrollerListener, false);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -173,6 +173,10 @@ public abstract class SlidingActivity extends AppCompatActivity {
      * @param savedInstanceState the saved instance state.
      */
     public abstract void init(Bundle savedInstanceState);
+
+    protected void configureScroller(MultiShrinkScroller scroller){
+
+    }
 
     /**
      * Set the title for the scroller.

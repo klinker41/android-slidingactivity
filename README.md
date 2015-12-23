@@ -74,6 +74,16 @@ First, extend SlidingActivity. Instead of overriding onCreate(), instead overrid
 
 More examples of possible activities can be found in the sample application and code snippets will be shown below.
 
+You can configure the scroller before it's initialised by overriding configureScroller(scroller)
+
+```java
+@Override
+    protected void configureScroller(MultiShrinkScroller scroller) {
+        super.configureScroller(scroller);
+        scroller.setIntermediateHeaderHeightRatio(1);
+    }
+```
+
 ## Activity Options
 
 Most activity options should be implemented inside init(). You can implement setImage() anywhere after init(), but none of the others should be outside of this method.
