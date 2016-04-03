@@ -1,5 +1,11 @@
 ## Changelog
 
+### Version 1.2.1:
+- Fixed custom headers wrapping content instead of matching parent
+
+### Version 1.2.0:
+- Added the ability to set custom header views
+
 ### Version 1.1.1:
 - Fade in the header text after it is set
 - Remove the padding from the content view because it caused a weird coloring effect
