@@ -1,5 +1,8 @@
 ## Changelog
 
+### Version 1.2.2:
+- Improve logic behind header color tint
+
 ### Version 1.2.1:
 - Fixed custom headers wrapping content instead of matching parent
 
