@@ -1,5 +1,9 @@
 ## Changelog
 
+### Version 1.2.3:
+- Don't allow text to overlap FAB when title is long
+- Add Day/Night theme
+
 ### Version 1.2.2:
 - Improve logic behind header color tint
 
