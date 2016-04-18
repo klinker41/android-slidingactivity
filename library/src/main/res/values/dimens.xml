@@ -31,5 +31,6 @@
     <dimen name="fab_marginTop">-56dp</dimen>
     <dimen name="fab_marginRight">0dp</dimen>
     <dimen name="fab_marginBottom">0dp</dimen>
+    <dimen name="fab_size">48dp</dimen>
 
 </resources>

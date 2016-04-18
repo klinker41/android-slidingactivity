@@ -1327,6 +1327,8 @@ public class MultiShrinkScroller extends FrameLayout {
 
         if (!enableFab) {
             fab.hide();
+        } else {
+            addFabMargins();
         }
     }
 
@@ -1368,6 +1370,25 @@ public class MultiShrinkScroller extends FrameLayout {
                 + toolbarLayoutParams.height - pretendBottomMargin
                 - maximumHeaderTextSize;
         titleLayoutParams.bottomMargin = 0;
+        largeTextView.setLayoutParams(titleLayoutParams);
+    }
+
+    /**
+     * Adds a margin to the right side of the text view so that it does not overlap with the FAB
+     * when it is active.
+     */
+    private void addFabMargins() {
+        final LayoutParams titleLayoutParams
+                = (LayoutParams) largeTextView.getLayoutParams();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            titleLayoutParams.setMarginEnd(titleLayoutParams.getMarginEnd() +
+                    getResources().getDimensionPixelSize(R.dimen.fab_size));
+        } else {
+            titleLayoutParams.rightMargin = titleLayoutParams.rightMargin +
+                    getResources().getDimensionPixelSize(R.dimen.fab_size);
+        }
+
         largeTextView.setLayoutParams(titleLayoutParams);
     }
 
