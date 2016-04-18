@@ -43,4 +43,17 @@
         <item name="popup_theme">@style/ThemeOverlay.AppCompat</item>
     </style>
 
+    <style name="Theme.Sliding.DayNight" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="content_background">@color/light_background</item>
+        <item name="popup_theme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
 </resources>
