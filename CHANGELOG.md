@@ -1,5 +1,8 @@
 ## Changelog
 
+### Version 1.3.1:
+- Make sure 720dp tablets have the new layout too
+
 ### Version 1.3.0:
 - Tablets have had a cool non-full-screen layout in portrait mode. Apply that layout to tablets landscape mode, as well as phone's landscape mode, if space allows.
 
