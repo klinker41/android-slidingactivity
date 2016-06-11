@@ -18,5 +18,7 @@
 <resources>
 
     <bool name="sliding_two_panel">true</bool>
+    <bool name="padded_layout">true</bool>
+    <bool name="full_screen_with_header">true</bool>
 
 </resources>

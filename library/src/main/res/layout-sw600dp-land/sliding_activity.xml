@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (C) 2015 Jacob Klinker
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<com.klinker.android.sliding.MultiShrinkScroller xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/multiscroller"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:descendantFocusability="afterDescendants">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/empty_start_column"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="@integer/sliding_space_layout_weight"
+            android:contentDescription="@string/sliding_transparent_view_description" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="@integer/sliding_card_layout_weight"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+              <View
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/sliding_starting_empty_height"
+                  android:contentDescription="@string/sliding_transparent_view_description"
+                  android:id="@+id/transparent_view" />
+
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="horizontal">
+
+                   <FrameLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:background="@android:color/transparent"
+                       android:id="@+id/toolbar_parent">
+
+                        <include layout="@layout/sliding_header" />
+
+                        <include layout="@layout/sliding_title" />
+
+                   </FrameLayout>
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
+
+                      <include layout="@layout/sliding_content" />
+
+                      <android.support.design.widget.FloatingActionButton
+                          android:id="@+id/fab"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_marginBottom="@dimen/fab_marginBottom"
+                          android:layout_marginEnd="@dimen/fab_marginRight"
+                          android:layout_marginRight="@dimen/fab_marginRight"
+                          android:layout_alignParentEnd="true"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentBottom="true"
+                          app:borderWidth="0dp"
+                          app:elevation="6dp"
+                          app:pressedTranslationZ="12dp"
+                          app:rippleColor="@color/fab_ripple"/>
+
+                  </RelativeLayout>
+
+              </LinearLayout>
+
+         </LinearLayout>
+
+        <View
+            android:id="@+id/empty_end_column"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="@integer/sliding_space_layout_weight"
+            android:contentDescription="@string/sliding_transparent_view_description" />
+
+    </LinearLayout>
+
+</com.klinker.android.sliding.MultiShrinkScroller>

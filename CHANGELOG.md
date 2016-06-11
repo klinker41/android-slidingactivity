@@ -1,5 +1,8 @@
 ## Changelog
 
+### Version 1.3.0:
+- Tablets have had a cool non-full-screen layout in portrait mode. Apply that layout to tablets landscape mode, as well as phone's landscape mode, if space allows.
+
 ### Version 1.2.3:
 - Don't allow text to overlap FAB when title is long
 - Add Day/Night theme

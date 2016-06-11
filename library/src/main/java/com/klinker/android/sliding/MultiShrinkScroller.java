@@ -157,6 +157,7 @@ public class MultiShrinkScroller extends FrameLayout {
     private final boolean isTwoPanel;
     private final float landscapePhotoRatio;
     private final int actionBarSize;
+    private final boolean paddedLayout;
 
     private static final float X1 = 0.16f;
     private static final float Y1 = 0.4f;
@@ -258,6 +259,7 @@ public class MultiShrinkScroller extends FrameLayout {
         toolbarElevation = getResources().getDimension(
                 R.dimen.sliding_toolbar_elevation);
         isTwoPanel = getResources().getBoolean(R.bool.sliding_two_panel);
+        paddedLayout = getResources().getBoolean(R.bool.padded_layout);
         maximumTitleMargin = (int) getResources().getDimension(
                 R.dimen.sliding_title_initial_margin);
 
@@ -1095,6 +1097,12 @@ public class MultiShrinkScroller extends FrameLayout {
             } else {
                 edgeGlowBottom.setSize(width, height);
             }
+
+            // todo: figure out what is wrong with the edge glow with padded layouts
+            if (paddedLayout) {
+                edgeGlowBottom.setSize(0,0);
+            }
+
             if (edgeGlowBottom.draw(canvas)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     postInvalidateOnAnimation();
@@ -1109,10 +1117,16 @@ public class MultiShrinkScroller extends FrameLayout {
             final int restoreCount = canvas.save();
             if (isTwoPanel) {
                 edgeGlowTop.setSize(scrollView.getWidth(), height);
-                canvas.translate(photoViewContainer.getWidth(), 0);
+                canvas.translate(photoViewContainer.getWidth() * (1/6), 0);
             } else {
                 edgeGlowTop.setSize(width, height);
             }
+
+            // todo: figure out what is wrong with the edge glow with padded layouts
+            if (paddedLayout) {
+                edgeGlowTop.setSize(0,0);
+            }
+
             if (edgeGlowTop.draw(canvas)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     postInvalidateOnAnimation();

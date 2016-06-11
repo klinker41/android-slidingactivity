@@ -165,6 +165,18 @@ public abstract class SlidingActivity extends AppCompatActivity {
         init(savedInstanceState);
         showActivity();
 
+        // when we have a phone in landscape and a two column layout, we don't want the padded
+        // edges on the side of it, so we set them to gone
+        if (!disabledHeader && getResources().getBoolean(R.bool.full_screen_with_header)) {
+            View emptyStart = findViewById(R.id.empty_start_column);
+            View emptyEnd = findViewById(R.id.empty_end_column);
+
+            if (emptyStart != null && emptyEnd != null) {
+                emptyStart.setVisibility(View.GONE);
+                emptyEnd.setVisibility(View.GONE);
+            }
+        }
+
         isStarting = false;
     }
 
@@ -344,10 +356,13 @@ public abstract class SlidingActivity extends AppCompatActivity {
         }
     }
 
+    private boolean disabledHeader = false;
+
     /**
      * Disables the header and only displays the scrolling content below it.
      */
     public void disableHeader() {
+        disabledHeader = true;
         scroller.disableHeader();
     }
 
