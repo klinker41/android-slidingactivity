@@ -1,5 +1,8 @@
 ## Changelog
 
+### Version 1.3.2:
+- Fix a crash on sw600dp tablets
+
 ### Version 1.3.1:
 - Make sure 720dp tablets have the new layout too
 
