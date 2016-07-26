@@ -1,5 +1,8 @@
 ## Changelog
 
+### Version 1.4.2:
+- We need the libraries min SDK to be 15 since that is what the blur on `PeekView` uses.
+
 ### Version 1.4.1:
 - Update to `PeekView` 1.2.0 for background blur support.
 
