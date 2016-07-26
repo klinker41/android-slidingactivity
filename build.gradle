@@ -32,5 +32,6 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url 'https://github.com/500px/500px-android-blur/raw/master/releases/' }
     }
 }
