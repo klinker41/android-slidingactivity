@@ -95,4 +95,6 @@
         multarum et magnarum voluptatum. Bonum negas esse divitias, praeposìtum esse dicis?
     </string>
 
+    <string name="peek_text">This is an example of using SlidingActivity with a PeekView!\n\n(https://github.com/klinker24/Android-3DTouch-PeekView)</string>
+
 </resources>

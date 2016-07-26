@@ -23,7 +23,10 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
 import android.view.Menu;
+import android.view.View;
 
+import com.klinker.android.peekview.builder.Peek;
+import com.klinker.android.peekview.callback.SimpleOnPeek;
 import com.klinker.android.sliding.SlidingActivity;
 
 /**
@@ -48,6 +51,14 @@ public class TalonActivity extends SlidingActivity {
 
         if (checkMemory()) {
             setContent(R.layout.activity_talon);
+
+            // long clicking on the "stats" card will display the PeekView
+            Peek.into(R.layout.peek_example, new SimpleOnPeek() {
+                @Override
+                public void onInflated(View rootView) {
+                    // we won't do anything here
+                }
+            }).applyTo(this, findViewById(R.id.talon_stats_card));
         }
 
         // delay this so that the animation shows and we don't change the activity colors

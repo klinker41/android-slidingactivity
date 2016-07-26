@@ -45,6 +45,8 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.klinker.android.peekview.PeekViewActivity;
+
 /**
  * Sliding activity that handles all interaction with users. It will be shown with about 150dp of
  * space at the top when initially launched and you can then scroll up the activity and close this
@@ -63,7 +65,7 @@ import android.widget.ImageView;
  *
  * You may use any combination of these to achieve the desired look.
  */
-public abstract class SlidingActivity extends AppCompatActivity {
+public abstract class SlidingActivity extends PeekViewActivity {
 
     private static final int ANIMATION_STATUS_BAR_COLOR_CHANGE_DURATION = 150;
     private static final int SCRIM_COLOR = Color.argb(0xC8, 0, 0, 0);

@@ -1,5 +1,8 @@
 ## Changelog
 
+### Version 1.4.0:
+- Allow SlidingActivity to work with PeekView (https://github.com/klinker24/Android-3DTouch-PeekView)
+
 ### Version 1.3.2:
 - Fix a crash on sw600dp tablets
 
