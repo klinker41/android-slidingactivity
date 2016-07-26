@@ -1,7 +1,10 @@
 ## Changelog
 
+### Version 1.4.1:
+- Update to `PeekView` 1.2.0 for background blur support.
+
 ### Version 1.4.0:
-- Allow SlidingActivity to work with PeekView (https://github.com/klinker24/Android-3DTouch-PeekView)
+- Allow `SlidingActivity` to work with `PeekView` (https://github.com/klinker24/Android-3DTouch-PeekView)
 
 ### Version 1.3.2:
 - Fix a crash on sw600dp tablets
@@ -34,7 +37,7 @@
 
 ### Version 1.0.1:
 - Fix issue with the expansion when there is no header
-- Allow for keyboard showing on Sliding Activities
+- Allow for keyboard showing on `SlidingActivity`
 
 ### Version 1.0.0:
 - Initial release and feature set
