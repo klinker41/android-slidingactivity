@@ -59,8 +59,7 @@ public class TalonActivity extends SlidingActivity {
                 public void onInflated(View rootView) {
                     // we won't do anything here
                 }
-            }).with(new PeekViewOptions().setBlurredView(findViewById(R.id.multiscroller)))
-                    .applyTo(this, findViewById(R.id.talon_stats_card));
+            }).applyTo(this, findViewById(R.id.talon_stats_card));
         }
 
         // delay this so that the animation shows and we don't change the activity colors

@@ -26,9 +26,6 @@ android {
         targetSdkVersion Integer.parseInt(project.TARGET_SDK_VERSION)
         versionCode Integer.parseInt(project.VERSION_CODE)
         versionName project.VERSION_NAME
-
-        renderscriptTargetApi Integer.parseInt(project.TARGET_SDK_VERSION)
-        renderscriptSupportModeEnabled true
     }
 
     buildTypes {
@@ -48,5 +45,5 @@ dependencies {
 
     compile "com.android.support:cardview-v7:${project.ANDROID_SUPPORT_VERSION}"
     compile 'de.hdodenhof:circleimageview:2.0.0'
-    compile 'com.klinkerapps:peekview:1.2.0'
+    compile 'com.klinkerapps:peekview:1.2.2'
 }
