@@ -15,6 +15,7 @@ Sliding activities allow for you to easily set header content, menus, and data o
  - Set colors that will affect the header and status bar color
  - Add a floating action button to the bottom of the header that will animate and show/hide itself at the correct time
  - Disable the header and show only content that is scrollable
+ - Works with [PeekView](https://github.com/klinker24/Android-3DTouch-PeekView) out of the box, to provide a "3D Touch" effect on your views. See example usage in the [TalonActivity](https://github.com/klinker41/android-slidingactivity/blob/master/sample/src/main/java/com/klinker/android/sliding/sample/TalonActivity.java) sample.
 
 ## Installation
 
