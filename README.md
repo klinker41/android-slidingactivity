@@ -17,6 +17,8 @@ Sliding activities allow for you to easily set header content, menus, and data o
  - Disable the header and show only content that is scrollable
  - Works with [PeekView](https://github.com/klinker24/Android-3DTouch-PeekView) out of the box, to provide a "3D Touch" effect on your views. See example usage in the [TalonActivity](https://github.com/klinker41/android-slidingactivity/blob/master/sample/src/main/java/com/klinker/android/sliding/sample/TalonActivity.java) sample.
 
+ ![Preview Talon/PeekView](preview_peekview.gif)
+
 ## Installation
 
 Include the following in your gradle script:
