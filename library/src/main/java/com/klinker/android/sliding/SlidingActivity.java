@@ -484,10 +484,8 @@ public abstract class SlidingActivity extends PeekViewActivity {
      */
     @Override
     public void onBackPressed() {
-        if (scroller != null) {
-            if (!isExitAnimationInProgress) {
-                scroller.scrollOffBottom();
-            }
+        if (scroller != null && !isExitAnimationInProgress) {
+            scroller.scrollOffBottom();
         } else {
             super.onBackPressed();
         }
@@ -499,13 +497,8 @@ public abstract class SlidingActivity extends PeekViewActivity {
      */
     @Override
     public void finish() {
-        if (scroller != null) {
-            if (!isExitAnimationFinished) {
-                scroller.scrollOffBottom();
-            } else {
-                super.finish();
-                overridePendingTransition(0, 0);
-            }
+        if (scroller != null && !isExitAnimationFinished) {
+            scroller.scrollOffBottom();
         } else {
             super.finish();
             overridePendingTransition(0, 0);
