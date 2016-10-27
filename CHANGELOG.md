@@ -1,7 +1,11 @@
 ## Changelog
 
+### Version 1.4.4:
+- Update dependencies and build tools for SDK 25
+
 ### Version 1.4.3:
 - Update to `PeekView` 1.2.2 to improve blurring support and remove `RenderScript` dependency in the example app
+
 ### Version 1.4.2:
 - We need the libraries min SDK to be 15 since that is what the blur on `PeekView` uses.
 
