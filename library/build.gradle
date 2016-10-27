@@ -44,7 +44,7 @@ dependencies {
     compile "com.android.support:palette-v7:${project.ANDROID_SUPPORT_VERSION}"
     compile "com.android.support:design:${project.ANDROID_SUPPORT_VERSION}"
 
-    compile 'com.klinkerapps:peekview:1.2.2'
+    compile 'com.klinkerapps:peekview:1.2.3'
 }
 
 apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
