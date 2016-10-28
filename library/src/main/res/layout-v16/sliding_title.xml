@@ -23,6 +23,7 @@
     android:layout_marginEnd="@dimen/sliding_title_initial_margin"
     android:layout_marginStart="@dimen/sliding_title_initial_margin"
     android:ellipsize="end"
+    android:importantForAccessibility="no"
     android:maxLines="@integer/sliding_title_lines"
     android:textAlignment="viewStart"
     android:textColor="@android:color/white"

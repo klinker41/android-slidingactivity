@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2016 Jacob Klinker
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +16,7 @@
 
 <resources>
 
-    <attr name="content_background" format="reference"/>
-    <attr name="popup_theme" format="reference"/>
+    <attr name="content_background" format="reference" />
+    <attr name="popup_theme" format="reference" />
 
 </resources>

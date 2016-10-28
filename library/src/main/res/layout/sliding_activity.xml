@@ -16,61 +16,55 @@
   ~ limitations under the License.
   -->
 <com.klinker.android.sliding.MultiShrinkScroller xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/multiscroller"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/multiscroller"
+    android:descendantFocusability="afterDescendants"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:descendantFocusability="afterDescendants">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-
-
-        <RelativeLayout
+        <View
+            android:id="@+id/transparent_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/sliding_starting_empty_height"
-                android:contentDescription="@string/sliding_transparent_view_description"
-                android:id="@+id/transparent_view" />
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/transparent_view"
-                android:id="@+id/toolbar_parent">
-                <include layout="@layout/sliding_header" />
-            </FrameLayout>
+            android:layout_height="@dimen/sliding_starting_empty_height"
+            android:contentDescription="@string/sliding_transparent_view_description" />
 
-            <include layout="@layout/sliding_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/toolbar_parent"/>
+        <FrameLayout
+            android:id="@+id/toolbar_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/transparent_view">
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/toolbar_parent"
-                android:layout_marginTop="@dimen/fab_marginTop"
-                android:layout_marginEnd="@dimen/fab_marginRight"
-                android:layout_marginRight="@dimen/fab_marginRight"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                app:borderWidth="0dp"
-                app:elevation="6dp"
-                app:pressedTranslationZ="12dp"
-                app:rippleColor="@color/fab_ripple"/>
+            <include layout="@layout/sliding_header" />
+        </FrameLayout>
 
-        </RelativeLayout>
+        <include
+            layout="@layout/sliding_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar_parent" />
 
-    </LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/toolbar_parent"
+            android:layout_marginEnd="@dimen/fab_marginRight"
+            android:layout_marginRight="@dimen/fab_marginRight"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"
+            app:rippleColor="@color/fab_ripple" />
+
+    </RelativeLayout>
 
     <include layout="@layout/sliding_title" />
 

@@ -25,7 +25,8 @@ public class ColorUtils {
 
     /**
      * Adjust the alpha of a color.
-     * @param color the color [0x00000000, 0xffffffff]
+     *
+     * @param color  the color [0x00000000, 0xffffffff]
      * @param factor the factor for the alpha [0,1]
      * @return the adjusted color
      */
