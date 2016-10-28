@@ -15,7 +15,6 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:drawSelectorOnTop="true"
@@ -58,16 +57,14 @@
                 android:maxLines="1"
                 android:paddingTop="4dp"
                 android:text="Jacob Klinker"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="top"
                 android:maxLines="1"
-                android:text="\@Klinker41"
-                tools:ignore="HardcodedText" />
+                android:text="\@Klinker41" />
 
         </LinearLayout>
 
@@ -85,8 +82,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:text="1d"
-                android:textSize="12sp"
-                tools:ignore="HardcodedText" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:layout_width="16dp"
@@ -105,8 +101,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:paddingTop="12dp"
-        android:text="\@lukeklinker Been saying this for years now..."
-        tools:ignore="HardcodedText" />
+        android:text="\@lukeklinker Been saying this for years now..." />
 
     <View
         android:layout_width="match_parent"

@@ -16,7 +16,6 @@
 
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/talon_stats_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -47,8 +46,7 @@
                 android:gravity="center_vertical"
                 android:text="\@Klinker41"
                 android:textColor="@color/talon_activity_primary"
-                android:textSize="18sp"
-                tools:ignore="HardcodedText" />
+                android:textSize="18sp" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -60,9 +58,7 @@
                 android:textAllCaps="true"
                 android:textColor="@color/talon_activity_primary"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
-
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -81,8 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Well, I make Android apps and go to school."
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -93,8 +88,7 @@
                 android:drawableStart="@drawable/ic_location"
                 android:gravity="center"
                 android:text="Iowa City, Iowa"
-                android:textSize="13sp"
-                tools:ignore="HardcodedText" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -120,8 +114,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="Followers: 427"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -185,8 +178,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="Following: 65"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -243,8 +235,7 @@
             android:paddingRight="16dp"
             android:paddingStart="16dp"
             android:text="Joined Twitter: Jul 23, 2009"
-            android:textSize="13sp"
-            tools:ignore="HardcodedText" />
+            android:textSize="13sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -254,8 +245,7 @@
             android:paddingRight="16dp"
             android:paddingStart="16dp"
             android:text="In 12 lists."
-            android:textSize="13sp"
-            tools:ignore="HardcodedText" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -15,7 +15,6 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:drawSelectorOnTop="true"
@@ -58,24 +57,22 @@
                 android:maxLines="1"
                 android:paddingTop="4dp"
                 android:text="Brandal Wagener"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:gravity="top"
                 android:maxLines="1"
-                android:text="\@Brandal24"
-                tools:ignore="HardcodedText" />
+                android:text="\@Brandal24" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="6dp"
             android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
             android:gravity="end|bottom"
             android:orientation="vertical">
 
@@ -85,8 +82,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:text="4d"
-                android:textSize="12sp"
-                tools:ignore="HardcodedText" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:layout_width="16dp"
@@ -105,7 +101,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:paddingTop="12dp"
-        android:text="I wish that the earth, sea, and sky up above will send me someone to lava."
-        tools:ignore="HardcodedText" />
+        android:text="I wish that the earth, sea, and sky up above will send me someone to lava." />
 
 </LinearLayout>

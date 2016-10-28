@@ -15,7 +15,6 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:drawSelectorOnTop="true"
@@ -73,24 +72,22 @@
                 android:maxLines="1"
                 android:paddingTop="4dp"
                 android:text="Luke Klinker"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:gravity="top"
                 android:maxLines="1"
-                android:text="\@lukeklinker"
-                tools:ignore="HardcodedText" />
+                android:text="\@lukeklinker" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="6dp"
             android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
             android:gravity="end|bottom"
             android:orientation="vertical">
 
@@ -100,8 +97,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:text="4d"
-                android:textSize="12sp"
-                tools:ignore="HardcodedText" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -113,8 +109,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:paddingTop="12dp"
-        android:text="Android Marshmallow introed new direct sharing abilities... Bet no other devs have added it as fast at \@Klinker41."
-        tools:ignore="HardcodedText" />
+        android:text="Android Marshmallow introed new direct sharing abilities... Bet no other devs have added it as fast at \@Klinker41." />
 
     <View
         android:layout_width="match_parent"
