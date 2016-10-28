@@ -34,6 +34,7 @@ public class MenuItemActivity extends SlidingActivity {
     /**
      * Initialize our values, this is overridden instead of onCreate as it should be in all
      * sliding activities.
+     *
      * @param savedInstanceState the saved state.
      */
     @Override
@@ -66,6 +67,7 @@ public class MenuItemActivity extends SlidingActivity {
 
     /**
      * Creates the options menu.
+     *
      * @param menu the menu.
      * @return true.
      */
@@ -77,6 +79,7 @@ public class MenuItemActivity extends SlidingActivity {
 
     /**
      * Handles the options item selected event.
+     *
      * @param item the item selected.
      * @return true.
      */

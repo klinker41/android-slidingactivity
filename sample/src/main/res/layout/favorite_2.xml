@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2016 Jacob Klinker
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,98 +14,98 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground">
+    android:drawSelectorOnTop="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp">
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <!-- The tweeters picture -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginRight="2dp"
             android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:src="@drawable/favorite_2_profile"
-            app:civ_border_width="0dp"/>
+            app:civ_border_width="0dp" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="13dp"
-            android:layout_marginStart="13dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginStart="13dp"
+            android:layout_weight="1"
             android:gravity="center_vertical"
-            android:layout_marginBottom="6dp">
+            android:orientation="vertical">
 
             <TextView
-                android:layout_height="0dp"
                 android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:text="Brandal Wagener"
-                android:fontFamily="sans-serif-light"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:maxLines="1"
                 android:paddingTop="4dp"
-                android:singleLine="true"
-                android:gravity="top"/>
+                android:text="Brandal Wagener"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:gravity="top"
+                android:maxLines="1"
                 android:text="\@Brandal24"
-                android:fontFamily="sans-serif-light"
-                android:singleLine="true"
-                android:gravity="top"/>
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginRight="6dp"
-            android:gravity="right|bottom">
+            android:layout_marginEnd="6dp"
+            android:gravity="end|bottom"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_height="16dp"
                 android:layout_width="16dp"
-                android:gravity="center_horizontal"
+                android:layout_height="16dp"
                 android:layout_gravity="center_horizontal"
-                android:fontFamily="sans-serif-light"
+                android:gravity="center_horizontal"
+                android:text="4d"
                 android:textSize="12sp"
-                android:text="4d"/>
+                tools:ignore="HardcodedText" />
 
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:src="@drawable/ic_message"
-                android:scaleType="fitCenter" />
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_message" />
 
         </LinearLayout>
 
     </LinearLayout>
 
     <TextView
-        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:paddingTop="12dp"
-        android:text="I wish that the earth, sea, and sky up above will send me someone to lava 🌋"
-        android:fontFamily="sans-serif-light"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp" />
+        android:paddingTop="12dp"
+        android:text="I wish that the earth, sea, and sky up above will send me someone to lava."
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>

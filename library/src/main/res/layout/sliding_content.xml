@@ -15,19 +15,18 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<com.klinker.android.sliding.TouchlessScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.klinker.android.sliding.TouchlessScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_scroller"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:id="@+id/content_scroller"
-    android:background="?content_background">
+    android:foreground="?content_background">
 
     <FrameLayout
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/content_container" >
+        android:orientation="vertical">
 
     </FrameLayout>
 

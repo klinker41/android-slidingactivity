@@ -31,6 +31,7 @@ public class FabActivity extends SlidingActivity {
     /**
      * Initialize our values, this is overridden instead of onCreate as it should be in all
      * sliding activities.
+     *
      * @param savedInstanceState the saved state.
      */
     @Override
