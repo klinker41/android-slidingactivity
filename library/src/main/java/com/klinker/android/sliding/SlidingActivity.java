@@ -576,4 +576,46 @@ public abstract class SlidingActivity extends PeekViewActivity {
         }
     }
 
+    /**
+     * Add an overlay to preview photo view.
+     */
+    public void setImageOverlay() {
+        addImageOverlay(0.3);
+    }
+
+    /**
+     * Add an overlay to preview photo view with alpha.
+     *
+     * @param alpha The aplha value of the view
+     */
+    public void setImageOverlay(float alpha) {
+        View view = new View(this);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(photoView.getLayoutParams());
+        view.setLayoutParams(layoutParams);
+        view.setBackgroundColor(Color.BLACK);
+        view.setAlpha(alpha);
+        ((FrameLayout) findViewById(R.id.toolbar_parent)).addView(view);
+    }
+
+    /**
+     * Get the instance of fab.
+     * Note: Not recommended if you are not sure what you are doing
+     *
+     * @return Returns the FloatingActionButton instance.
+     */
+    public FloatingActionButton getFab() {
+        return fab;
+    }
+
+    /**
+     * Set the title text color.
+     *
+     * @param textColor Text color
+     */
+    public void setTitleTextColor(int textColor) {
+        if (scroller != null) {
+            scroller.setTitleTextColor(textColor);
+        }
+    }
+
 }

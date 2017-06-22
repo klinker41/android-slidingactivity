@@ -414,6 +414,15 @@ public class MultiShrinkScroller extends FrameLayout {
     }
 
     /**
+     * Set the text color of the title.
+     *
+     * @param color Text color
+     */
+    public void setTitleTextColor(int color) {
+        largeTextView.setTextColor(color);
+    }
+
+    /**
      * Disables the header at the top of the activity, only the content will be shown.
      */
     public void disableHeader() {
