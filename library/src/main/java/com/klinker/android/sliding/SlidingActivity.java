@@ -580,7 +580,7 @@ public abstract class SlidingActivity extends PeekViewActivity {
      * Add an overlay to preview photo view.
      */
     public void setImageOverlay() {
-        addImageOverlay(0.3);
+        setImageOverlay(0.3f);
     }
 
     /**
