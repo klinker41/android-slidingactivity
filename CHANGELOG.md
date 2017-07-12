@@ -1,5 +1,10 @@
 ## Changelog
 
+### Version 1.5.0:
+- Add ability to put a transparent overlay over the header image
+- Add method to get the FAB instance
+- Add ability to change the text color of the header text
+
 ### Version 1.4.4:
 - Update dependencies and build tools for SDK 25
 
