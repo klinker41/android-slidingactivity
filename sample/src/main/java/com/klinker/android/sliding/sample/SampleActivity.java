@@ -136,7 +136,7 @@ public class SampleActivity extends AppCompatActivity {
     }
 
     public Intent addExpansionArgs(Intent intent) {
-        if (((CheckBox) findViewById(R.id.use_expansion_check)).isChecked()) {
+        if (((CheckBox)findViewById(R.id.use_expansion_check)).isChecked()) {
             intent.putExtra(ARG_USE_EXPANSION, true);
 
             View expansionView = findViewById(R.id.expansion_view);

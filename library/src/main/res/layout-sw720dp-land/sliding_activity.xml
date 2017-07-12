@@ -17,14 +17,14 @@
   -->
 
 <com.klinker.android.sliding.MultiShrinkScroller xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/multiscroller"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="afterDescendants"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/multiscroller"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:descendantFocusability="afterDescendants">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,59 +40,59 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="@integer/sliding_card_layout_weight"
-            android:orientation="vertical">
+             android:layout_height="match_parent"
+             android:orientation="vertical">
 
-            <View
-                android:id="@+id/transparent_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/sliding_starting_empty_height"
-                android:contentDescription="@string/sliding_transparent_view_description" />
+              <View
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/sliding_starting_empty_height"
+                  android:contentDescription="@string/sliding_transparent_view_description"
+                  android:id="@+id/transparent_view" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="horizontal">
 
-                <FrameLayout
-                    android:id="@+id/toolbar_parent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent">
+                   <FrameLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:background="@android:color/transparent"
+                       android:id="@+id/toolbar_parent">
 
-                    <include layout="@layout/sliding_header" />
+                        <include layout="@layout/sliding_header" />
 
-                    <include layout="@layout/sliding_title" />
+                        <include layout="@layout/sliding_title" />
 
-                </FrameLayout>
+                   </FrameLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
 
-                    <include layout="@layout/sliding_content" />
+                      <include layout="@layout/sliding_content" />
 
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/fab"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="@dimen/fab_marginBottom"
-                        android:layout_marginEnd="@dimen/fab_marginRight"
-                        android:layout_marginRight="@dimen/fab_marginRight"
-                        app:borderWidth="0dp"
-                        app:elevation="6dp"
-                        app:pressedTranslationZ="12dp"
-                        app:rippleColor="@color/fab_ripple" />
+                      <android.support.design.widget.FloatingActionButton
+                          android:id="@+id/fab"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_marginBottom="@dimen/fab_marginBottom"
+                          android:layout_marginEnd="@dimen/fab_marginRight"
+                          android:layout_marginRight="@dimen/fab_marginRight"
+                          android:layout_alignParentEnd="true"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentBottom="true"
+                          app:borderWidth="0dp"
+                          app:elevation="6dp"
+                          app:pressedTranslationZ="12dp"
+                          app:rippleColor="@color/fab_ripple"/>
 
-                </RelativeLayout>
+                  </RelativeLayout>
 
-            </LinearLayout>
+              </LinearLayout>
 
-        </LinearLayout>
+         </LinearLayout>
 
         <View
             android:id="@+id/empty_end_column"

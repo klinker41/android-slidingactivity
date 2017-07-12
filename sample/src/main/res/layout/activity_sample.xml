@@ -15,91 +15,90 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/expansion_view"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
+    <View android:layout_height="100dp"
+          android:layout_width="match_parent"
+          android:layout_centerInParent="true"
+          android:id="@+id/expansion_view"
+          android:layout_marginLeft="16dp"
+          android:layout_marginRight="16dp"/>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        <LinearLayout
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:orientation="vertical"
             tools:context="com.klinker.android.sliding.sample.SampleActivity">
 
             <CheckBox
                 android:id="@+id/use_expansion_check"
+                android:text="@string/use_expansion_animation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/use_expansion_animation" />
+                android:layout_gravity="center_horizontal" />
 
             <Button
-                android:id="@+id/show_normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_normal_sliding_activity" />
+                android:text="@string/show_normal_sliding_activity"
+                android:id="@+id/show_normal"/>
 
             <Button
-                android:id="@+id/show_fullscreen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_normal_sliding_activity_fullscreen" />
+                android:text="@string/show_normal_sliding_activity_fullscreen"
+                android:id="@+id/show_fullscreen"/>
 
             <Button
-                android:id="@+id/show_menu_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_menu_item_activity" />
+                android:text="@string/show_menu_item_activity"
+                android:id="@+id/show_menu_item"/>
 
             <Button
-                android:id="@+id/show_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_image_activity" />
+                android:text="@string/show_image_activity"
+                android:id="@+id/show_image"/>
 
             <Button
-                android:id="@+id/show_dark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_dark_activity" />
+                android:text="@string/show_dark_activity"
+                android:id="@+id/show_dark"/>
 
             <Button
-                android:id="@+id/show_fab"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_fab_activity" />
+                android:text="@string/show_fab_activity"
+                android:id="@+id/show_fab"/>
 
             <Button
-                android:id="@+id/show_no_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_no_header_activity" />
+                android:text="@string/show_no_header_activity"
+                android:id="@+id/show_no_header"/>
 
             <Button
-                android:id="@+id/show_custom_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_custom_header_activity" />
+                android:text="@string/show_custom_header_activity"
+                android:id="@+id/show_custom_header"/>
 
             <Button
-                android:id="@+id/show_talon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_talon_activity" />
+                android:text="@string/show_talon_activity"
+                android:id="@+id/show_talon"/>
 
 
         </LinearLayout>

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2016 Jacob Klinker
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +15,13 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:drawSelectorOnTop="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:background="?android:attr/selectableItemBackground">
 
-    <FrameLayout
-        android:layout_width="match_parent"
+    <FrameLayout android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -31,70 +30,72 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
-            android:src="@drawable/favorite_1_image" />
+            android:src="@drawable/favorite_1_image"/>
     </FrameLayout>
 
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp">
 
         <!-- The tweeters picture -->
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
             android:src="@drawable/mention_1_profile"
-            app:civ_border_width="0dp" />
+            app:civ_border_width="0dp"/>
 
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="6dp"
+            android:layout_weight="1"
             android:layout_marginLeft="13dp"
             android:layout_marginStart="13dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_marginBottom="6dp">
 
             <TextView
+                android:layout_height="0dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="top"
-                android:maxLines="1"
-                android:paddingTop="4dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
                 android:text="Luke Klinker"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-light"
+                android:paddingTop="4dp"
+                android:singleLine="true"
+                android:gravity="top"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:gravity="top"
-                android:maxLines="1"
-                android:text="\@lukeklinker" />
+                android:layout_weight="1"
+                android:text="\@lukeklinker"
+                android:fontFamily="sans-serif-light"
+                android:singleLine="true"
+                android:gravity="top"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="6dp"
+            android:orientation="vertical"
             android:layout_marginRight="6dp"
-            android:gravity="end|bottom"
-            android:orientation="vertical">
+            android:gravity="right|bottom">
 
             <TextView
-                android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="16dp"
                 android:gravity="center_horizontal"
                 android:text="4d"
                 android:textSize="12sp" />
@@ -104,17 +105,17 @@
     </LinearLayout>
 
     <TextView
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_width="fill_parent"
         android:paddingTop="12dp"
-        android:text="Android Marshmallow introed new direct sharing abilities... Bet no other devs have added it as fast at \@Klinker41." />
+        android:text="Android Marshmallow introed new direct sharing abilities... Bet no other devs have added it as fast at \@Klinker41 😁 "
+        android:fontFamily="sans-serif-light"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp" />
 
-    <View
-        android:layout_width="match_parent"
+    <View android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
-        android:background="?android:attr/listDivider" />
+        android:background="?android:attr/listDivider"/>
 
 </LinearLayout>

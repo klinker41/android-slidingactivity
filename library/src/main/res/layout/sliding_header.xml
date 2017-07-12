@@ -22,20 +22,18 @@
         android:id="@+id/photo_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/photo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="false"
-        android:contentDescription="@string/sliding_transparent_view_description"
         android:scaleType="centerCrop" />
-
     <FrameLayout
-        android:id="@+id/header_content_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/header_content_container">
 
     </FrameLayout>
 
@@ -49,7 +47,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom" />
-
     <View
         android:id="@+id/action_bar_gradient"
         android:layout_width="match_parent"
@@ -57,13 +54,13 @@
         android:layout_gravity="top" />
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
         android:layout_width="wrap_content"
-        android:layout_height="?android:attr/actionBarSize"
         android:layout_gravity="end|top"
+        android:layout_height="?android:attr/actionBarSize"
         android:background="@android:color/transparent"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="?popup_theme" />
+        app:popupTheme="?popup_theme"
+        android:id="@+id/toolbar"/>
 
 
 </merge>

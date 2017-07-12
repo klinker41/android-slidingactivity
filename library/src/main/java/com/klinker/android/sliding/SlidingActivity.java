@@ -51,10 +51,10 @@ import com.klinker.android.peekview.PeekViewActivity;
  * Sliding activity that handles all interaction with users. It will be shown with about 150dp of
  * space at the top when initially launched and you can then scroll up the activity and close this
  * gap. Once it has been scrolled up, scrolling down will dismiss the activity.
- * <p>
+ *
  * Usage will vary on what you would like to do. The following methods are available to customize
  * this activity:
- * <p>
+ *
  * setTitle()
  * setImage()
  * setContent()
@@ -62,7 +62,7 @@ import com.klinker.android.peekview.PeekViewActivity;
  * setFab()
  * disableHeader()
  * enableFullscreen()
- * <p>
+ *
  * You may use any combination of these to achieve the desired look.
  */
 public abstract class SlidingActivity extends PeekViewActivity {
@@ -83,78 +83,15 @@ public abstract class SlidingActivity extends PeekViewActivity {
     private boolean isEntranceAnimationFinished;
     private boolean isExitAnimationInProgress;
     private boolean isExitAnimationFinished;
-    private final MultiShrinkScroller.MultiShrinkScrollerListener multiShrinkScrollerListener
-            = new MultiShrinkScroller.MultiShrinkScrollerListener() {
-        @Override
-        public void onScrolledOffBottom() {
-            isExitAnimationFinished = true;
-            finish();
-        }
-
-        @Override
-        public void onEnterFullscreen() {
-            updateStatusBarColor();
-        }
-
-        @Override
-        public void onExitFullscreen() {
-            updateStatusBarColor();
-        }
-
-        @Override
-        public void onStartScrollOffBottom() {
-            isExitAnimationInProgress = true;
-
-            if (scroller.willUseReverseExpansion()) {
-                content.removeAllViews();
-
-                final Interpolator interpolator;
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    interpolator = AnimationUtils.loadInterpolator(SlidingActivity.this,
-                            android.R.interpolator.linear_out_slow_in);
-                } else {
-                    interpolator = new DecelerateInterpolator();
-                }
-
-                final ValueAnimator contentAlpha = ValueAnimator.ofFloat(1f, 0f);
-                contentAlpha.setInterpolator(interpolator);
-                contentAlpha.setDuration(MultiShrinkScroller.ANIMATION_DURATION + 300);
-                contentAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        float val = (float) animation.getAnimatedValue();
-                        scroller.setAlpha(val);
-                        windowScrim.setAlpha((int) (0xFF * val));
-                    }
-                });
-                contentAlpha.start();
-            }
-        }
-
-        @Override
-        public void onEntranceAnimationDone() {
-            isEntranceAnimationFinished = true;
-        }
-
-        @Override
-        public void onTransparentViewHeightChange(float ratio) {
-            if (isEntranceAnimationFinished) {
-                windowScrim.setAlpha((int) (0xFF * ratio));
-            }
-        }
-    };
     private boolean isStarting;
     private boolean startFullscreen = false;
     private MultiShrinkScroller.OpenAnimation openAnimation = MultiShrinkScroller.OpenAnimation.SLIDE_UP;
     private FrameLayout headerContent;
-    private boolean disabledHeader = false;
 
     /**
      * Set up all relevant data for the activity including scrollers, etc. This is a final method,
      * any implementing class should instead implement init() and do what work you would like to do
      * there instead.
-     *
      * @param savedInstanceState the saved instance state.
      */
     @Override
@@ -247,7 +184,6 @@ public abstract class SlidingActivity extends PeekViewActivity {
 
     /**
      * Initialize all of your data here, as you would with onCreate() normally.
-     *
      * @param savedInstanceState the saved instance state.
      */
     public abstract void init(Bundle savedInstanceState);
@@ -257,13 +193,12 @@ public abstract class SlidingActivity extends PeekViewActivity {
      *
      * @param scroller {@link MultiShrinkScroller} instance
      */
-    protected void configureScroller(MultiShrinkScroller scroller) {
+    protected void configureScroller(MultiShrinkScroller scroller){
 
     }
 
     /**
      * Set the title for the scroller.
-     *
      * @param title the title to display.
      */
     @Override
@@ -273,7 +208,6 @@ public abstract class SlidingActivity extends PeekViewActivity {
 
     /**
      * Set the title for the scroller.
-     *
      * @param resId the title res id to display.
      */
     @Override
@@ -285,8 +219,7 @@ public abstract class SlidingActivity extends PeekViewActivity {
      * Set the primary colors for the activity. The primary color will be displayed as the
      * background on the header, the primary color dark will be used for coloring the status
      * bar on Lollipop+.
-     *
-     * @param primaryColor     the primary color to display.
+     * @param primaryColor the primary color to display.
      * @param primaryColorDark the primary dark color to display.
      */
     public void setPrimaryColors(int primaryColor, int primaryColorDark) {
@@ -295,18 +228,17 @@ public abstract class SlidingActivity extends PeekViewActivity {
 
     /**
      * Enable an FAB on the screen.
-     *
-     * @param color           the color for the FAB.
-     * @param drawableRes     the drawable to display on the FAB.
+     * @param color the color for the FAB.
+     * @param drawableRes the drawable to display on the FAB.
      * @param onClickListener the listener to activate when clicked on.
      */
     public void setFab(int color, int drawableRes, OnClickListener onClickListener) {
         fab.setBackgroundTintList(
                 new ColorStateList(
-                        new int[][]{
-                                new int[]{}
+                        new int[][] {
+                                new int[] {}
                         },
-                        new int[]{
+                        new int[] {
                                 color
                         }
                 )
@@ -327,7 +259,6 @@ public abstract class SlidingActivity extends PeekViewActivity {
 
     /**
      * Set the content to be displayed in the scrolling area.
-     *
      * @param resId the resource id to inflate for the content.
      */
     public void setContent(int resId) {
@@ -336,7 +267,6 @@ public abstract class SlidingActivity extends PeekViewActivity {
 
     /**
      * Set the content to be displayed in the scrolling area.
-     *
      * @param view the view to use for the content.
      */
     public void setContent(View view) {
@@ -345,7 +275,6 @@ public abstract class SlidingActivity extends PeekViewActivity {
 
     /**
      * Set the content to be displayed inside the header area
-     *
      * @param resId the resource id to inflate for the content.
      */
     public void setHeaderContent(int resId) {
@@ -354,16 +283,14 @@ public abstract class SlidingActivity extends PeekViewActivity {
 
     /**
      * Set the content to be displayed in the header area.
-     *
      * @param view the view to use for the content.
      */
-    public void setHeaderContent(View view) {
+    public void setHeaderContent(View view){
         headerContent.addView(view);
     }
 
     /**
      * Set the image to be displayed in the header.
-     *
      * @param resId the resource id to use for the bitmap to be created for the header.
      */
     public void setImage(int resId) {
@@ -372,13 +299,13 @@ public abstract class SlidingActivity extends PeekViewActivity {
 
     /**
      * Set the image to be displayed in the header. The image will be set immediately.
-     * <p>
+     *
      * If the activity is still starting when it is set (ie you call this in your init() method)
      * then the activity will use Palette to extract the primary colors from the image for you and
      * set them correctly. In this case, there is no reason to call setPrimaryColors(). If you
      * would like to manually set the colors still, call setPrimaryColors() after you have called
      * setImage().
-     * <p>
+     *
      * If the activity has already been started and your calling this after the fact (ie you might
      * have just downloaded the image from a url or needed to load it in the background) then the
      * activity will not use Palette to extract any colors. If this is the case, you should still
@@ -431,6 +358,8 @@ public abstract class SlidingActivity extends PeekViewActivity {
         }
     }
 
+    private boolean disabledHeader = false;
+
     /**
      * Disables the header and only displays the scrolling content below it.
      */
@@ -443,8 +372,8 @@ public abstract class SlidingActivity extends PeekViewActivity {
      * Perform an Inbox style expansion from the previous activity instead of the simple slide up expansion
      *
      * @param leftOffset how many pixels from the left edge of the screen the view you are expanding from is.
-     * @param topOffset  how many pixels from the top edge of the screen the view you are expanding from is.
-     * @param viewWidth  the width of the view you are expanding from.
+     * @param topOffset how many pixels from the top edge of the screen the view you are expanding from is.
+     * @param viewWidth the width of the view you are expanding from.
      * @param viewHeight the height of the view you are expanding from/
      */
     public void expandFromPoints(int leftOffset, int topOffset, int viewWidth, int viewHeight) {
@@ -490,7 +419,7 @@ public abstract class SlidingActivity extends PeekViewActivity {
             }, MultiShrinkScroller.ANIMATION_DURATION);
         }
 
-        boolean openToCurrentPosition = getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE &&
+        boolean openToCurrentPosition =  getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE &&
                 !startFullscreen;
         scroller.performEntranceAnimation(openAnimation, openToCurrentPosition);
     }
@@ -617,5 +546,67 @@ public abstract class SlidingActivity extends PeekViewActivity {
             scroller.setTitleTextColor(textColor);
         }
     }
+
+    private final MultiShrinkScroller.MultiShrinkScrollerListener multiShrinkScrollerListener
+            = new MultiShrinkScroller.MultiShrinkScrollerListener() {
+        @Override
+        public void onScrolledOffBottom() {
+            isExitAnimationFinished = true;
+            finish();
+        }
+
+        @Override
+        public void onEnterFullscreen() {
+            updateStatusBarColor();
+        }
+
+        @Override
+        public void onExitFullscreen() {
+            updateStatusBarColor();
+        }
+
+        @Override
+        public void onStartScrollOffBottom() {
+            isExitAnimationInProgress = true;
+
+            if (scroller.willUseReverseExpansion()) {
+                content.removeAllViews();
+
+                final Interpolator interpolator;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    interpolator = AnimationUtils.loadInterpolator(SlidingActivity.this,
+                            android.R.interpolator.linear_out_slow_in);
+                } else {
+                    interpolator = new DecelerateInterpolator();
+                }
+
+                final ValueAnimator contentAlpha = ValueAnimator.ofFloat(1f, 0f);
+                contentAlpha.setInterpolator(interpolator);
+                contentAlpha.setDuration(MultiShrinkScroller.ANIMATION_DURATION + 300);
+                contentAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        float val = (float) animation.getAnimatedValue();
+                        scroller.setAlpha(val);
+                        windowScrim.setAlpha((int) (0xFF * val));
+                    }
+                });
+                contentAlpha.start();
+            }
+        }
+
+        @Override
+        public void onEntranceAnimationDone() {
+            isEntranceAnimationFinished = true;
+        }
+
+        @Override
+        public void onTransparentViewHeightChange(float ratio) {
+            if (isEntranceAnimationFinished) {
+                windowScrim.setAlpha((int) (0xFF * ratio));
+            }
+        }
+    };
 
 }

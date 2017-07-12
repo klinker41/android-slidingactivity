@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2016 Jacob Klinker
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +15,18 @@
   ~ limitations under the License.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/large_title"
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="top|start"
-    android:layout_marginBottom="@dimen/sliding_title_initial_margin"
-    android:layout_marginEnd="@dimen/sliding_title_initial_margin"
     android:layout_marginStart="@dimen/sliding_title_initial_margin"
-    android:ellipsize="end"
-    android:maxLines="@integer/sliding_title_lines"
-    android:textAlignment="viewStart"
+    android:layout_marginEnd="@dimen/sliding_title_initial_margin"
+    android:layout_marginBottom="@dimen/sliding_title_initial_margin"
+    android:layout_gravity="top|start"
     android:textColor="@android:color/white"
-    android:textIsSelectable="false"
-    android:textSize="@dimen/sliding_maximum_title_size" />
+    android:maxLines="@integer/sliding_title_lines"
+    android:textSize="@dimen/sliding_maximum_title_size"
+    android:textAlignment="viewStart"
+    android:ellipsize="end"
+    android:importantForAccessibility="no"
+    android:id="@+id/large_title"/>

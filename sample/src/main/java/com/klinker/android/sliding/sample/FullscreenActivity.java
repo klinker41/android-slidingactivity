@@ -27,7 +27,6 @@ public class FullscreenActivity extends NormalActivity {
 
     /**
      * Make sure we call super to set everything else up, then show as fullscreen.
-     *
      * @param savedInstanceState the saved state.
      */
     @Override

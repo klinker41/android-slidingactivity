@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2016 Jacob Klinker
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,11 +21,15 @@
     <color name="normal_sliding_activity_primary_dark">#37474F</color>
     <color name="menu_item_activity_primary">#E91E63</color>
     <color name="menu_item_activity_primary_dark">#AD1457</color>
+    <color name="image_activity_primary">#43A047</color>
+    <color name="image_activity_primary_dark">#2E7D32</color>
     <color name="dark_activity_primary">#FF5722</color>
     <color name="dark_activity_primary_dark">#D84315</color>
     <color name="fab_activity_primary">#673ab7</color>
     <color name="fab_activity_primary_dark">#512da8</color>
     <color name="fab_activity_accent">#607d8b</color>
+    <color name="no_header_activity_primary">#FFEB3B</color>
+    <color name="no_header_activity_priamry_dark">#F9A825</color>
     <color name="talon_activity_primary">#00BCD4</color>
     <color name="talon_activity_primary_dark">#00838F</color>
     <color name="talon_activity_accent">#E91E63</color>

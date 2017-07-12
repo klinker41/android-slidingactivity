@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2016 Jacob Klinker
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +20,7 @@
     <dimen name="sliding_starting_empty_height">150dp</dimen>
     <dimen name="sliding_maximum_title_size">26sp</dimen>
     <dimen name="sliding_title_initial_margin">16dp</dimen>
-    <item name="sliding_landscape_photo_ratio" format="float" type="dimen">0.7</item>
+    <item name="sliding_landscape_photo_ratio" type="dimen" format="float">0.7</item>
     <dimen name="sliding_dismiss_distance_on_release">40dp</dimen>
     <dimen name="sliding_dismiss_distance_on_scroll">100dp</dimen>
     <dimen name="sliding_snap_to_top_slop_height">33dp</dimen>

@@ -44,6 +44,6 @@ dependencies {
     compile project(':library')
 
     compile "com.android.support:cardview-v7:${project.ANDROID_SUPPORT_VERSION}"
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.klinkerapps:peekview:1.2.3'
 }

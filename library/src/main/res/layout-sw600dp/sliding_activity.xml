@@ -16,14 +16,14 @@
   ~ limitations under the License.
   -->
 <com.klinker.android.sliding.MultiShrinkScroller xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/multiscroller"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="afterDescendants"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/multiscroller"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:descendantFocusability="afterDescendants">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,47 +39,46 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="@integer/sliding_card_layout_weight"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <View
-                android:id="@+id/transparent_view"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sliding_starting_empty_height"
-                android:contentDescription="@string/sliding_transparent_view_description" />
+                android:contentDescription="@string/sliding_transparent_view_description"
+                android:id="@+id/transparent_view" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <FrameLayout
-                    android:id="@+id/toolbar_parent"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
+                    android:layout_height="match_parent"
+                    android:id="@+id/toolbar_parent">
                     <include layout="@layout/sliding_header" />
                 </FrameLayout>
 
-                <include
-                    layout="@layout/sliding_content"
+                <include layout="@layout/sliding_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/toolbar_parent" />
+                    android:layout_below="@id/toolbar_parent"/>
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
                     android:layout_below="@id/toolbar_parent"
+                    android:layout_marginTop="@dimen/fab_marginTop"
                     android:layout_marginEnd="@dimen/fab_marginRight"
                     android:layout_marginRight="@dimen/fab_marginRight"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     app:borderWidth="0dp"
                     app:elevation="6dp"
                     app:pressedTranslationZ="12dp"
-                    app:rippleColor="@color/fab_ripple" />
+                    app:rippleColor="@color/fab_ripple"/>
 
             </RelativeLayout>
 

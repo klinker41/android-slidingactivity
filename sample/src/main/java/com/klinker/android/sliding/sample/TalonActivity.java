@@ -39,7 +39,6 @@ public class TalonActivity extends SlidingActivity {
     /**
      * Initialize our values, this is overridden instead of onCreate as it should be in all
      * sliding activities.
-     *
      * @param savedInstanceState the saved state.
      */
     @Override
@@ -90,7 +89,6 @@ public class TalonActivity extends SlidingActivity {
 
     /**
      * Creates the options menu.
-     *
      * @param menu the menu.
      * @return true.
      */
@@ -103,7 +101,6 @@ public class TalonActivity extends SlidingActivity {
     /**
      * Oops, this is a really big layout with lots of images and no optimizations done to it, older
      * or lower end devices might run out of memory! Sorry to those devs with these devices.
-     *
      * @return true if device has 1GB of memory and can show the content.
      */
     private boolean checkMemory() {

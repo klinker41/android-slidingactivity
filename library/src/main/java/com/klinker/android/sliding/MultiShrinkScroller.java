@@ -58,15 +58,15 @@ import android.widget.TextView;
  * A custom {@link ViewGroup} that operates similarly to a {@link ScrollView}, except with multiple
  * subviews. These subviews are scrolled or shrinked one at a time, until each reaches their
  * minimum or maximum value.
- * <p>
+ *
  * MultiShrinkScroller is designed for a specific problem. As such, this class is designed to be
  * used with a specific layout file: quickcontact_activity.xml. MultiShrinkScroller expects subviews
  * with specific ID values.
- * <p>
+ *
  * MultiShrinkScroller's code is heavily influenced by ScrollView. Nonetheless, several ScrollView
  * features are missing. For example: handling of KEYCODES, OverScroll bounce and saving
  * scroll state in savedInstanceState bundles.
- * <p>
+ *
  * Before copying this approach to nested scrolling, consider whether something simpler and less
  * customized will work for you. For example, see the re-usable StickyHeaderListView used by
  * WifiSetupActivity (very nice). Alternatively, check out Google+'s cover photo scrolling or
@@ -76,69 +76,42 @@ import android.widget.TextView;
  */
 public class MultiShrinkScroller extends FrameLayout {
 
-    /**
-     * The duration that the activity should take to animate onto screen.
-     */
-    public static final int ANIMATION_DURATION = 300;
+    public enum OpenAnimation {
+        SLIDE_UP, EXPAND_FROM_VIEW
+    }
+
     /**
      * 1000 pixels per millisecond. Ie, 1 pixel per second.
      */
     private static final int PIXELS_PER_SECOND = 1000;
+
+    /**
+     * The duration that the activity should take to animate onto screen.
+     */
+    public static final int ANIMATION_DURATION = 300;
+
     /**
      * Length of the acceleration animations. This value was taken from ValueAnimator.java.
      */
     private static final int EXIT_FLING_ANIMATION_DURATION_MS = 250;
+
+    /**
+     * In portrait mode, the height:width ratio of the photo's starting height.
+     */
+    private float intermediateHeaderHeightRatio = 0.6f;
+
     /**
      * Color blending will only be performed on the contact photo once the toolbar is compressed
      * to this ratio of its full height.
      */
     private static final float COLOR_BLENDING_START_RATIO = 0.5f;
+
     /**
      * Dampen the animations slightly.
      */
     private static final float SPRING_DAMPENING_FACTOR = 0.01f;
-    private static final float X1 = 0.16f;
-    private static final float Y1 = 0.4f;
-    private static final float X2 = 0.2f;
-    private static final float Y2 = 1f;
-    /**
-     * Interpolator from android.support.v4.view.ViewPager. Snappier and more elastic feeling
-     * than the default interpolator.
-     */
-    private static final Interpolator INTERPOLATOR = new Interpolator() {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public float getInterpolation(float t) {
-            t -= 1.0f;
-            return t * t * t * t * t + 1.0f;
-        }
-    };
-    private final Scroller scroller;
-    private final EdgeEffect edgeGlowBottom;
-    private final EdgeEffect edgeGlowTop;
-    private final int touchSlop;
-    private final int maximumVelocity;
-    private final int minimumVelocity;
-    private final int dismissDistanceOnScroll;
-    private final int dismissDistanceOnRelease;
-    private final int snapToTopSlopHeight;
-    private final int transparentStartHeight;
-    private final int maximumTitleMargin;
-    private final float toolbarElevation;
-    private final boolean isTwoPanel;
-    private final float landscapePhotoRatio;
-    private final int actionBarSize;
-    private final boolean paddedLayout;
-    private final PathInterpolator textSizePathInterpolator;
-    private final int[] gradientColors = new int[]{0, 0x88000000};
-    /**
-     * In portrait mode, the height:width ratio of the photo's starting height.
-     */
-    private float intermediateHeaderHeightRatio = 0.6f;
-    private float[] lastEventPosition = {0, 0};
+    private float[] lastEventPosition = { 0, 0 };
     private VelocityTracker velocityTracker;
     private boolean isBeingDragged = false;
     private boolean receivedDown = false;
@@ -168,11 +141,50 @@ public class MultiShrinkScroller extends FrameLayout {
     private boolean hasEverTouchedTheTop;
     private boolean isTouchDisabledForDismissAnimation;
     private boolean enableFab = false;
+
+    private final Scroller scroller;
+    private final EdgeEffect edgeGlowBottom;
+    private final EdgeEffect edgeGlowTop;
+    private final int touchSlop;
+    private final int maximumVelocity;
+    private final int minimumVelocity;
+    private final int dismissDistanceOnScroll;
+    private final int dismissDistanceOnRelease;
+    private final int snapToTopSlopHeight;
+    private final int transparentStartHeight;
+    private final int maximumTitleMargin;
+    private final float toolbarElevation;
+    private final boolean isTwoPanel;
+    private final float landscapePhotoRatio;
+    private final int actionBarSize;
+    private final boolean paddedLayout;
+
+    private static final float X1 = 0.16f;
+    private static final float Y1 = 0.4f;
+    private static final float X2 = 0.2f;
+    private static final float Y2 = 1f;
+    private final PathInterpolator textSizePathInterpolator;
+
+    private final int[] gradientColors = new int[] {0,0x88000000};
     private GradientDrawable titleGradientDrawable = new GradientDrawable(
             GradientDrawable.Orientation.TOP_BOTTOM, gradientColors);
     private GradientDrawable actionBarGradientDrawable = new GradientDrawable(
             GradientDrawable.Orientation.BOTTOM_TOP, gradientColors);
-    private OpenAnimation openAnimation = OpenAnimation.SLIDE_UP;
+
+    /**
+     * Interface for listening to scroll events.
+     */
+    public interface MultiShrinkScrollerListener {
+
+        void onScrolledOffBottom();
+        void onStartScrollOffBottom();
+        void onTransparentViewHeightChange(float ratio);
+        void onEntranceAnimationDone();
+        void onEnterFullscreen();
+        void onExitFullscreen();
+
+    }
+
     /**
      * Listener for snapping the content to the bottom of the screen.
      */
@@ -189,14 +201,25 @@ public class MultiShrinkScroller extends FrameLayout {
             }
         }
     };
-    private int expansionLeftOffset;
-    private int expansionTopOffset;
-    private int expansionViewWidth;
-    private int expansionViewHeight;
+
+    /**
+     * Interpolator from android.support.v4.view.ViewPager. Snappier and more elastic feeling
+     * than the default interpolator.
+     */
+    private static final Interpolator INTERPOLATOR = new Interpolator() {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public float getInterpolation(float t) {
+            t -= 1.0f;
+            return t * t * t * t * t + 1.0f;
+        }
+    };
 
     /**
      * Create a new instance of MultiShrinkScroller.
-     *
      * @param context
      */
     public MultiShrinkScroller(Context context) {
@@ -205,7 +228,6 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Create a new instance of MultiShrinkScroller.
-     *
      * @param context
      * @param attrs
      */
@@ -215,7 +237,6 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Create a new instance of MultiShrinkScroller.
-     *
      * @param context
      * @param attrs
      * @param defStyleAttr
@@ -400,7 +421,6 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Set the title for the large text view that will be adjusted as the activity scrolls.
-     *
      * @param title the title.
      */
     public void setTitle(String title) {
@@ -435,7 +455,6 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Catch the touch event and act on it.
-     *
      * @param event the touch event.
      * @return true if we should start dragging, otherwise false.
      */
@@ -487,7 +506,6 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Catch the touch event and act on it.
-     *
      * @param event the touch event.
      */
     @Override
@@ -556,7 +574,6 @@ public class MultiShrinkScroller extends FrameLayout {
      * Sets the tint color that should be applied to the header. If an image is present, this
      * will go behind the image and show over it as the activity is scrolled, otherwise it will
      * just be the color displayed at the top of the screen.
-     *
      * @param color the primary color for the activity to display.
      */
     public void setHeaderTintColor(int color) {
@@ -725,10 +742,9 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Scroll the activity up as the entrace animation.
-     *
      * @param scrollToCurrentPosition if true, will scroll from the bottom of the screen to the
-     *                                current position. Otherwise, will scroll from the bottom of the screen to the top of the
-     *                                screen.
+     * current position. Otherwise, will scroll from the bottom of the screen to the top of the
+     * screen.
      */
     public void performEntranceAnimation(OpenAnimation animation, boolean scrollToCurrentPosition) {
         final int currentPosition = getScroll();
@@ -769,6 +785,13 @@ public class MultiShrinkScroller extends FrameLayout {
         }
 
     }
+
+    private OpenAnimation openAnimation = OpenAnimation.SLIDE_UP;
+
+    private int expansionLeftOffset;
+    private int expansionTopOffset;
+    private int expansionViewWidth;
+    private int expansionViewHeight;
 
     public void setExpansionPoints(int leftOffset, int topOffset, int viewWidth, int viewHeight) {
         this.expansionLeftOffset = leftOffset;
@@ -898,7 +921,6 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Scroll to a certain position.
-     *
      * @param x the x position.
      * @param y the y position.
      */
@@ -921,7 +943,7 @@ public class MultiShrinkScroller extends FrameLayout {
 
         if (listener != null) {
             if (wasFullscreen && !isFullscreen) {
-                listener.onExitFullscreen();
+                 listener.onExitFullscreen();
             } else if (!wasFullscreen && isFullscreen) {
                 listener.onEnterFullscreen();
             }
@@ -934,19 +956,9 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Get the current toolbar height.
-     *
      * @return the toolbar height.
      */
     public int getToolbarHeight() {
-        return toolbar.getLayoutParams().height;
-    }
-
-    /**
-     * Gets the current header height.
-     *
-     * @return the header height.
-     */
-    public int getHeaderHeight() {
         return toolbar.getLayoutParams().height;
     }
 
@@ -963,6 +975,22 @@ public class MultiShrinkScroller extends FrameLayout {
     }
 
     /**
+     * Gets the current header height.
+     * @return the header height.
+     */
+    public int getHeaderHeight() {
+        return toolbar.getLayoutParams().height;
+    }
+
+    /**
+     * Set where to scroll to.
+     * @param scroll the y scroll position.
+     */
+    public void setScroll(int scroll) {
+        scrollTo(0, scroll);
+    }
+
+    /**
      * Returns the total amount scrolled inside the nested ScrollView + the amount of shrinking
      * performed on the ToolBar. This is the value inspected by animators.
      */
@@ -970,15 +998,6 @@ public class MultiShrinkScroller extends FrameLayout {
         return transparentStartHeight - getTransparentViewHeight()
                 + getMaximumScrollableHeaderHeight() - getToolbarHeight()
                 + scrollView.getScrollY();
-    }
-
-    /**
-     * Set where to scroll to.
-     *
-     * @param scroll the y scroll position.
-     */
-    public void setScroll(int scroll) {
-        scrollTo(0, scroll);
     }
 
     private int getMaximumScrollableHeaderHeight() {
@@ -989,11 +1008,11 @@ public class MultiShrinkScroller extends FrameLayout {
      * A variant of {@link #getScroll} that pretends the header is never larger than
      * than intermediateHeaderHeight. This function is sometimes needed when making scrolling
      * decisions that will not change the header size (ie, snapping to the bottom or top).
-     * <p>
+     *
      * When isOpenImageSquare is true, this function considers intermediateHeaderHeight ==
      * maximumHeaderHeight, since snapping decisions will be made relative the full header
      * size when isOpenImageSquare = true.
-     * <p>
+     *
      * This value should never be used in conjunction with {@link #getScroll} values.
      */
     private int getScroll_ignoreOversizedHeaderForSnapping() {
@@ -1061,7 +1080,6 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Draw all components on the screen.
-     *
      * @param canvas the canvas to draw on.
      */
     @Override
@@ -1091,7 +1109,7 @@ public class MultiShrinkScroller extends FrameLayout {
 
             // todo: figure out what is wrong with the edge glow with padded layouts
             if (paddedLayout) {
-                edgeGlowBottom.setSize(0, 0);
+                edgeGlowBottom.setSize(0,0);
             }
 
             if (edgeGlowBottom.draw(canvas)) {
@@ -1108,14 +1126,14 @@ public class MultiShrinkScroller extends FrameLayout {
             final int restoreCount = canvas.save();
             if (isTwoPanel) {
                 edgeGlowTop.setSize(scrollView.getWidth(), height);
-                canvas.translate(photoViewContainer.getWidth() * (1 / 6), 0);
+                canvas.translate(photoViewContainer.getWidth() * (1/6), 0);
             } else {
                 edgeGlowTop.setSize(width, height);
             }
 
             // todo: figure out what is wrong with the edge glow with padded layouts
             if (paddedLayout) {
-                edgeGlowTop.setSize(0, 0);
+                edgeGlowTop.setSize(0,0);
             }
 
             if (edgeGlowTop.draw(canvas)) {
@@ -1264,8 +1282,8 @@ public class MultiShrinkScroller extends FrameLayout {
             return;
         }
 
-        final float ratio = (toolbarHeight - minimumHeaderHeight)
-                / (float) (maximumHeaderHeight - minimumHeaderHeight);
+        final float ratio = (toolbarHeight  - minimumHeaderHeight)
+                / (float)(maximumHeaderHeight - minimumHeaderHeight);
         final float minimumSize = invisiblePlaceholderTextView.getHeight();
         float bezierOutput;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -1307,7 +1325,6 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Update the FAB visibility state depending on scrollview state.
-     *
      * @param scrollY the y value of the scroll.
      */
     private void updateFabStatus(int scrollY) {
@@ -1326,7 +1343,6 @@ public class MultiShrinkScroller extends FrameLayout {
 
     /**
      * Set whether or not the FAB should be displayed.
-     *
      * @param enableFab whether to enable the fab.
      */
     public void setEnableFab(boolean enableFab) {
@@ -1367,8 +1383,8 @@ public class MultiShrinkScroller extends FrameLayout {
         }
 
         // How offset the title should be from the bottom of the toolbar
-        final int pretendBottomMargin = (int) (collapsedTitleBottomMargin * (1 - x)
-                + maximumTitleMargin * x);
+        final int pretendBottomMargin =  (int) (collapsedTitleBottomMargin * (1 - x)
+                + maximumTitleMargin * x) ;
         // Calculate how offset the title should be from the top of the screen. Instead of
         // calling largeTextView.getHeight() use the maximumHeaderTextSize for this calculation.
         // The getHeight() value acts unexpectedly when largeTextView is partially clipped by
@@ -1474,33 +1490,10 @@ public class MultiShrinkScroller extends FrameLayout {
         invalidate();
     }
 
-    public enum OpenAnimation {
-        SLIDE_UP, EXPAND_FROM_VIEW
-    }
-
-    /**
-     * Interface for listening to scroll events.
-     */
-    public interface MultiShrinkScrollerListener {
-
-        void onScrolledOffBottom();
-
-        void onStartScrollOffBottom();
-
-        void onTransparentViewHeightChange(float ratio);
-
-        void onEntranceAnimationDone();
-
-        void onEnterFullscreen();
-
-        void onExitFullscreen();
-
-    }
-
     /**
      * Interpolator that enforces a specific starting velocity. This is useful to avoid a
      * discontinuity between dragging speed and flinging speed.
-     * <p>
+     *
      * Similar to a {@link android.view.animation.AccelerateInterpolator} in the sense that
      * getInterpolation() is a quadratic function.
      */
@@ -1512,7 +1505,7 @@ public class MultiShrinkScroller extends FrameLayout {
         private final float numberFrames;
 
         public AcceleratingFlingInterpolator(int durationMs, float startingSpeedPixelsPerSecond,
-                                             int pixelsDelta) {
+                int pixelsDelta) {
             startingSpeedPixelsPerFrame = startingSpeedPixelsPerSecond / getRefreshRate();
             this.durationMs = durationMs;
             this.pixelsDelta = pixelsDelta;
@@ -1544,7 +1537,7 @@ public class MultiShrinkScroller extends FrameLayout {
         }
 
         public long getFrameIntervalMs() {
-            return (long) (1000 / getRefreshRate());
+            return (long)(1000 / getRefreshRate());
         }
     }
 

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2016 Jacob Klinker
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,37 +16,24 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:title="Change Profile Picture"
-        app:showAsAction="never"
-        tools:ignore="HardcodedText" />
+    <item android:title="Change Profile Picture"
+        app:showAsAction="never"/>
 
-    <item
-        android:title="Change Profile Banner"
-        app:showAsAction="never"
-        tools:ignore="HardcodedText" />
+    <item android:title="Change Profile Banner"
+        app:showAsAction="never"/>
 
-    <item
-        android:title="Change Profile Info"
-        app:showAsAction="never"
-        tools:ignore="HardcodedText" />
+    <item android:title="Change Profile Info"
+        app:showAsAction="never"/>
 
-    <item
-        android:title="Mute"
-        app:showAsAction="never"
-        tools:ignore="HardcodedText" />
+    <item android:title="Mute"
+        app:showAsAction="never"/>
 
-    <item
-        android:title="Mute Retweets"
-        app:showAsAction="never"
-        tools:ignore="HardcodedText" />
+    <item android:title="Mute Retweets"
+        app:showAsAction="never"/>
 
-    <item
-        android:title="Muffle User"
-        app:showAsAction="never"
-        tools:ignore="HardcodedText" />
+    <item android:title="Muffle User"
+        app:showAsAction="never"/>
 
 </menu>

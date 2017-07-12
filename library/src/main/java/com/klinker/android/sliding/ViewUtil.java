@@ -35,9 +35,8 @@ public class ViewUtil {
     /**
      * Adds a rectangular outline to a view. This can be useful when you want to add a shadow
      * to a transparent view. See b/16856049.
-     *
      * @param view view that the outline is added to
-     * @param res  The resources file.
+     * @param res The resources file.
      */
     public static void addRectangularOutlineProvider(View view, Resources res) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

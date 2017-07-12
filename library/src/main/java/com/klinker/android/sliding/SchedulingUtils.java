@@ -26,10 +26,9 @@ public class SchedulingUtils {
 
     /**
      * Do an action before the drawing occurs.
-     *
-     * @param view          the view to be drawn.
+     * @param view the view to be drawn.
      * @param drawNextFrame whether we should draw the next frame or not.
-     * @param runnable      the runnable to run.
+     * @param runnable the runnable to run.
      */
     public static void doOnPreDraw(final View view, final boolean drawNextFrame,
                                    final Runnable runnable) {
