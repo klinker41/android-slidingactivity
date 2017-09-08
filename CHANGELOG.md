@@ -1,5 +1,8 @@
 ## Changelog
 
+### Version 1.5.1:
+- Update dependencies and build tools for SDK 26
+
 ### Version 1.5.0:
 - Add ability to put a transparent overlay over the header image
 - Add method to get the FAB instance
