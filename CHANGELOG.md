@@ -1,5 +1,8 @@
 ## Changelog
 
+### Version 1.5.2:
+- Remove `final` modifier, per request
+
 ### Version 1.5.1:
 - Update dependencies and build tools for SDK 26
 
