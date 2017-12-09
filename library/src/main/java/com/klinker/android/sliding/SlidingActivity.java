@@ -32,7 +32,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -390,7 +389,7 @@ public abstract class SlidingActivity extends PeekViewActivity {
     }
 
     @Override
-    protected final void onNewIntent(Intent intent) {
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         hasAlreadyBeenOpened = true;
         isEntranceAnimationFinished = true;
